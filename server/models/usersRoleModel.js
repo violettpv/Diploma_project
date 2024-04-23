@@ -32,4 +32,4 @@ const UsersRole = db.define(
   }
 );
 
-module.exports = { UsersRole };
+module.exports = UsersRole;

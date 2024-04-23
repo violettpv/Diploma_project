@@ -1,32 +1,30 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
-const Clinic = db.define(
-  'Clinic',
+const Patient = db.define(
+  'Patient',
   {
     uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
+    surname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    address: {
+    patronymic: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     phone: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        is: /^\+(380)[0-9]{9}$/,
-      },
-    },
-    phone2: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      unique: false,
       validate: {
         is: /^\+(380)[0-9]{9}$/,
       },
@@ -34,17 +32,22 @@ const Clinic = db.define(
     email: {
       type: DataTypes.STRING,
       allowNull: true,
-      unique: true,
+      unique: false,
       validate: {
         isEmail: true,
       },
     },
-    website: {
+    birthdate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    address: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        isUrl: true,
-      },
+    },
+    notes: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {
@@ -53,4 +56,4 @@ const Clinic = db.define(
   }
 );
 
-module.exports = Clinic;
+module.exports = Patient;

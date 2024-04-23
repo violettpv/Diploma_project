@@ -53,7 +53,7 @@ const User = db.define(
     },
     clinicId: {
       type: DataTypes.UUID,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'Clinic',
         key: 'uuid',
@@ -66,4 +66,4 @@ const User = db.define(
   }
 );
 
-module.exports = { User };
+module.exports = User;

@@ -22,13 +22,24 @@ const db = new Sequelize(
 );
 
 const syncTables = async () => {
-  const User = require('../models/userModel');
-  const Role = require('../models/roleModel');
-  const UsersRoles = require('../models/usersRolesModel');
+  const Anamnesis = require('../models/anamnesisModel');
   const Clinic = require('../models/clinicModel');
+  const DentalFormula = require('../models/dentalFormulaModel');
+  const Disease = require('../models/diseaseModel');
+  const Dispensary = require('../models/dispensaryModel');
+  const Form043 = require('../models/form043Model');
+  const Note = require('../models/noteModel');
+  const Patient = require('../models/patientModel');
+  const Role = require('../models/roleModel');
+  const Service = require('../models/serviceModel');
+  const TreatmentPlan = require('../models/treatmentPlanModel');
+  const User = require('../models/userModel');
+  const UsersRole = require('../models/usersRoleModel');
 
-  User.belongsToMany(Role, { through: UsersRoles });
-  Role.belongsToMany(User, { through: UsersRoles });
+  User.belongsToMany(Role, { through: UsersRole });
+  Role.belongsToMany(User, { through: UsersRole });
+  Patient.belongsToMany(Disease, { through: Anamnesis });
+  Disease.belongsToMany(Patient, { through: Anamnesis });
 
   try {
     await db.sync();

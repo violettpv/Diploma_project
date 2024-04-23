@@ -1,18 +1,29 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
-const Role = db.define(
-  'Role',
+const Anamnesis = db.define(
+  'Anamnesis',
   {
     uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    role: {
+    disease: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      references: {
+        model: 'Disease',
+        key: 'uuid',
+      },
+    },
+    patientId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Patient',
+        key: 'uuid',
+      },
     },
   },
   {
@@ -21,4 +32,4 @@ const Role = db.define(
   }
 );
 
-module.exports = Role;
+module.exports = Anamnesis;

@@ -1,19 +1,23 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
-const Role = db.define(
-  'Role',
+const DentalFormula = db.define(
+  'DentalFormula',
   {
     uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    role: {
-      type: DataTypes.STRING,
+    patientId: {
+      type: DataTypes.UUID,
       allowNull: false,
-      unique: true,
+      references: {
+        model: 'Patient',
+        key: 'uuid',
+      },
     },
+    // toothNumber: {
   },
   {
     freezeTableName: true,
@@ -21,4 +25,4 @@ const Role = db.define(
   }
 );
 
-module.exports = Role;
+module.exports = DentalFormula;

@@ -1,18 +1,21 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
-const Role = db.define(
-  'Role',
+const Service = db.define(
+  'Service',
   {
     uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    role: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+    },
+    price: {
+      type: DataTypes.DECIMAL,
+      allowNull: false,
     },
   },
   {
@@ -21,4 +24,4 @@ const Role = db.define(
   }
 );
 
-module.exports = Role;
+module.exports = Service;
