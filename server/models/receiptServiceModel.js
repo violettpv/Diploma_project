@@ -1,32 +1,37 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
-const TreatmentPlan = db.define(
-  'TreatmentPlan',
+const ReceiptService = db.define(
+  'ReceiptService',
   {
     uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    patientId: {
+    receiptId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Patient',
+        model: 'Receipt',
         key: 'uuid',
       },
     },
-    date: {
-      type: DataTypes.DATEONLY,
+    serviceId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Service',
+        key: 'uuid',
+      },
+    },
+    // чи правильно??
+    quantity: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
-    examinationPlan: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    treatmentPlan: {
-      type: DataTypes.STRING,
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
   },
@@ -36,4 +41,4 @@ const TreatmentPlan = db.define(
   }
 );
 
-module.exports = TreatmentPlan;
+module.exports = ReceiptService;

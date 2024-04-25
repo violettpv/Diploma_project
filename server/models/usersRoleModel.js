@@ -1,5 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
+const Role = require('./roleModel');
+const User = require('./userModel');
 
 const UsersRole = db.define(
   'UsersRoles',
@@ -9,19 +11,19 @@ const UsersRole = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    userId: {
+    userUuid: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'User',
+        model: User,
         key: 'uuid',
       },
     },
-    userRole: {
+    roleUuid: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Role',
+        model: Role,
         key: 'uuid',
       },
     },

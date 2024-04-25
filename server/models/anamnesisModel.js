@@ -1,5 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
+const Disease = require('./diseaseModel');
+const Patient = require('./patientModel');
 
 const Anamnesis = db.define(
   'Anamnesis',
@@ -9,19 +11,19 @@ const Anamnesis = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    disease: {
+    diseaseUuid: {
       type: DataTypes.STRING,
       allowNull: false,
       references: {
-        model: 'Disease',
+        model: Disease,
         key: 'uuid',
       },
     },
-    patientId: {
+    patientUuid: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Patient',
+        model: Patient,
         key: 'uuid',
       },
     },

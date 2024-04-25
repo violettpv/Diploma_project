@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv').config({ path: __dirname + '/../.env' });
 const port = process.env.PORT || 5000;
 
-const { db } = require('./config/db');
+const { db, syncTables } = require('./config/db');
 db.authenticate()
   .then(() => {
     console.log('Database connected');
@@ -10,6 +10,7 @@ db.authenticate()
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
   });
+syncTables();
 
 const { errorHandler } = require('./middleware/errorHandler');
 

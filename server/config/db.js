@@ -23,23 +23,40 @@ const db = new Sequelize(
 
 const syncTables = async () => {
   const Anamnesis = require('../models/anamnesisModel');
-  const Clinic = require('../models/clinicModel');
-  const DentalFormula = require('../models/dentalFormulaModel');
-  const Disease = require('../models/diseaseModel');
-  const Dispensary = require('../models/dispensaryModel');
-  const Form043 = require('../models/form043Model');
-  const Note = require('../models/noteModel');
-  const Patient = require('../models/patientModel');
-  const Role = require('../models/roleModel');
-  const Service = require('../models/serviceModel');
-  const TreatmentPlan = require('../models/treatmentPlanModel');
-  const User = require('../models/userModel');
-  const UsersRole = require('../models/usersRoleModel');
+  // const Appointment = require('../models/appointmentModel');
 
-  User.belongsToMany(Role, { through: UsersRole });
-  Role.belongsToMany(User, { through: UsersRole });
-  Patient.belongsToMany(Disease, { through: Anamnesis });
-  Disease.belongsToMany(Patient, { through: Anamnesis });
+  // const DentalFormula = require('../models/dentalFormulaModel');
+  const Disease = require('../models/diseaseModel');
+  // const Dispensary = require('../models/dispensaryModel');
+  // const DoctorsDiaryEntries = require('../models/doctorsDiaryEntriesModel');
+  // const DoctorsDiary = require('../models/doctorsDiaryModel');
+  // const Form043 = require('../models/form043Model');
+  // const Note = require('../models/noteModel');
+  const Patient = require('../models/patientModel');
+  // const PaymentType = require('../models/paymentTypeModel');
+  // const Receipt = require('../models/receiptModel');
+  // const ReceiptService = require('../models/receiptServiceModel');
+
+  // const Service = require('../models/serviceModel');
+  // const Tooth = require('../models/toothModel');
+  // const ToothNotation = require('../models/toothNotationModel');
+  // const TreatmentPlan = require('../models/treatmentPlanModel');
+
+  const User = require('../models/userModel');
+  const Role = require('../models/roleModel');
+  const UsersRole = require('../models/usersRoleModel');
+  const Clinic = require('../models/clinicModel');
+
+  // M:M
+  User.belongsToMany(Role, { through: UsersRole, foreignKey: 'userUuid' });
+  Role.belongsToMany(User, { through: UsersRole, foreignKey: 'roleUuid' });
+
+  // 1:M
+  Clinic.hasMany(User);
+  User.belongsTo(Clinic, { foreignKey: 'clinicUuid' });
+
+  Patient.belongsToMany(Disease, { through: Anamnesis, foreignKey: 'patientUuid' });
+  Disease.belongsToMany(Patient, { through: Anamnesis, foreignKey: 'diseaseUuid' });
 
   try {
     await db.sync();
@@ -49,4 +66,4 @@ const syncTables = async () => {
   }
 };
 
-module.exports = { db };
+module.exports = { db, syncTables };

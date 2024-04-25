@@ -29,17 +29,14 @@ const Form043 = db.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    medicalExaminationData: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     oclussion: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    oralHygiene: {
+    // стан гігієни порожнини рота,стан слизової оболонки порожнини рота... (11 запис)
+    medicalExaminationData: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     researchData: {
       type: DataTypes.STRING,
@@ -48,6 +45,14 @@ const Form043 = db.define(
     vitaScale: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    oralHealthTrainingData: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    oralHygieneControlData: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

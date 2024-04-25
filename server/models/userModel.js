@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
+const Clinic = require('./clinicModel');
 
 const User = db.define(
   'User',
@@ -41,21 +42,11 @@ const User = db.define(
         is: /^\+(380)[0-9]{9}$/,
       },
     },
-    isMainAdmin: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    isAdmin: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    clinicId: {
+    clinicUuid: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Clinic',
+        model: Clinic,
         key: 'uuid',
       },
     },

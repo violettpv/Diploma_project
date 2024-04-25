@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
-const TreatmentPlan = db.define(
-  'TreatmentPlan',
+const DoctorsDiary = db.define(
+  'DoctorsDiary',
   {
     uuid: {
       type: DataTypes.UUID,
@@ -21,13 +21,13 @@ const TreatmentPlan = db.define(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    examinationPlan: {
-      type: DataTypes.STRING,
+    diaryEntriesId: {
+      type: DataTypes.UUID,
       allowNull: false,
-    },
-    treatmentPlan: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      references: {
+        model: 'DoctorsDiaryEntries',
+        key: 'uuid',
+      },
     },
   },
   {
@@ -36,4 +36,4 @@ const TreatmentPlan = db.define(
   }
 );
 
-module.exports = TreatmentPlan;
+module.exports = DoctorsDiary;

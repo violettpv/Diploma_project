@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
-const DentalFormula = db.define(
-  'DentalFormula',
+const Appointment = db.define(
+  'Appointment',
   {
     uuid: {
       type: DataTypes.UUID,
@@ -18,25 +18,43 @@ const DentalFormula = db.define(
       },
     },
     date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false,
     },
-    toothId: {
+    startTime: {
+      type: DataTypes.TIME,
+      allowNull: false,
+    },
+    endTime: {
+      type: DataTypes.TIME,
+      allowNull: false,
+    },
+    roomNumber: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    // чи не таблиця User, a UserRole (= лікар)??
+    doctorId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Tooth',
+        model: 'User',
         key: 'uuid',
       },
     },
-    notationId: {
+    receiptId: {
       type: DataTypes.UUID,
-      // може бути без запису?
       allowNull: true,
       references: {
-        model: 'ToothNotation',
+        model: 'Receipt',
         key: 'uuid',
       },
+    },
+    // для квитанції і переносу у звіт?
+    isFinished: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     note: {
       type: DataTypes.STRING,
@@ -49,4 +67,4 @@ const DentalFormula = db.define(
   }
 );
 
-module.exports = DentalFormula;
+module.exports = Appointment;
