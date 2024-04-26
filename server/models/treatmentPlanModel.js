@@ -9,26 +9,19 @@ const TreatmentPlan = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    patientId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Patient',
-        key: 'uuid',
-      },
-    },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
-    examinationPlan: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    treatmentPlan: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    // patientId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: 'Patient',
+    //     key: 'uuid',
+    //   },
+    // },
+    // treatmentPlanEntriesId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: 'TreatmentPlanEntries',
+    //     key: 'uuid',
+    // },
   },
   {
     freezeTableName: true,

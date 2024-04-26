@@ -9,16 +9,30 @@ const Appointment = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    patientId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Patient',
-        key: 'uuid',
-      },
-    },
+    // patientId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: 'Patient',
+    //     key: 'uuid',
+    //   },
+    // },
+    // чи не таблиця User, a UserRole (= лікар)??
+    // doctorId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: 'User',
+    //     key: 'uuid',
+    //   },
+    // },
+    // receiptId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: 'Receipt',
+    //     key: 'uuid',
+    //   },
+    // },
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     startTime: {
@@ -32,23 +46,6 @@ const Appointment = db.define(
     roomNumber: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    // чи не таблиця User, a UserRole (= лікар)??
-    doctorId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'User',
-        key: 'uuid',
-      },
-    },
-    receiptId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'Receipt',
-        key: 'uuid',
-      },
     },
     // для квитанції і переносу у звіт?
     isFinished: {

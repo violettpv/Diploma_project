@@ -9,29 +9,22 @@ const ReceiptService = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    receiptId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Receipt',
-        key: 'uuid',
-      },
-    },
-    serviceId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Service',
-        key: 'uuid',
-      },
-    },
-    // чи правильно??
+    // receiptId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: 'Receipt',
+    //     key: 'uuid',
+    //   },
+    // },
+    // serviceId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: 'Service',
+    //     key: 'uuid',
+    //   },
+    // },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    price: {
-      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
   },

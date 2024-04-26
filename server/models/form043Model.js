@@ -9,14 +9,14 @@ const Form043 = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    patientId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Patient',
-        key: 'uuid',
-      },
-    },
+    // patientId: {
+    //   type: DataTypes.UUID,
+    //   allowNull: false,
+    //   references: {
+    //     model: 'Patient',
+    //     key: 'uuid',
+    //   },
+    // },
     diagnosis: {
       type: DataTypes.STRING,
       allowNull: true,

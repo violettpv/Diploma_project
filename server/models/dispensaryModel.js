@@ -9,28 +9,27 @@ const Dispensary = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    patientId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Patient',
-        key: 'uuid',
-      },
-    },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'User',
-        key: 'uuid',
-      },
-    },
+    // patientId: {
+    //   type: DataTypes.UUID,
+    //   allowNull: false,
+    //   references: {
+    //     model: 'Patient',
+    //     key: 'uuid',
+    //   },
+    // },
+    // userId: {
+    //   type: DataTypes.UUID,
+    //   allowNull: false,
+    //   references: {
+    //     model: 'User',
+    //     key: 'uuid',
+    //   },
+    // },
     dateOfTheVisit: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
     timeNeeded: {
-      // maybe change time
       type: DataTypes.INTEGER,
       allowNull: false,
     },

@@ -9,26 +9,20 @@ const DoctorsDiary = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    patientId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'Patient',
-        key: 'uuid',
-      },
-    },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
-    diaryEntriesId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'DoctorsDiaryEntries',
-        key: 'uuid',
-      },
-    },
+    // patientId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: 'Patient',
+    //     key: 'uuid',
+    //   },
+    // },
+    // diaryEntriesId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: 'DoctorsDiaryEntries',
+    //     key: 'uuid',
+    //   },
+    // },
   },
   {
     freezeTableName: true,

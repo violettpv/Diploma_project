@@ -9,11 +9,6 @@ const Receipt = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    // чи потрібна дата?
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
     total: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
@@ -28,13 +23,10 @@ const Receipt = db.define(
       allowNull: false,
       defaultValue: false,
     },
-    paymentTypeId: {
-      type: DataTypes.UUID,
+    // from client
+    paymentType: {
+      type: DataTypes.STRING,
       allowNull: false,
-      references: {
-        model: 'PaymentType',
-        key: 'uuid',
-      },
     },
   },
   {

@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 
 const db = new Sequelize(
   process.env.DATABASE,
@@ -22,41 +22,62 @@ const db = new Sequelize(
 );
 
 const syncTables = async () => {
-  const Anamnesis = require('../models/anamnesisModel');
-  // const Appointment = require('../models/appointmentModel');
-
-  // const DentalFormula = require('../models/dentalFormulaModel');
-  const Disease = require('../models/diseaseModel');
-  // const Dispensary = require('../models/dispensaryModel');
-  // const DoctorsDiaryEntries = require('../models/doctorsDiaryEntriesModel');
-  // const DoctorsDiary = require('../models/doctorsDiaryModel');
-  // const Form043 = require('../models/form043Model');
-  // const Note = require('../models/noteModel');
-  const Patient = require('../models/patientModel');
-  // const PaymentType = require('../models/paymentTypeModel');
-  // const Receipt = require('../models/receiptModel');
-  // const ReceiptService = require('../models/receiptServiceModel');
-
-  // const Service = require('../models/serviceModel');
-  // const Tooth = require('../models/toothModel');
-  // const ToothNotation = require('../models/toothNotationModel');
-  // const TreatmentPlan = require('../models/treatmentPlanModel');
-
+  const Clinic = require('../models/clinicModel');
   const User = require('../models/userModel');
   const Role = require('../models/roleModel');
   const UsersRole = require('../models/usersRoleModel');
-  const Clinic = require('../models/clinicModel');
+  const Patient = require('../models/patientModel');
+  const Disease = require('../models/diseaseModel');
+  const Anamnesis = require('../models/anamnesisModel');
+  const Note = require('../models/noteModel');
+  const Service = require('../models/serviceModel');
+  const Receipt = require('../models/receiptModel');
+  const ReceiptService = require('../models/receiptServiceModel');
+  const Appointment = require('../models/appointmentModel');
+  const Dispensary = require('../models/dispensaryModel');
+  const Form043 = require('../models/form043Model');
+  const TreatmentPlanEntries = require('../models/treatmentPlanEntriesModel');
+  const TreatmentPlan = require('../models/treatmentPlanModel');
+  const DoctorsDiaryEntries = require('../models/doctorsDiaryEntriesModel');
+  const DoctorsDiary = require('../models/doctorsDiaryModel');
+  const DentalFormula = require('../models/dentalFormulaModel');
 
+  // Assosiations / Relationships
   // M:M
-  User.belongsToMany(Role, { through: UsersRole, foreignKey: 'userUuid' });
-  Role.belongsToMany(User, { through: UsersRole, foreignKey: 'roleUuid' });
-
+  User.belongsToMany(Role, { through: UsersRole });
+  Role.belongsToMany(User, { through: UsersRole });
   // 1:M
   Clinic.hasMany(User);
-  User.belongsTo(Clinic, { foreignKey: 'clinicUuid' });
-
-  Patient.belongsToMany(Disease, { through: Anamnesis, foreignKey: 'patientUuid' });
-  Disease.belongsToMany(Patient, { through: Anamnesis, foreignKey: 'diseaseUuid' });
+  User.belongsTo(Clinic);
+  // M:M
+  Patient.belongsToMany(Disease, { through: Anamnesis });
+  Disease.belongsToMany(Patient, { through: Anamnesis });
+  // 1:M
+  Receipt.hasMany(ReceiptService);
+  ReceiptService.belongsTo(Receipt);
+  // 1:1
+  Receipt.hasOne(Appointment);
+  Appointment.belongsTo(Receipt);
+  // 1:M (user = doctor)
+  Patient.hasMany(Appointment);
+  Appointment.belongsTo(Patient);
+  User.hasMany(Appointment);
+  Appointment.belongsTo(User);
+  // 1:M
+  Patient.hasMany(Dispensary);
+  Dispensary.belongsTo(Patient);
+  User.hasMany(Dispensary);
+  Dispensary.belongsTo(User);
+  // 1:1
+  Patient.hasOne(Form043);
+  Form043.belongsTo(Patient);
+  Patient.hasOne(DentalFormula);
+  DentalFormula.belongsTo(Patient);
+  // M:M
+  Patient.belongsToMany(TreatmentPlanEntries, { through: TreatmentPlan });
+  TreatmentPlanEntries.belongsToMany(Patient, { through: TreatmentPlan });
+  Patient.belongsToMany(DoctorsDiaryEntries, { through: DoctorsDiary });
+  DoctorsDiaryEntries.belongsToMany(Patient, { through: DoctorsDiary });
 
   try {
     await db.sync();

@@ -9,15 +9,10 @@ const DoctorsDiaryEntries = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    // don't sure if I need patientId here
-    // patientId: {
-    //   type: DataTypes.UUID,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'Patient',
-    //     key: 'uuid',
-    //   },
-    // },
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
     complaints: {
       type: DataTypes.STRING,
       allowNull: true,

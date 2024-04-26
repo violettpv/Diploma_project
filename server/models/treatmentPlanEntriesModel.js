@@ -1,15 +1,23 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
-const ToothNotation = db.define(
-  'ToothNotation',
+const TreatmentPlanEntries = db.define(
+  'TreatmentPlanEntries',
   {
     uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    notation: {
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    examinationPlan: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    treatmentPlan: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -20,4 +28,4 @@ const ToothNotation = db.define(
   }
 );
 
-module.exports = ToothNotation;
+module.exports = TreatmentPlanEntries;
