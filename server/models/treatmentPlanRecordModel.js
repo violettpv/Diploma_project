@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
-const TreatmentPlanEntries = db.define(
-  'TreatmentPlanEntries',
+const TreatmentPlanRecord = db.define(
+  'treatmentPlanRecord',
   {
     uuid: {
       type: DataTypes.UUID,
@@ -28,4 +28,4 @@ const TreatmentPlanEntries = db.define(
   }
 );
 
-module.exports = TreatmentPlanEntries;
+module.exports = TreatmentPlanRecord;

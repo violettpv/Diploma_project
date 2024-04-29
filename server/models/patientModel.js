@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
 const Patient = db.define(
-  'Patient',
+  'patient',
   {
     uuid: {
       type: DataTypes.UUID,

@@ -1,22 +1,23 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
+const Patient = require('./patientModel');
 
 const Form043 = db.define(
-  'Form043',
+  'form043',
   {
     uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    // patientId: {
-    //   type: DataTypes.UUID,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'Patient',
-    //     key: 'uuid',
-    //   },
-    // },
+    patientUuid: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: Patient,
+        key: 'uuid',
+      },
+    },
     diagnosis: {
       type: DataTypes.STRING,
       allowNull: true,

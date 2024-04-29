@@ -36,9 +36,9 @@ const syncTables = async () => {
   const Appointment = require('../models/appointmentModel');
   const Dispensary = require('../models/dispensaryModel');
   const Form043 = require('../models/form043Model');
-  const TreatmentPlanEntries = require('../models/treatmentPlanEntriesModel');
+  const TreatmentPlanRecord = require('../models/treatmentPlanRecordModel');
   const TreatmentPlan = require('../models/treatmentPlanModel');
-  const DoctorsDiaryEntries = require('../models/doctorsDiaryEntriesModel');
+  const DoctorsDiaryRecord = require('../models/doctorsDiaryRecordModel');
   const DoctorsDiary = require('../models/doctorsDiaryModel');
   const DentalFormula = require('../models/dentalFormulaModel');
 
@@ -74,16 +74,41 @@ const syncTables = async () => {
   Patient.hasOne(DentalFormula);
   DentalFormula.belongsTo(Patient);
   // M:M
-  Patient.belongsToMany(TreatmentPlanEntries, { through: TreatmentPlan });
-  TreatmentPlanEntries.belongsToMany(Patient, { through: TreatmentPlan });
-  Patient.belongsToMany(DoctorsDiaryEntries, { through: DoctorsDiary });
-  DoctorsDiaryEntries.belongsToMany(Patient, { through: DoctorsDiary });
+  Patient.belongsToMany(TreatmentPlanRecord, { through: TreatmentPlan });
+  TreatmentPlanRecord.belongsToMany(Patient, { through: TreatmentPlan });
+  Patient.belongsToMany(DoctorsDiaryRecord, { through: DoctorsDiary });
+  DoctorsDiaryRecord.belongsToMany(Patient, { through: DoctorsDiary });
 
   try {
     await db.sync();
+    // Create default roles
+    // await Role.bulkCreate([
+    //   { role: 'main' },
+    //   { role: 'doctor' },
+    //   { role: 'administrator' },
+    // ]);
+    await checkExistingRoles();
     console.log('Tables synced');
   } catch (err) {
     console.error('Unable to sync tables:', err);
+  }
+};
+
+const checkExistingRoles = async () => {
+  const Role = require('../models/roleModel');
+  const requiredRoles = ['main', 'doctor', 'administrator'];
+  const existingRoles = await Role.findAll();
+
+  // Check if all required roles exist
+  for (const role of requiredRoles) {
+    const roleExists = existingRoles.some((existingRole) => existingRole.role === role);
+    if (!roleExists) {
+      await Role.create({ role });
+      // console.log(`Role '${role}' created`);
+    }
+    // else {
+    //   console.log(`Role '${role}' already exists`);
+    // }
   }
 };
 

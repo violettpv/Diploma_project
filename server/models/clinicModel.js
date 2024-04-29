@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
 const Clinic = db.define(
-  'Clinic',
+  'clinic',
   {
     uuid: {
       type: DataTypes.UUID,
@@ -15,11 +15,11 @@ const Clinic = db.define(
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     phone: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         is: /^\+(380)[0-9]{9}$/,
       },

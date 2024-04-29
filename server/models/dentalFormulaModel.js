@@ -1,8 +1,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
+const Patient = require('./patientModel');
 
 const DentalFormula = db.define(
-  'DentalFormula',
+  'dentalFormula',
   {
     uuid: {
       type: DataTypes.UUID,
@@ -17,14 +18,14 @@ const DentalFormula = db.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    // patientId: {
-    //   type: DataTypes.UUID,
-    //   allowNull: false,
-    //   references: {
-    //     model: 'Patient',
-    //     key: 'uuid',
-    //   },
-    // },
+    patientUuid: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: Patient,
+        key: 'uuid',
+      },
+    },
   },
   {
     freezeTableName: true,

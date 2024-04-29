@@ -1,36 +1,39 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
+const Patient = require('./patientModel');
+const User = require('./userModel');
+const Receipt = require('./receiptModel');
 
 const Appointment = db.define(
-  'Appointment',
+  'appointment',
   {
     uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    // patientId: {
-    //   type: DataTypes.UUID,
-    //   references: {
-    //     model: 'Patient',
-    //     key: 'uuid',
-    //   },
-    // },
-    // чи не таблиця User, a UserRole (= лікар)??
-    // doctorId: {
-    //   type: DataTypes.UUID,
-    //   references: {
-    //     model: 'User',
-    //     key: 'uuid',
-    //   },
-    // },
-    // receiptId: {
-    //   type: DataTypes.UUID,
-    //   references: {
-    //     model: 'Receipt',
-    //     key: 'uuid',
-    //   },
-    // },
+    patientUuid: {
+      type: DataTypes.UUID,
+      references: {
+        model: Patient,
+        key: 'uuid',
+      },
+    },
+    // таблиця User чи UserRole (= лікар)??
+    userUuid: {
+      type: DataTypes.UUID,
+      references: {
+        model: User,
+        key: 'uuid',
+      },
+    },
+    receiptUuid: {
+      type: DataTypes.UUID,
+      references: {
+        model: Receipt,
+        key: 'uuid',
+      },
+    },
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,

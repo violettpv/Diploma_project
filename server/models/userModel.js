@@ -1,9 +1,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
-// const Clinic = require('./clinicModel');
+const Clinic = require('./clinicModel');
 
 const User = db.define(
-  'User',
+  'user',
   {
     uuid: {
       type: DataTypes.UUID,
@@ -42,13 +42,13 @@ const User = db.define(
         is: /^\+(380)[0-9]{9}$/,
       },
     },
-    // clinicUuid: {
-    //   type: DataTypes.UUID,
-    //   references: {
-    //     model: Clinic,
-    //     key: 'uuid',
-    //   },
-    // },
+    clinicUuid: {
+      type: DataTypes.UUID,
+      references: {
+        model: Clinic,
+        key: 'uuid',
+      },
+    },
   },
   {
     freezeTableName: true,
