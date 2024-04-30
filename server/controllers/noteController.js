@@ -12,10 +12,7 @@ const createNote = asyncHandler(async (req, res) => {
     throw new Error('Please fill in all fields');
   }
 
-  const note = await Note.create({
-    title,
-    content,
-  });
+  const note = await Note.create({ title, content });
 
   res.status(201).json({
     uuid: note.uuid,
