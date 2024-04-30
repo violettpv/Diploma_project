@@ -1,6 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { db } = require('../config/db');
-const Clinic = require('./clinicModel');
 
 const User = db.define(
   'user',
@@ -40,13 +39,6 @@ const User = db.define(
       unique: true,
       validate: {
         is: /^\+(380)[0-9]{9}$/,
-      },
-    },
-    clinicUuid: {
-      type: DataTypes.UUID,
-      references: {
-        model: Clinic,
-        key: 'uuid',
       },
     },
   },

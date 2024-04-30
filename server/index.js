@@ -19,6 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/users', require('./routes/userRoute'));
+app.use('/api/clinic', require('./routes/clinicRoute'));
+app.use('/api/patients', require('./routes/patientRoute'));
+app.use('/api/notes', require('./routes/noteRoute'));
+// app.use('/api/services', require('./routes/serviceRoute'));
+// app.use('/api/diseases', require('./routes/diseaseRoute'));
+// app.use('/api/appointments', require('./routes/appointmentRoute'));
 
 app.use(errorHandler);
 

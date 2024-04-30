@@ -46,9 +46,6 @@ const syncTables = async () => {
   // M:M
   User.belongsToMany(Role, { through: UsersRole });
   Role.belongsToMany(User, { through: UsersRole });
-  // 1:M
-  Clinic.hasMany(User);
-  User.belongsTo(Clinic);
   // M:M
   Patient.belongsToMany(Disease, { through: Anamnesis });
   Disease.belongsToMany(Patient, { through: Anamnesis });
@@ -81,12 +78,6 @@ const syncTables = async () => {
 
   try {
     await db.sync();
-    // Create default roles
-    // await Role.bulkCreate([
-    //   { role: 'main' },
-    //   { role: 'doctor' },
-    //   { role: 'administrator' },
-    // ]);
     await checkExistingRoles();
     console.log('Tables synced');
   } catch (err) {

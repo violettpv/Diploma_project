@@ -9,16 +9,12 @@ const Note = db.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
-    note: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    created: {
-      type: DataTypes.DATE,
+    content: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
