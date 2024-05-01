@@ -7,11 +7,12 @@ const {
   updateForm043,
   getAllForm043s,
 } = require('../controllers/form043Controller');
+const { protect } = require('../middleware/authHandler');
 
-router.post('/create', createForm043);
-router.get('/get/:uuid', getForm043);
-router.get('/all', getAllForm043s);
-router.delete('/delete/:uuid', deleteForm043);
-router.put('/update/:uuid', updateForm043);
+router.post('/create', protect, createForm043);
+router.get('/get/:uuid', protect, getForm043);
+router.get('/all', protect, getAllForm043s);
+router.delete('/delete/:uuid', protect, deleteForm043);
+router.put('/update/:uuid', protect, updateForm043);
 
 module.exports = router;

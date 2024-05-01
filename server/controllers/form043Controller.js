@@ -1,11 +1,11 @@
 const asyncHandler = require('express-async-handler');
 const Form043 = require('../models/form043Model');
-
-// ПРОТЕСТИТИ!!!!!!!!!!!!
+const User = require('../models/userModel');
+const Role = require('../models/roleModel');
 
 // @desc    Create a new form043
 // @route   POST /api/form043/create
-// @access  Public
+// @access  Private
 const createForm043 = asyncHandler(async (req, res) => {
   const {
     patientUuid,
@@ -34,7 +34,7 @@ const createForm043 = asyncHandler(async (req, res) => {
   const usersRole = findUsersRole.roles[0].role;
   if (!(usersRole === 'main' || usersRole === 'doctor')) {
     res.status(400);
-    throw new Error('User is not a main admin');
+    throw new Error('User is not a main admin or a doctor');
   }
 
   // Check if form043 already exists with the same patientUuid
@@ -79,7 +79,7 @@ const createForm043 = asyncHandler(async (req, res) => {
 
 // @desc    Get a form043 of a patient
 // @route   Get /api/form043/get/:uuid
-// @access  Public
+// @access  Private
 const getForm043 = asyncHandler(async (req, res) => {
   const form043 = await Form043.findOne({ where: { patientUuid: req.params.uuid } });
 
@@ -92,7 +92,7 @@ const getForm043 = asyncHandler(async (req, res) => {
   const usersRole = findUsersRole.roles[0].role;
   if (!(usersRole === 'main' || usersRole === 'doctor')) {
     res.status(400);
-    throw new Error('User is not a main admin');
+    throw new Error('User is not a main admin or a doctor');
   }
 
   if (form043) {
@@ -105,9 +105,22 @@ const getForm043 = asyncHandler(async (req, res) => {
 
 // @desc    Get all form043s
 // @route   Get /api/form043/all
-// @access  Private. For development only
+// @access  Private
 const getAllForm043s = asyncHandler(async (req, res) => {
   const form043s = await Form043.findAll({ order: [['uuid', 'DESC']] });
+
+  // Check if user's role is 'main' or 'doctor'
+  const userUuid = req.user.uuid;
+  const findUsersRole = await User.findOne({
+    where: { uuid: userUuid },
+    include: { model: Role, through: { attributes: [] } },
+  });
+  const usersRole = findUsersRole.roles[0].role;
+  if (!(usersRole === 'main' || usersRole === 'doctor')) {
+    res.status(400);
+    throw new Error('User is not a main admin or a doctor');
+  }
+
   if (form043s) {
     res.json(form043s);
   } else {
@@ -132,7 +145,7 @@ const deleteForm043 = asyncHandler(async (req, res) => {
 
 // @desc    Update a form043
 // @route   PUT /api/form043/update/:uuid
-// @access  Public
+// @access  Private
 const updateForm043 = asyncHandler(async (req, res) => {
   const form043 = await Form043.findOne({ where: { uuid: req.params.uuid } });
   if (!form043) {
@@ -149,7 +162,7 @@ const updateForm043 = asyncHandler(async (req, res) => {
   const usersRole = findUsersRole.roles[0].role;
   if (!(usersRole === 'main' || usersRole === 'doctor')) {
     res.status(400);
-    throw new Error('User is not a main admin');
+    throw new Error('User is not a main admin or a doctor');
   }
 
   const {

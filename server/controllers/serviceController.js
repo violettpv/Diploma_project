@@ -1,13 +1,13 @@
 const asyncHandler = require('express-async-handler');
 const Service = require('../models/serviceModel');
-
-// ПРОТЕСТИТИ!!!!!!!!!!!!
+const User = require('../models/userModel');
+const Role = require('../models/roleModel');
 
 // Може створювати та редагувати тільки Main адмін
 
 // @desc    Create a new service
 // @route   POST /api/services/create
-// @access  Public
+// @access  Private
 const createService = asyncHandler(async (req, res) => {
   const { name, price } = req.body;
 
@@ -23,7 +23,7 @@ const createService = asyncHandler(async (req, res) => {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
-  if (!usersRole === 'main') {
+  if (!(usersRole === 'main')) {
     res.status(400);
     throw new Error('User is not a main admin');
   }
@@ -70,7 +70,7 @@ const getServices = asyncHandler(async (req, res) => {
 
 // @desc    Delete a service
 // @route   DELETE /api/services/delete/:uuid
-// @access  Public
+// @access  Private
 const deleteService = asyncHandler(async (req, res) => {
   const service = await Service.findOne({ where: { uuid: req.params.uuid } });
 
@@ -81,7 +81,7 @@ const deleteService = asyncHandler(async (req, res) => {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
-  if (!usersRole === 'main') {
+  if (!(usersRole === 'main')) {
     res.status(400);
     throw new Error('User is not a main admin');
   }
@@ -97,7 +97,7 @@ const deleteService = asyncHandler(async (req, res) => {
 
 // @desc    Update a service
 // @route   PUT /api/services/update/:uuid
-// @access  Public
+// @access  Private
 const updateService = asyncHandler(async (req, res) => {
   const service = await Service.findOne({ where: { uuid: req.params.uuid } });
   if (!service) {
@@ -112,7 +112,7 @@ const updateService = asyncHandler(async (req, res) => {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
-  if (!usersRole === 'main') {
+  if (!(usersRole === 'main')) {
     res.status(400);
     throw new Error('User is not a main admin');
   }

@@ -7,11 +7,12 @@ const {
   updateService,
   getServices,
 } = require('../controllers/serviceController');
+const { protect } = require('../middleware/authHandler');
 
-router.post('/create', createService);
+router.post('/create', protect, createService);
 router.get('/get/:uuid', getService);
 router.get('/all', getServices);
-router.delete('/delete/:uuid', deleteService);
-router.put('/update/:uuid', updateService);
+router.delete('/delete/:uuid', protect, deleteService);
+router.put('/update/:uuid', protect, updateService);
 
 module.exports = router;

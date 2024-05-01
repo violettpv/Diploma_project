@@ -5,13 +5,16 @@ const {
   getTreatmentPlan,
   deleteTreatmentPlan,
   updateTreatmentPlan,
-  getAllTreatmentPlans,
+  getAllTrPlansOfPatient,
+  getAllPlans,
 } = require('../controllers/treatmentPlanController');
+const { protect } = require('../middleware/authHandler');
 
-router.post('/create', createTreatmentPlan);
-router.get('/get/:uuid', getTreatmentPlan);
-router.get('/all', getAllTreatmentPlans);
-router.delete('/delete/:uuid', deleteTreatmentPlan);
-router.put('/update/:uuid', updateTreatmentPlan);
+router.post('/create', protect, createTreatmentPlan);
+router.get('/get/:uuid', protect, getTreatmentPlan);
+router.get('/all/:uuid', protect, getAllTrPlansOfPatient);
+router.get('/all/', protect, getAllPlans);
+router.delete('/delete/:uuid', protect, deleteTreatmentPlan);
+router.put('/update/:uuid', protect, updateTreatmentPlan);
 
 module.exports = router;
