@@ -1,6 +1,10 @@
 const asyncHandler = require('express-async-handler');
 const Service = require('../models/serviceModel');
 
+// ПРОТЕСТИТИ!!!!!!!!!!!!
+
+// Може створювати та редагувати тільки Main адмін
+
 // @desc    Create a new service
 // @route   POST /api/services/create
 // @access  Public
@@ -12,13 +16,30 @@ const createService = asyncHandler(async (req, res) => {
     throw new Error('Please fill in all fields');
   }
 
+  // Check if user's role is 'main'
+  const userUuid = req.user.uuid;
+  const findUsersRole = await User.findOne({
+    where: { uuid: userUuid },
+    include: { model: Role, through: { attributes: [] } },
+  });
+  const usersRole = findUsersRole.roles[0].role;
+  if (!usersRole === 'main') {
+    res.status(400);
+    throw new Error('User is not a main admin');
+  }
+
   const service = await Service.create({ name, price });
 
-  res.status(201).json({
-    uuid: service.uuid,
-    name: service.name,
-    price: service.price,
-  });
+  if (service) {
+    res.status(201).json({
+      uuid: service.uuid,
+      name: service.name,
+      price: service.price,
+    });
+  } else {
+    res.status(400);
+    throw new Error('Invalid service data');
+  }
 });
 
 // @desc    Get a service
@@ -52,6 +73,19 @@ const getServices = asyncHandler(async (req, res) => {
 // @access  Public
 const deleteService = asyncHandler(async (req, res) => {
   const service = await Service.findOne({ where: { uuid: req.params.uuid } });
+
+  // Check if user's role is 'main'
+  const userUuid = req.user.uuid;
+  const findUsersRole = await User.findOne({
+    where: { uuid: userUuid },
+    include: { model: Role, through: { attributes: [] } },
+  });
+  const usersRole = findUsersRole.roles[0].role;
+  if (!usersRole === 'main') {
+    res.status(400);
+    throw new Error('User is not a main admin');
+  }
+
   if (service) {
     await service.destroy();
     res.json({ message: 'Service removed' });
@@ -69,6 +103,18 @@ const updateService = asyncHandler(async (req, res) => {
   if (!service) {
     res.status(404);
     throw new Error('Service not found');
+  }
+
+  // Check if user's role is 'main'
+  const userUuid = req.user.uuid;
+  const findUsersRole = await User.findOne({
+    where: { uuid: userUuid },
+    include: { model: Role, through: { attributes: [] } },
+  });
+  const usersRole = findUsersRole.roles[0].role;
+  if (!usersRole === 'main') {
+    res.status(400);
+    throw new Error('User is not a main admin');
   }
 
   const { name, price } = req.body;

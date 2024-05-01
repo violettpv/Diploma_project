@@ -14,11 +14,16 @@ const createNote = asyncHandler(async (req, res) => {
 
   const note = await Note.create({ title, content });
 
-  res.status(201).json({
-    uuid: note.uuid,
-    title: note.title,
-    content: note.content,
-  });
+  if (note) {
+    res.status(201).json({
+      uuid: note.uuid,
+      title: note.title,
+      content: note.content,
+    });
+  } else {
+    res.status(400);
+    throw new Error('Invalid note data');
+  }
 });
 
 // @desc    Get a note

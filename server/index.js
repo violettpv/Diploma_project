@@ -23,6 +23,10 @@ app.use('/api/clinic', require('./routes/clinicRoute'));
 app.use('/api/patients', require('./routes/patientRoute'));
 app.use('/api/notes', require('./routes/noteRoute'));
 app.use('/api/services', require('./routes/serviceRoute'));
+app.use('/api/anamnesis', require('./routes/anamnesisRoute'));
+app.use('/api/dispensary', require('./routes/dispensaryRoute'));
+app.use('/api/form043', require('./routes/form043Route'));
+app.use('/api/trtplan', require('./routes/treatmentPlanRoute'));
 // app.use('/api/appointments', require('./routes/appointmentRoute'));
 
 app.use(errorHandler);

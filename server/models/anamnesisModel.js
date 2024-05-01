@@ -12,18 +12,24 @@ const Anamnesis = db.define(
       defaultValue: DataTypes.UUIDV4,
     },
     diseaseUuid: {
-      type: DataTypes.STRING,
+      allowNull: false,
+      type: DataTypes.UUID,
       references: {
         model: Disease,
         key: 'uuid',
       },
     },
     patientUuid: {
+      allowNull: false,
       type: DataTypes.UUID,
       references: {
         model: Patient,
         key: 'uuid',
       },
+    },
+    note: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

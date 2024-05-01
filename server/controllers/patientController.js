@@ -54,7 +54,7 @@ const getPatient = asyncHandler(async (req, res) => {
 // @route   Get /api/patients/all
 // @access  Public
 const getPatients = asyncHandler(async (req, res) => {
-  const patients = await Patient.findAll();
+  const patients = await Patient.findAll({ order: [['surname', 'ASC']] });
   if (patients) {
     res.json(patients);
   } else {

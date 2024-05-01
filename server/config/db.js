@@ -166,6 +166,8 @@ const checkExistingDiseases = async () => {
     // для пацієнток
     'Вагітність',
     'Годуюча мати',
+    // Повністю відсутні
+    'Повністю здоровий',
   ];
   const existingDiseases = await Disease.findAll();
 
