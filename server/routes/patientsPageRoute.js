@@ -20,6 +20,6 @@ router.get('/me', protectPatient, getMe);
 router.get('/tplan/:uuid', protectPatient, getTreatmentPlan);
 router.get('/all/tplans', protectPatient, getAllPlans);
 router.delete('/delete/:uuid', protect, deletePage);
-router.put('/update/:uuid', protectPatient, updatePageInfo);
+router.put('/update', protectPatient, updatePageInfo);
 
 module.exports = router;

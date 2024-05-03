@@ -193,10 +193,10 @@ const deletePage = asyncHandler(async (req, res) => {
 });
 
 // @desc    Update a patient's page info (only login and password are allowed)
-// @route   PUT /api/patientspage/update/:uuid
+// @route   PUT /api/patientspage/update
 // @access  Private
 const updatePageInfo = asyncHandler(async (req, res) => {
-  const patient = await Patient.findByPk(req.params.uuid);
+  const patient = await Patient.findByPk(req.patient.uuid);
 
   if (!patient) {
     res.status(400);

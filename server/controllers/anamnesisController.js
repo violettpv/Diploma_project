@@ -1,5 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Anamnesis = require('../models/anamnesisModel');
+const Disease = require('../models/diseaseModel');
+const Patient = require('../models/patientModel');
 
 // @desc    Create a new anamnesis
 // @route   POST /api/anamnesis/create
@@ -42,11 +44,24 @@ const createAnamnesis = asyncHandler(async (req, res) => {
 // @route   Get /api/anamnesis/get/:uuid
 // @access  Public
 const getAnamnesis = asyncHandler(async (req, res) => {
-  const anamnesis = await Anamnesis.findAll({
-    where: { patientUuid: req.params.uuid },
+  const patient = await Patient.findByPk(req.params.uuid);
+  const anamnesis = await Patient.findByPk(patient.uuid, {
+    include: [
+      {
+        model: Disease,
+        through: { attributes: [] },
+      },
+    ],
+    order: [[Disease, 'name', 'ASC']],
   });
+
   if (anamnesis) {
-    res.json(anamnesis);
+    res.json({
+      patient: patient.uuid,
+      surname: patient.surname,
+      name: patient.name,
+      anamnesis: anamnesis.diseases,
+    });
   } else {
     res.status(404);
     throw new Error('Anamnesis not found');
