@@ -3,22 +3,20 @@ const TreatmentPlan = require('../models/treatmentPlanModel');
 const TreatmentPlanRecord = require('../models/treatmentPlanRecordModel');
 const User = require('../models/userModel');
 const Role = require('../models/roleModel');
+const Patient = require('../models/patientModel');
 
 // @desc    Create a new treatment plan
 // @route   POST /api/tplan/create
 // @access  Private
 const createTreatmentPlan = asyncHandler(async (req, res) => {
-  const { patientUuid, date, examinationPlan, treatmentPlan } = req.body;
-  // treatmentPlanRecordUuid
-  if (!patientUuid || !date || !treatmentPlan) {
+  const { patientUuid, date, examination, treatment } = req.body;
+  if (!patientUuid || !date || !treatment) {
     res.status(400);
     throw new Error('Please fill all fields');
   }
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -29,13 +27,12 @@ const createTreatmentPlan = asyncHandler(async (req, res) => {
 
   const trPlanRecord = await TreatmentPlanRecord.create({
     date,
-    examinationPlan,
-    treatmentPlan,
+    examination,
+    treatment,
   });
-  const treatmentPlanRecordUuid = trPlanRecord.uuid;
   const trPlan = await TreatmentPlan.create({
     patientUuid,
-    treatmentPlanRecordUuid,
+    treatmentPlanRecordUuid: trPlanRecord.uuid,
   });
 
   if (trPlan && trPlanRecord) {
@@ -44,8 +41,8 @@ const createTreatmentPlan = asyncHandler(async (req, res) => {
       patientUuid: trPlan.patientUuid,
       treatmentPlanRecordUuid: trPlan.treatmentPlanRecordUuid,
       date: trPlanRecord.date,
-      examinationPlan: trPlanRecord.examinationPlan,
-      treatmentPlan: trPlanRecord.treatmentPlan,
+      examination: trPlanRecord.examination,
+      treatment: trPlanRecord.treatment,
     });
   } else {
     res.status(400);
@@ -53,19 +50,14 @@ const createTreatmentPlan = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get a treatment plan by uuid
+// @desc    Get the treatment plan by uuid
 // @route   GET /api/tplan/get/:uuid
 // @access  Private
 const getTreatmentPlan = asyncHandler(async (req, res) => {
-  const trPlan = await TreatmentPlan.findOne({ where: { patientUuid: req.params.uuid } });
-  const trPlanRecord = await TreatmentPlanRecord.findOne({
-    where: { uuid: trPlan.treatmentPlanRecordUuid },
-  });
+  const planRecord = await TreatmentPlanRecord.findByPk(req.params.uuid);
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -74,14 +66,12 @@ const getTreatmentPlan = asyncHandler(async (req, res) => {
     throw new Error('User is not a main admin or a doctor');
   }
 
-  if (trPlan && trPlanRecord) {
+  if (planRecord) {
     res.json({
-      uuid: trPlan.uuid,
-      patientUuid: trPlan.patientUuid,
-      treatmentPlanRecordUuid: trPlan.treatmentPlanRecordUuid,
-      date: trPlanRecord.date,
-      examinationPlan: trPlanRecord.examinationPlan,
-      treatmentPlan: trPlanRecord.treatmentPlan,
+      uuid: planRecord.uuid,
+      date: planRecord.date,
+      examination: planRecord.examination,
+      treatment: planRecord.treatment,
     });
   } else {
     res.status(404);
@@ -92,19 +82,19 @@ const getTreatmentPlan = asyncHandler(async (req, res) => {
 // @desc    Get all treatment plans
 // @route   GET /api/tplan/all/:uuid
 // @access  Private
-const getAllTrPlansOfPatient = asyncHandler(async (req, res) => {
-  // ДОПИСАТИ!!!!!!!!!!!!!!!!
-  const trPlans = await TreatmentPlan.findAll({
-    where: { patientUuid: req.params.uuid },
+const getAllPlansOfPatient = asyncHandler(async (req, res) => {
+  const tPlans = await Patient.findByPk(req.params.uuid, {
+    order: [['date', 'DESC']],
+    include: [
+      {
+        model: TreatmentPlanRecord,
+        through: { attributes: [] },
+      },
+    ],
   });
-  // const trPlansRecords = await TreatmentPlanRecord.findAll({
-  //   where: { uuid: trPlans.treatmentPlanRecordUuid },
-  // });
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -113,16 +103,8 @@ const getAllTrPlansOfPatient = asyncHandler(async (req, res) => {
     throw new Error('User is not a main admin or a doctor');
   }
 
-  if (trPlans && trPlansRecords) {
-    res.json(trPlans, trPlansRecords);
-    // {
-    //   uuid: trPlans.uuid,
-    //   patientUuid: trPlans.patientUuid,
-    //   treatmentPlanRecordUuid: trPlans.treatmentPlanRecordUuid,
-    //   date: trPlansRecords.date,
-    //   examinationPlan: trPlansRecords.examinationPlan,
-    //   treatmentPlan: trPlansRecords.treatmentPlan,
-    // });
+  if (tPlans) {
+    res.json(tPlans);
   } else {
     res.status(404);
     throw new Error('Treatment plans not found');
@@ -133,13 +115,17 @@ const getAllTrPlansOfPatient = asyncHandler(async (req, res) => {
 // @route   GET /api/tplan/all
 // @access  Private. For developers only
 const getAllPlans = asyncHandler(async (req, res) => {
-  const trPlans = await TreatmentPlan.findAll();
-  const trPlansRecords = await TreatmentPlanRecord.findAll();
+  const allPlans = await Patient.findAll({
+    include: [
+      {
+        model: TreatmentPlanRecord,
+        through: { attributes: [] },
+      },
+    ],
+  });
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -148,27 +134,22 @@ const getAllPlans = asyncHandler(async (req, res) => {
     throw new Error('User is not a main admin or a doctor');
   }
 
-  if (trPlans) {
-    res.json(trPlans);
+  if (allPlans) {
+    res.json(allPlans);
   } else {
     res.status(404);
     throw new Error('Treatment plans not found');
   }
 });
 
-// @desc    Delete a treatment plan
+// @desc    Delete the treatment plan
 // @route   DELETE /api/tplan/delete/:uuid
 // @access  Private
 const deleteTreatmentPlan = asyncHandler(async (req, res) => {
-  const trPlan = await TreatmentPlan.findOne({ where: { uuid: req.params.uuid } });
-  const trPlanRecord = await TreatmentPlanRecord.findOne({
-    where: { uuid: trPlan.treatmentPlanRecordUuid },
-  });
+  const trPlan = await TreatmentPlanRecord.findOne({ where: { uuid: req.params.uuid } });
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -179,7 +160,6 @@ const deleteTreatmentPlan = asyncHandler(async (req, res) => {
 
   if (trPlan) {
     await trPlan.destroy();
-    await trPlanRecord.destroy();
     res.json({ message: 'Treatment plan removed' });
   } else {
     res.status(404);
@@ -187,23 +167,19 @@ const deleteTreatmentPlan = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Update a treatment plan
+// @desc    Update the treatment plan
 // @route   PUT /api/tplan/update/:uuid
 // @access  Private
 const updateTreatmentPlan = asyncHandler(async (req, res) => {
-  const trPlan = await TreatmentPlan.findOne({ where: { patientUuid: req.params.uuid } });
-  const trPlanRecord = await TreatmentPlanRecord.findOne({
-    where: { uuid: trPlan.treatmentPlanRecordUuid },
-  });
-  if (!(trPlan && trPlanRecord)) {
+  const trPlan = await TreatmentPlanRecord.findByPk(req.params.uuid);
+
+  if (!trPlan) {
     res.status(404);
     throw new Error('Treatment plan not found');
   }
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -211,19 +187,18 @@ const updateTreatmentPlan = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('User is not a main admin or a doctor');
   }
-  const { date, examinationPlan, treatmentPlan } = req.body;
 
-  await trPlanRecord.set({ date, examinationPlan, treatmentPlan });
-  await trPlanRecord.save();
+  const { date, examination, treatment } = req.body;
 
-  if (trPlan && trPlanRecord) {
+  await trPlan.set({ date, examination, treatment });
+  await trPlan.save();
+
+  if (trPlan) {
     res.json({
       uuid: trPlan.uuid,
-      patientUuid: trPlan.patientUuid,
-      treatmentPlanRecordUuid: trPlan.treatmentPlanRecordUuid,
-      date: trPlanRecord.date,
-      examinationPlan: trPlanRecord.examinationPlan,
-      treatmentPlan: trPlanRecord.treatmentPlan,
+      date: trPlan.date,
+      examination: trPlan.examination,
+      treatment: trPlan.treatment,
     });
   } else {
     res.status(400);
@@ -234,7 +209,7 @@ const updateTreatmentPlan = asyncHandler(async (req, res) => {
 module.exports = {
   createTreatmentPlan,
   getTreatmentPlan,
-  getAllTrPlansOfPatient,
+  getAllPlansOfPatient,
   getAllPlans,
   deleteTreatmentPlan,
   updateTreatmentPlan,

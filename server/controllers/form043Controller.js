@@ -26,9 +26,7 @@ const createForm043 = asyncHandler(async (req, res) => {
   }
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -84,9 +82,7 @@ const getForm043 = asyncHandler(async (req, res) => {
   const form043 = await Form043.findOne({ where: { patientUuid: req.params.uuid } });
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -110,9 +106,7 @@ const getAllForm043s = asyncHandler(async (req, res) => {
   const form043s = await Form043.findAll({ order: [['uuid', 'DESC']] });
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -134,6 +128,17 @@ const getAllForm043s = asyncHandler(async (req, res) => {
 // @access  Private. For development only
 const deleteForm043 = asyncHandler(async (req, res) => {
   const form043 = await Form043.findOne({ where: { patientUuid: req.params.uuid } });
+
+  // Check if user's role is 'main' or 'doctor'
+  const findUsersRole = await User.findByPk(req.user.uuid, {
+    include: { model: Role, through: { attributes: [] } },
+  });
+  const usersRole = findUsersRole.roles[0].role;
+  if (!(usersRole === 'main' || usersRole === 'doctor')) {
+    res.status(400);
+    throw new Error('User is not a main admin or a doctor');
+  }
+
   if (form043) {
     await form043.destroy();
     res.json({ message: 'Form043 removed' });
@@ -154,9 +159,7 @@ const updateForm043 = asyncHandler(async (req, res) => {
   }
 
   // Check if user's role is 'main' or 'doctor'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;

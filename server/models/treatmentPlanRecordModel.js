@@ -13,11 +13,11 @@ const TreatmentPlanRecord = db.define(
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    examinationPlan: {
+    examination: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    treatmentPlan: {
+    treatment: {
       type: DataTypes.STRING,
       allowNull: false,
     },

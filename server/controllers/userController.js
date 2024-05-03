@@ -74,6 +74,12 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  // Check if email and password are not null
+  if (!email || !password) {
+    res.status(400);
+    throw new Error('Please provide an email and password');
+  }
+
   // Check if user exists
   const user = await User.findOne({ where: { email } });
   if (!user) {
@@ -137,7 +143,7 @@ const createUser = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   // Check if role is doctor or administrator
-  if (role !== 'doctor' && role !== 'administrator') {
+  if (!(role === 'doctor' || role === 'administrator')) {
     res.status(400);
     throw new Error('Invalid role');
   }

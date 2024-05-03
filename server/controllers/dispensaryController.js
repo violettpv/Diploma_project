@@ -15,17 +15,6 @@ const createDispensary = asyncHandler(async (req, res) => {
     throw new Error('Please fill all fields');
   }
 
-  // Check if user's role is 'doctor' or 'main'
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
-    include: { model: Role, through: { attributes: [] } },
-  });
-  const usersRole = findUsersRole.roles[0].role;
-  if (!(usersRole === 'doctor' || usersRole === 'main')) {
-    res.status(400);
-    throw new Error('User is not a doctor or main admin');
-  }
-
   // Check if dateOfTheVisit is today or later
   const today = new Date();
   const dateConverted = new Date(dateOfTheVisit);
@@ -80,7 +69,7 @@ const getDispensary = asyncHandler(async (req, res) => {
 // @route   Get /api/dispensary/all
 // @access  Public
 const getAllDispensary = asyncHandler(async (req, res) => {
-  const dispensary = await Dispensary.findAll();
+  const dispensary = await Dispensary.findAll({ order: [['dateOfTheVisit', 'ASC']] });
   if (dispensary) {
     res.json(dispensary);
   } else {

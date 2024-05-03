@@ -5,14 +5,14 @@ const {
   getTreatmentPlan,
   deleteTreatmentPlan,
   updateTreatmentPlan,
-  getAllTrPlansOfPatient,
+  getAllPlansOfPatient,
   getAllPlans,
 } = require('../controllers/treatmentPlanController');
 const { protect } = require('../middleware/authHandler');
 
 router.post('/create', protect, createTreatmentPlan);
 router.get('/get/:uuid', protect, getTreatmentPlan);
-router.get('/all/:uuid', protect, getAllTrPlansOfPatient);
+router.get('/all/:uuid', protect, getAllPlansOfPatient);
 router.get('/all/', protect, getAllPlans);
 router.delete('/delete/:uuid', protect, deleteTreatmentPlan);
 router.put('/update/:uuid', protect, updateTreatmentPlan);

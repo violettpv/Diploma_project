@@ -49,6 +49,16 @@ const Patient = db.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    // for patient's personal page
+    login: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     freezeTableName: true,

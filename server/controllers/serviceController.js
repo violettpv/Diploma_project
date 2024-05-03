@@ -16,10 +16,8 @@ const createService = asyncHandler(async (req, res) => {
     throw new Error('Please fill in all fields');
   }
 
-  // Check if user's role is 'main'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  // Check if user's role is 'main' or 'doctor'
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -74,10 +72,8 @@ const getServices = asyncHandler(async (req, res) => {
 const deleteService = asyncHandler(async (req, res) => {
   const service = await Service.findOne({ where: { uuid: req.params.uuid } });
 
-  // Check if user's role is 'main'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  // Check if user's role is 'main' or 'doctor'
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
@@ -105,10 +101,8 @@ const updateService = asyncHandler(async (req, res) => {
     throw new Error('Service not found');
   }
 
-  // Check if user's role is 'main'
-  const userUuid = req.user.uuid;
-  const findUsersRole = await User.findOne({
-    where: { uuid: userUuid },
+  // Check if user's role is 'main' or 'doctor'
+  const findUsersRole = await User.findByPk(req.user.uuid, {
     include: { model: Role, through: { attributes: [] } },
   });
   const usersRole = findUsersRole.roles[0].role;
