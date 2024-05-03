@@ -106,7 +106,8 @@ const getDDRecord = asyncHandler(async (req, res) => {
 // @route   GET /api/docsdiary/all/:uuid
 // @access  Private
 const getAllRecordsOfPatient = asyncHandler(async (req, res) => {
-  const diaryRecords = await Patient.findByPk(req.params.uuid, {
+  const patient = await Patient.findByPk(req.params.uuid);
+  const diaryRecords = await Patient.findByPk(patient.uuid, {
     order: [[DoctorsDiaryRecord, 'date', 'DESC']],
     include: [
       {
@@ -114,6 +115,7 @@ const getAllRecordsOfPatient = asyncHandler(async (req, res) => {
         through: { attributes: [] },
       },
     ],
+    order: [[DoctorsDiaryRecord, 'date', 'DESC']],
   });
 
   // Check if user's role is 'main' or 'doctor'
@@ -127,38 +129,12 @@ const getAllRecordsOfPatient = asyncHandler(async (req, res) => {
   }
 
   if (diaryRecords) {
-    res.json(diaryRecords);
-  } else {
-    res.status(404);
-    throw new Error('Doctor`s diary records not found');
-  }
-});
-
-// @desc    Get all doctor`s diary records
-// @route   GET /api/docsdiary/all
-// @access  Private. For developers only
-const getAllRecords = asyncHandler(async (req, res) => {
-  const allRecords = await Patient.findAll({
-    include: [
-      {
-        model: DoctorsDiaryRecord,
-        through: { attributes: [] },
-      },
-    ],
-  });
-
-  // Check if user's role is 'main' or 'doctor'
-  const findUsersRole = await User.findByPk(req.user.uuid, {
-    include: { model: Role, through: { attributes: [] } },
-  });
-  const usersRole = findUsersRole.roles[0].role;
-  if (!(usersRole === 'main' || usersRole === 'doctor')) {
-    res.status(400);
-    throw new Error('User is not a main admin or a doctor');
-  }
-
-  if (allRecords) {
-    res.json(allRecords);
+    res.json({
+      patient: patient.uuid,
+      surname: patient.surname,
+      name: patient.name,
+      diaryRecords: diaryRecords.doctorsDiaryRecords,
+    });
   } else {
     res.status(404);
     throw new Error('Doctor`s diary records not found');
@@ -216,7 +192,7 @@ const updateDDRecord = asyncHandler(async (req, res) => {
   const { date, complaints, anamnesis, status, diagnosis, treatment, recommendations } =
     req.body;
 
-  await diaryRecord.set({
+  diaryRecord.set({
     date,
     complaints,
     anamnesis,
@@ -250,5 +226,4 @@ module.exports = {
   deleteDDRecord,
   updateDDRecord,
   getAllRecordsOfPatient,
-  getAllRecords,
 };

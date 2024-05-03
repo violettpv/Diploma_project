@@ -28,7 +28,7 @@ app.use('/api/dispensary', require('./routes/dispensaryRoute'));
 app.use('/api/form043', require('./routes/form043Route'));
 app.use('/api/tplan', require('./routes/treatmentPlanRoute'));
 app.use('/api/docsdiary', require('./routes/doctorsDiaryRoute'));
-// app.use('api/patientspage', require('./routes/patientsPageRoute'));
+app.use('/api/patientspage', require('./routes/patientsPageRoute'));
 // app.use('/api/appointments', require('./routes/appointmentRoute'));
 
 app.use(errorHandler);

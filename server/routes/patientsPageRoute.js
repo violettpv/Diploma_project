@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   loginPatient,
+  getMe,
   createPage, // by admin or main
   getTreatmentPlan,
   getAllPlans,
@@ -15,9 +16,9 @@ const { protectPatient } = require('../middleware/patientAuthHandler');
 
 router.post('/login', loginPatient);
 router.post('/create', protect, createPage);
-router.get('/me/:uuid', protectPatient, getMe);
+router.get('/me', protectPatient, getMe);
 router.get('/tplan/:uuid', protectPatient, getTreatmentPlan);
-router.get('/tplan/all', protectPatient, getAllPlans);
+router.get('/all/tplans', protectPatient, getAllPlans);
 router.delete('/delete/:uuid', protect, deletePage);
 router.put('/update/:uuid', protectPatient, updatePageInfo);
 

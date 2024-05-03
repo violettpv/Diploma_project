@@ -89,7 +89,7 @@ const updatePatient = asyncHandler(async (req, res) => {
 
   const { surname, name, patronymic, phone, email, birthdate, address, notes } = req.body;
 
-  await patient.set({
+  patient.set({
     surname,
     name,
     patronymic,

@@ -41,8 +41,6 @@ const createDispensary = asyncHandler(async (req, res) => {
       timeNeeded: dispensary.timeNeeded,
       treatment: dispensary.treatment,
       notes: dispensary.notes,
-      // check user's role
-      usersRole: findUsersRole.roles,
     });
   } else {
     res.status(400);
@@ -54,9 +52,7 @@ const createDispensary = asyncHandler(async (req, res) => {
 // @route   Get /api/dispensary/get/:uuid
 // @access  Public
 const getDispensary = asyncHandler(async (req, res) => {
-  const dispensary = await Dispensary.findOne({
-    where: { patientUuid: req.params.uuid },
-  });
+  const dispensary = await Dispensary.findByPk(req.params.uuid);
   if (dispensary) {
     res.json(dispensary);
   } else {
@@ -112,7 +108,7 @@ const updateDispensary = asyncHandler(async (req, res) => {
     throw new Error('Date of the visit must be today or later');
   }
 
-  await dispensary.set({
+  dispensary.set({
     userUuid,
     dateOfTheVisit,
     timeNeeded,

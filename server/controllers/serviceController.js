@@ -57,7 +57,7 @@ const getService = asyncHandler(async (req, res) => {
 // @route   Get /api/services/all
 // @access  Public
 const getServices = asyncHandler(async (req, res) => {
-  const services = await Service.findAll();
+  const services = await Service.findAll({ order: [['name', 'ASC']] });
   if (services) {
     res.json(services);
   } else {
@@ -112,7 +112,7 @@ const updateService = asyncHandler(async (req, res) => {
   }
 
   const { name, price } = req.body;
-  await service.set({ name, price });
+  service.set({ name, price });
   await service.save();
 
   if (service) {

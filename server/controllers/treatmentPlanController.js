@@ -83,14 +83,15 @@ const getTreatmentPlan = asyncHandler(async (req, res) => {
 // @route   GET /api/tplan/all/:uuid
 // @access  Private
 const getAllPlansOfPatient = asyncHandler(async (req, res) => {
-  const tPlans = await Patient.findByPk(req.params.uuid, {
-    order: [['date', 'DESC']],
+  const patient = await Patient.findByPk(req.params.uuid);
+  const tPlans = await Patient.findByPk(patient.uuid, {
     include: [
       {
         model: TreatmentPlanRecord,
         through: { attributes: [] },
       },
     ],
+    order: [[TreatmentPlanRecord, 'date', 'DESC']],
   });
 
   // Check if user's role is 'main' or 'doctor'
@@ -104,38 +105,12 @@ const getAllPlansOfPatient = asyncHandler(async (req, res) => {
   }
 
   if (tPlans) {
-    res.json(tPlans);
-  } else {
-    res.status(404);
-    throw new Error('Treatment plans not found');
-  }
-});
-
-// @desc    Get all treatment plans
-// @route   GET /api/tplan/all
-// @access  Private. For developers only
-const getAllPlans = asyncHandler(async (req, res) => {
-  const allPlans = await Patient.findAll({
-    include: [
-      {
-        model: TreatmentPlanRecord,
-        through: { attributes: [] },
-      },
-    ],
-  });
-
-  // Check if user's role is 'main' or 'doctor'
-  const findUsersRole = await User.findByPk(req.user.uuid, {
-    include: { model: Role, through: { attributes: [] } },
-  });
-  const usersRole = findUsersRole.roles[0].role;
-  if (!(usersRole === 'main' || usersRole === 'doctor')) {
-    res.status(400);
-    throw new Error('User is not a main admin or a doctor');
-  }
-
-  if (allPlans) {
-    res.json(allPlans);
+    res.json({
+      patient: patient.uuid,
+      surname: patient.surname,
+      name: patient.name,
+      treatmentPlans: tPlans.treatmentPlanRecords,
+    });
   } else {
     res.status(404);
     throw new Error('Treatment plans not found');
@@ -190,7 +165,7 @@ const updateTreatmentPlan = asyncHandler(async (req, res) => {
 
   const { date, examination, treatment } = req.body;
 
-  await trPlan.set({ date, examination, treatment });
+  trPlan.set({ date, examination, treatment });
   await trPlan.save();
 
   if (trPlan) {
@@ -210,7 +185,6 @@ module.exports = {
   createTreatmentPlan,
   getTreatmentPlan,
   getAllPlansOfPatient,
-  getAllPlans,
   deleteTreatmentPlan,
   updateTreatmentPlan,
 };

@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const Role = require('../models/roleModel');
-const UsersRole = require('../models/usersRoleModel');
 const Patient = require('../models/patientModel');
 const TreatmentPlanRecord = require('../models/treatmentPlanRecordModel');
 
@@ -36,7 +35,7 @@ const createPage = asyncHandler(async (req, res) => {
   }
 
   // Check if login and password are not null
-  if (!(patient.login === '' && patient.password === '')) {
+  if (patient.login !== null && patient.password !== null) {
     res.status(400);
     throw new Error('The login and password are already set');
   }
@@ -56,7 +55,8 @@ const createPage = asyncHandler(async (req, res) => {
     res.status(201).json({
       uuid: patient.uuid,
       login: patient.login,
-      password: patient.password,
+      // password: patient.password, // for testing purposes => working
+      token: generateToken(patient.uuid),
     });
   } else {
     res.status(400);
@@ -86,8 +86,8 @@ const loginPatient = asyncHandler(async (req, res) => {
     res.json({
       uuid: patient.uuid,
       login: patient.login,
-      password: patient.password, // for testing
-      token: generateToken(user.uuid),
+      // password: patient.password, // for testing => working
+      token: generateToken(patient.uuid),
     });
   } else {
     res.status(400);
@@ -96,26 +96,33 @@ const loginPatient = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get all treatment plans for a patient
-// @route   GET /api/patientspage/tplan/all
+// @route   GET /api/patientspage/all/tplans
+// @access  Private
 const getAllPlans = asyncHandler(async (req, res) => {
-  const patient = await Patient.findByPk(req.params.uuid);
+  const patient = await Patient.findByPk(req.patient.uuid);
+
   if (!patient) {
     res.status(400);
     throw new Error('Patient not found');
   }
 
-  const allTrPlans = await Patient.findByPk(req.params.uuid, {
-    order: [['date', 'DESC']],
+  const allTrPlans = await Patient.findByPk(patient.uuid, {
     include: [
       {
         model: TreatmentPlanRecord,
         through: { attributes: [] },
       },
     ],
+    order: [[TreatmentPlanRecord, 'date', 'DESC']],
   });
 
   if (allTrPlans) {
-    res.json(allTrPlans);
+    res.json({
+      patient: patient.uuid,
+      surname: patient.surname,
+      name: patient.name,
+      treatmentPlans: allTrPlans.treatmentPlanRecords,
+    });
   } else {
     res.status(404);
     throw new Error('Treatment plans not found');
@@ -128,7 +135,7 @@ const getAllPlans = asyncHandler(async (req, res) => {
 const getTreatmentPlan = asyncHandler(async (req, res) => {
   const planRecord = await TreatmentPlanRecord.findByPk(req.params.uuid);
 
-  const patient = await Patient.findByPk(patientUuid);
+  const patient = await Patient.findByPk(req.patient.uuid);
   if (!patient) {
     res.status(400);
     throw new Error('Patient not found');
@@ -136,6 +143,7 @@ const getTreatmentPlan = asyncHandler(async (req, res) => {
 
   if (planRecord) {
     res.json({
+      patient: patient.uuid,
       uuid: planRecord.uuid,
       date: planRecord.date,
       examination: planRecord.examination,
@@ -148,7 +156,7 @@ const getTreatmentPlan = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get a patient's page
-// @route   GET /api/patientspage/me/:uuid
+// @route   GET /api/patientspage/me
 // @access  Private
 const getMe = asyncHandler(async (req, res) => {
   res.status(200).json(req.patient);
@@ -176,8 +184,8 @@ const deletePage = asyncHandler(async (req, res) => {
   }
 
   patient.set({
-    login: '',
-    password: '',
+    login: null,
+    password: null,
   });
   await patient.save();
 
