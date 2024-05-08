@@ -119,41 +119,6 @@ const updatePatient = asyncHandler(async (req, res) => {
   }
 });
 
-const updatePatient2 = asyncHandler(async (req, res) => {
-  const patient = await Patient.findOne({ where: { uuid: req.params.uuid } });
-
-  if (patient) {
-    const { surname, name, patronymic, phone, email, birthdate, address, notes } =
-      req.body;
-
-    patient.surname = surname || patient.surname;
-    patient.name = name || patient.name;
-    patient.patronymic = patronymic || patient.patronymic;
-    patient.phone = phone || patient.phone;
-    patient.email = email || patient.email;
-    patient.birthdate = birthdate || patient.birthdate;
-    patient.address = address || patient.address;
-    patient.notes = notes || patient.notes;
-
-    await patient.save();
-
-    res.json({
-      uuid: patient.uuid,
-      surname: patient.surname,
-      name: patient.name,
-      patronymic: patient.patronymic,
-      phone: patient.phone,
-      email: patient.email,
-      birthdate: patient.birthdate,
-      address: patient.address,
-      notes: patient.notes,
-    });
-  } else {
-    res.status(404);
-    throw new Error('Patient not found');
-  }
-});
-
 module.exports = {
   createPatient,
   getPatient,

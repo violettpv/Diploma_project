@@ -60,11 +60,13 @@ const syncTables = async () => {
   Appointment.belongsTo(Patient);
   User.hasMany(Appointment);
   Appointment.belongsTo(User);
-  // 1:M
-  Patient.hasMany(Dispensary);
-  Dispensary.belongsTo(Patient);
-  User.hasMany(Dispensary);
-  Dispensary.belongsTo(User);
+  // M:M
+  // Patient.hasMany(Dispensary);
+  // Dispensary.belongsTo(Patient);
+  // User.hasMany(Dispensary);
+  // Dispensary.belongsTo(User);
+  Patient.belongsToMany(User, { through: Dispensary });
+  User.belongsToMany(Patient, { through: Dispensary });
   // 1:1
   Patient.hasOne(Form043);
   Form043.belongsTo(Patient);

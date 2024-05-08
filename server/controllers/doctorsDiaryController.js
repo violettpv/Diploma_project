@@ -4,6 +4,7 @@ const DoctorsDiary = require('../models/doctorsDiaryModel');
 const User = require('../models/userModel');
 const Role = require('../models/roleModel');
 const Patient = require('../models/patientModel');
+const { Op } = require('sequelize');
 
 // @desc    Create a new doctor's diary record
 // @route   POST /api/docsdiary/create
@@ -102,13 +103,12 @@ const getDDRecord = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get all dotor's diary records of a patient
+// @desc    Get all doctor's diary records of a patient
 // @route   GET /api/docsdiary/all/:uuid
 // @access  Private
 const getAllRecordsOfPatient = asyncHandler(async (req, res) => {
   const patient = await Patient.findByPk(req.params.uuid);
   const diaryRecords = await Patient.findByPk(patient.uuid, {
-    order: [[DoctorsDiaryRecord, 'date', 'DESC']],
     include: [
       {
         model: DoctorsDiaryRecord,
@@ -220,10 +220,76 @@ const updateDDRecord = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Find the doc's diary record by date
+// @route   GET /api/docsdiary/find?uuid=&date=&month=&year=
+// @access  Private
+const findRecordByDate = asyncHandler(async (req, res) => {
+  const { date, month, year } = req.query;
+  const patient = await Patient.findByPk(req.query.uuid);
+  if (!patient) {
+    res.status(404);
+    throw new Error('Patient not found');
+  }
+  if (!date && !month && !year) {
+    res.status(400);
+    throw new Error('Please provide a date, month or year');
+  }
+  if (date < 1 || date > 31) {
+    res.status(400);
+    throw new Error('Invalid date');
+  }
+  if (month < 1 || month > 12) {
+    res.status(400);
+    throw new Error('Invalid month');
+  }
+  if (year < 2000 || year > 2100) {
+    res.status(400);
+    throw new Error('Invalid year');
+  }
+
+  const searchDate = `${year}-${month}-${date}`;
+  const diaryRecords = await Patient.findByPk(patient.uuid, {
+    include: [
+      {
+        model: DoctorsDiaryRecord,
+        through: { attributes: [] },
+        where: {
+          date: {
+            [Op.eq]: searchDate,
+          },
+        },
+      },
+    ],
+  });
+
+  // Check if user's role is 'main' or 'doctor'
+  const findUsersRole = await User.findByPk(req.user.uuid, {
+    include: { model: Role, through: { attributes: [] } },
+  });
+  const usersRole = findUsersRole.roles[0].role;
+  if (!(usersRole === 'main' || usersRole === 'doctor')) {
+    res.status(400);
+    throw new Error('User is not a main admin or a doctor');
+  }
+
+  if (diaryRecords) {
+    res.json({
+      patient: patient.uuid,
+      surname: patient.surname,
+      name: patient.name,
+      diaryRecords: diaryRecords.doctorsDiaryRecords,
+    });
+  } else {
+    res.status(404);
+    throw new Error('Doctor`s diary records not found');
+  }
+});
+
 module.exports = {
   createDDRecord,
   getDDRecord,
   deleteDDRecord,
   updateDDRecord,
   getAllRecordsOfPatient,
+  findRecordByDate,
 };

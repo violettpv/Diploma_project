@@ -4,6 +4,7 @@ const TreatmentPlanRecord = require('../models/treatmentPlanRecordModel');
 const User = require('../models/userModel');
 const Role = require('../models/roleModel');
 const Patient = require('../models/patientModel');
+const { Op } = require('sequelize');
 
 // @desc    Create a new treatment plan
 // @route   POST /api/tplan/create
@@ -181,10 +182,76 @@ const updateTreatmentPlan = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Find the treatment plan record by date
+// @route   GET /api/tplan/find?uuid=&date=&month=&year=
+// @access  Private
+const findPlansByDate = asyncHandler(async (req, res) => {
+  const { date, month, year } = req.query;
+  const patient = await Patient.findByPk(req.query.uuid);
+  if (!patient) {
+    res.status(404);
+    throw new Error('Patient not found');
+  }
+  if (!date && !month && !year) {
+    res.status(400);
+    throw new Error('Please provide a date, month or year');
+  }
+  if (date < 1 || date > 31) {
+    res.status(400);
+    throw new Error('Invalid date');
+  }
+  if (month < 1 || month > 12) {
+    res.status(400);
+    throw new Error('Invalid month');
+  }
+  if (year < 2000 || year > 2100) {
+    res.status(400);
+    throw new Error('Invalid year');
+  }
+
+  const searchDate = `${year}-${month}-${date}`;
+  const tPlans = await Patient.findByPk(patient.uuid, {
+    include: [
+      {
+        model: TreatmentPlanRecord,
+        through: { attributes: [] },
+        where: {
+          date: {
+            [Op.eq]: searchDate,
+          },
+        },
+      },
+    ],
+  });
+
+  // Check if user's role is 'main' or 'doctor'
+  const findUsersRole = await User.findByPk(req.user.uuid, {
+    include: { model: Role, through: { attributes: [] } },
+  });
+  const usersRole = findUsersRole.roles[0].role;
+  if (!(usersRole === 'main' || usersRole === 'doctor')) {
+    res.status(400);
+    throw new Error('User is not a main admin or a doctor');
+  }
+
+  if (tPlans) {
+    res.json({
+      patient: patient.uuid,
+      surname: patient.surname,
+      name: patient.name,
+      treatmentPlans: tPlans.treatmentPlanRecords,
+    });
+  } else {
+    res.status(404);
+    throw new Error('Treatment plans not found');
+  }
+});
+
 module.exports = {
   createTreatmentPlan,
   getTreatmentPlan,
   getAllPlansOfPatient,
+  findPlansByDate,
   deleteTreatmentPlan,
   updateTreatmentPlan,
 };

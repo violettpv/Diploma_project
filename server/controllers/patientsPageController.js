@@ -5,6 +5,7 @@ const User = require('../models/userModel');
 const Role = require('../models/roleModel');
 const Patient = require('../models/patientModel');
 const TreatmentPlanRecord = require('../models/treatmentPlanRecordModel');
+const { Op } = require('sequelize');
 
 // @desc    Create a page for a patient (administrator or main)
 // @route   POST /api/patientspage/create
@@ -129,6 +130,61 @@ const getAllPlans = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Find the treatment plan record by date
+// @route   GET /api/patientspage/findtplans?date=&month=&year=
+// @access  Private
+const findPlansByDate = asyncHandler(async (req, res) => {
+  const { date, month, year } = req.query;
+  const patient = await Patient.findByPk(req.patient.uuid);
+  if (!patient) {
+    res.status(404);
+    throw new Error('Patient not found');
+  }
+  if (!date && !month && !year) {
+    res.status(400);
+    throw new Error('Please provide a date, month or year');
+  }
+  if (date < 1 || date > 31) {
+    res.status(400);
+    throw new Error('Invalid date');
+  }
+  if (month < 1 || month > 12) {
+    res.status(400);
+    throw new Error('Invalid month');
+  }
+  if (year < 2000 || year > 2100) {
+    res.status(400);
+    throw new Error('Invalid year');
+  }
+
+  const searchDate = `${year}-${month}-${date}`;
+  const tPlans = await Patient.findByPk(patient.uuid, {
+    include: [
+      {
+        model: TreatmentPlanRecord,
+        through: { attributes: [] },
+        where: {
+          date: {
+            [Op.eq]: searchDate,
+          },
+        },
+      },
+    ],
+  });
+
+  if (tPlans) {
+    res.json({
+      patient: patient.uuid,
+      surname: patient.surname,
+      name: patient.name,
+      treatmentPlans: tPlans.treatmentPlanRecords,
+    });
+  } else {
+    res.status(404);
+    throw new Error('Treatment plans not found');
+  }
+});
+
 // @desc    Get a treatment plan for a patient
 // @route   GET /api/patientspage/tplan/:uuid
 // @access  Private
@@ -239,4 +295,5 @@ module.exports = {
   getAllPlans,
   deletePage,
   updatePageInfo,
+  findPlansByDate,
 };

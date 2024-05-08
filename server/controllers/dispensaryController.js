@@ -1,7 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const Dispensary = require('../models/dispensaryModel');
 const User = require('../models/userModel');
-const Role = require('../models/roleModel');
+const Patient = require('../models/patientModel');
+const { Op } = require('sequelize');
 
 // @desc    Create a new dispensary record
 // @route   POST /api/dispensary/create
@@ -133,10 +134,119 @@ const updateDispensary = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc   Find all dispensary records of the patient
+// @route  GET /api/dispensary/findbypatient?surname=&name=&patronymic
+// @access Public
+const findRecordsOfPatient = asyncHandler(async (req, res) => {
+  // Split the query into words on client
+  const { surname, name, patronymic } = req.query;
+  const result = await Patient.findAll({
+    where: {
+      surname: { [Op.substring]: surname },
+      name: { [Op.substring]: name },
+      patronymic: { [Op.substring]: patronymic },
+    },
+    attributes: ['uuid', 'surname', 'name', 'patronymic'],
+    include: [
+      {
+        model: User,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+        through: {
+          attributes: ['uuid', 'dateOfTheVisit', 'timeNeeded', 'treatment', 'notes'],
+        },
+      },
+    ],
+    order: [[User, Dispensary, 'dateOfTheVisit', 'ASC']],
+  });
+
+  if (result) {
+    res.json(result);
+  } else {
+    res.status(404);
+    throw new Error('Dispensary records not found');
+  }
+});
+
+// @desc   Find all dispensary records of the user (doctor)
+// @route  GET /api/dispensary/findbydoctor?surname=&name=&patronymic
+// @access Public
+const findRecordsOfDoctor = asyncHandler(async (req, res) => {
+  // Split the query into words on client
+  const { surname, name, patronymic } = req.query;
+  const result = await User.findAll({
+    where: {
+      surname: { [Op.substring]: surname },
+      name: { [Op.substring]: name },
+      patronymic: { [Op.substring]: patronymic },
+    },
+    attributes: ['uuid', 'surname', 'name', 'patronymic'],
+    include: [
+      {
+        model: Patient,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+        through: {
+          attributes: ['uuid', 'dateOfTheVisit', 'timeNeeded', 'treatment', 'notes'],
+        },
+      },
+    ],
+    order: [[Patient, Dispensary, 'dateOfTheVisit', 'ASC']],
+  });
+
+  if (result) {
+    res.json(result);
+  } else {
+    res.status(404);
+    throw new Error('Dispensary records not found');
+  }
+});
+
+// @desc   Find all dispensary records by date
+// @route  GET /api/dispensary/findbydate?date=&month=&year=
+// @access Public
+const findRecordsByDate = asyncHandler(async (req, res) => {
+  const { date, month, year } = req.query;
+  if (!date && !month && !year) {
+    res.status(400);
+    throw new Error('Please provide a date, month or year');
+  }
+  if (date < 1 || date > 31) {
+    res.status(400);
+    throw new Error('Invalid date');
+  }
+  if (month < 1 || month > 12) {
+    res.status(400);
+    throw new Error('Invalid month');
+  }
+  if (year < 2000 || year > 2100) {
+    res.status(400);
+    throw new Error('Invalid year');
+  }
+
+  const searchDate = `${year}-${month}-${date}`;
+  const records = await Dispensary.findAll({
+    where: {
+      dateOfTheVisit: {
+        [Op.eq]: searchDate,
+      },
+    },
+    order: [['dateOfTheVisit', 'ASC']],
+  });
+
+  if (records) {
+    res.json(records);
+  } else {
+    res.status(404);
+    throw new Error('Dispensary records not found');
+  }
+});
+
 module.exports = {
   createDispensary,
   getDispensary,
   deleteDispensary,
   updateDispensary,
   getAllDispensary,
+  findRecordsOfPatient,
+  findRecordsOfDoctor,
+  findRecordsByDate,
 };

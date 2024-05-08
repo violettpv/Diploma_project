@@ -6,6 +6,7 @@ const {
   createPage, // by admin or main
   getTreatmentPlan,
   getAllPlans,
+  findPlansByDate,
   // Ще мають бути нагадування [Історія повідомлень]
   // Всі візити [Історія візитів]
   deletePage, // by admin ( or auto delete after deleting Patient)
@@ -19,6 +20,7 @@ router.post('/create', protect, createPage);
 router.get('/me', protectPatient, getMe);
 router.get('/tplan/:uuid', protectPatient, getTreatmentPlan);
 router.get('/all/tplans', protectPatient, getAllPlans);
+router.get('/findtplans', protectPatient, findPlansByDate);
 router.delete('/delete/:uuid', protect, deletePage);
 router.put('/update', protectPatient, updatePageInfo);
 

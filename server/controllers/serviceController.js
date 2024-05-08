@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Service = require('../models/serviceModel');
 const User = require('../models/userModel');
 const Role = require('../models/roleModel');
+const { Op } = require('sequelize');
 
 // Може створювати та редагувати тільки Main адмін
 
@@ -58,6 +59,26 @@ const getService = asyncHandler(async (req, res) => {
 // @access  Public
 const getServices = asyncHandler(async (req, res) => {
   const services = await Service.findAll({ order: [['name', 'ASC']] });
+  if (services) {
+    res.json(services);
+  } else {
+    res.status(404);
+    throw new Error('Services not found');
+  }
+});
+
+// @desc    Get a service with search query
+// @route   Get /api/services/find?query=
+// @access  Public
+const searchServices = asyncHandler(async (req, res) => {
+  const { query } = req.query;
+  const services = await Service.findAll({
+    where: {
+      name: { [Op.substring]: query },
+    },
+    order: [['name', 'ASC']],
+  });
+
   if (services) {
     res.json(services);
   } else {
@@ -133,4 +154,5 @@ module.exports = {
   getServices,
   deleteService,
   updateService,
+  searchServices,
 };
