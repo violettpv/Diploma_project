@@ -41,6 +41,7 @@ const syncTables = async () => {
   const DoctorsDiaryRecord = require('../models/doctorsDiaryRecordModel');
   const DoctorsDiary = require('../models/doctorsDiaryModel');
   const DentalFormula = require('../models/dentalFormulaModel');
+  const MessageTemplate = require('../models/messageTemplateModel');
 
   // Assosiations / Relationships
   // M:M
@@ -61,10 +62,6 @@ const syncTables = async () => {
   User.hasMany(Appointment);
   Appointment.belongsTo(User);
   // M:M
-  // Patient.hasMany(Dispensary);
-  // Dispensary.belongsTo(Patient);
-  // User.hasMany(Dispensary);
-  // Dispensary.belongsTo(User);
   Patient.belongsToMany(User, { through: Dispensary });
   User.belongsToMany(Patient, { through: Dispensary });
   // 1:1

@@ -63,10 +63,16 @@ const getDispensary = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get all dispensary records
-// @route   Get /api/dispensary/all
+// @route   Get /api/dispensary/all?limit=&offset=
 // @access  Public
 const getAllDispensary = asyncHandler(async (req, res) => {
-  const dispensary = await Dispensary.findAll({ order: [['dateOfTheVisit', 'ASC']] });
+  const { limit, offset } = req.query;
+  const dispensary = await Dispensary.findAll({
+    order: [['dateOfTheVisit', 'ASC']],
+    limit: parseInt(limit),
+    offset: parseInt(offset),
+    subQuery: false,
+  });
   if (dispensary) {
     res.json(dispensary);
   } else {

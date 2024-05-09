@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Patient = require('../models/patientModel');
+const { Op } = require('sequelize');
 
 // @desc    Register a new patient
 // @route   POST /api/patients/create
@@ -51,10 +52,16 @@ const getPatient = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get a all patients
-// @route   Get /api/patients/all
+// @route   Get /api/patients/all?limit=&offset=
 // @access  Public
 const getPatients = asyncHandler(async (req, res) => {
-  const patients = await Patient.findAll({ order: [['surname', 'ASC']] });
+  const { limit, offset } = req.query;
+  const patients = await Patient.findAll({
+    order: [['surname', 'ASC']],
+    limit: parseInt(limit),
+    offset: parseInt(offset),
+    subQuery: false,
+  });
   if (patients) {
     res.json(patients);
   } else {
@@ -119,10 +126,57 @@ const updatePatient = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc   Find a patient by phone
+// @route  GET /api/patients/findbyphone?phone=
+// @access Public
+const findPatientByPhone = asyncHandler(async (req, res) => {
+  const { phone } = req.query;
+  const result = await Patient.findAll({
+    where: {
+      phone: { [Op.substring]: phone },
+    },
+    // attributes: ['uuid', 'surname', 'name', 'patronymic', 'phone'],
+    order: [['surname', 'ASC']],
+  });
+
+  if (result) {
+    res.json(result);
+  } else {
+    res.status(404);
+    throw new Error('Patient not found');
+  }
+});
+
+// @desc   Find a patient by full name (surname, name, patronymic)
+// @route  GET /api/patients/findbyname?surname=&name=&patronymic=
+// @access Public
+const findPatientByName = asyncHandler(async (req, res) => {
+  // Split the query into words on client
+  const { surname, name, patronymic } = req.query;
+  const result = await Patient.findAll({
+    where: {
+      surname: { [Op.substring]: surname },
+      name: { [Op.substring]: name },
+      patronymic: { [Op.substring]: patronymic },
+    },
+    // attributes: ['uuid', 'surname', 'name', 'patronymic'],
+    order: [['surname', 'ASC']],
+  });
+
+  if (result) {
+    res.json(result);
+  } else {
+    res.status(404);
+    throw new Error('Patient not found');
+  }
+});
+
 module.exports = {
   createPatient,
   getPatient,
   getPatients,
   deletePatient,
   updatePatient,
+  findPatientByPhone,
+  findPatientByName,
 };

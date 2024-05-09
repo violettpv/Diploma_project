@@ -101,7 +101,7 @@ const getForm043 = asyncHandler(async (req, res) => {
 
 // @desc    Get all form043s
 // @route   Get /api/form043/all
-// @access  Private
+// @access  Private (for development only)
 const getAllForm043s = asyncHandler(async (req, res) => {
   const form043s = await Form043.findAll({ order: [['uuid', 'DESC']] });
 

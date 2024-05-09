@@ -77,7 +77,7 @@ const updateNote = asyncHandler(async (req, res) => {
   }
 
   const { title, content } = req.body;
-  await note.set({ title, content });
+  note.set({ title, content });
   await note.save();
 
   if (note) {

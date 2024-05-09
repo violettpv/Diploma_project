@@ -81,11 +81,13 @@ const getTreatmentPlan = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get all treatment plans
-// @route   GET /api/tplan/all/:uuid
+// @route   GET /api/tplan/all/:uuid?limit=&offset=
 // @access  Private
 const getAllPlansOfPatient = asyncHandler(async (req, res) => {
+  const { limit, offset } = req.query;
   const patient = await Patient.findByPk(req.params.uuid);
   const tPlans = await Patient.findByPk(patient.uuid, {
+    attributes: ['uuid', 'surname', 'name'],
     include: [
       {
         model: TreatmentPlanRecord,
@@ -93,6 +95,9 @@ const getAllPlansOfPatient = asyncHandler(async (req, res) => {
       },
     ],
     order: [[TreatmentPlanRecord, 'date', 'DESC']],
+    limit: parseInt(limit),
+    offset: parseInt(offset),
+    subQuery: false,
   });
 
   // Check if user's role is 'main' or 'doctor'
@@ -106,12 +111,7 @@ const getAllPlansOfPatient = asyncHandler(async (req, res) => {
   }
 
   if (tPlans) {
-    res.json({
-      patient: patient.uuid,
-      surname: patient.surname,
-      name: patient.name,
-      treatmentPlans: tPlans.treatmentPlanRecords,
-    });
+    res.json(tPlans);
   } else {
     res.status(404);
     throw new Error('Treatment plans not found');
@@ -211,6 +211,7 @@ const findPlansByDate = asyncHandler(async (req, res) => {
 
   const searchDate = `${year}-${month}-${date}`;
   const tPlans = await Patient.findByPk(patient.uuid, {
+    attributes: ['uuid', 'surname', 'name'],
     include: [
       {
         model: TreatmentPlanRecord,
@@ -235,12 +236,7 @@ const findPlansByDate = asyncHandler(async (req, res) => {
   }
 
   if (tPlans) {
-    res.json({
-      patient: patient.uuid,
-      surname: patient.surname,
-      name: patient.name,
-      treatmentPlans: tPlans.treatmentPlanRecords,
-    });
+    res.json(tPlans);
   } else {
     res.status(404);
     throw new Error('Treatment plans not found');
