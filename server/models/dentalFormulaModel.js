@@ -29,7 +29,7 @@ const DentalFormula = db.define(
   },
   {
     freezeTableName: true,
-    timestamps: false,
+    timestamps: true,
   }
 );
 

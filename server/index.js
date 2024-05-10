@@ -31,6 +31,7 @@ app.use('/api/docsdiary', require('./routes/doctorsDiaryRoute'));
 app.use('/api/patientspage', require('./routes/patientsPageRoute'));
 app.use('/api/msgtemplate', require('./routes/messageTemplateRoute'));
 app.use('/api/appointments', require('./routes/appointmentRoute'));
+app.use('/api/dentalformula', require('./routes/dentalFormulaRoute'));
 
 app.use(errorHandler);
 
