@@ -5,6 +5,9 @@ const MessageTemplate = require('../models/messageTemplateModel');
 // @route   POST /api/msgtemplate/create
 // @access  Public
 const createTemplate = asyncHandler(async (req, res) => {
+  // можливо зробити що body це json, який буде формувати повідомлення
+  // наприклад { "body": { "date": "2024-03-02", "time": "10:00"", "address": "адреса" } }
+  // на фронті зробити поля, які можна додавати в шаблон
   const { name, body } = req.body;
   if (!name || !body) {
     res.status(400);

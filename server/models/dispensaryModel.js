@@ -13,6 +13,7 @@ const Dispensary = db.define(
     },
     patientUuid: {
       type: DataTypes.UUID,
+      unique: false,
       allowNull: false,
       references: {
         model: Patient,
@@ -21,6 +22,7 @@ const Dispensary = db.define(
     },
     userUuid: {
       type: DataTypes.UUID,
+      unique: false,
       allowNull: false,
       references: {
         model: User,
@@ -30,6 +32,7 @@ const Dispensary = db.define(
     dateOfTheVisit: {
       type: DataTypes.DATEONLY,
       allowNull: false,
+      unique: false,
       validate: {
         is: /(20[0-9]{2})-([0-1][0-9])-([0-3][0-9])/,
       },

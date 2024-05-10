@@ -11,13 +11,12 @@ const Receipt = db.define(
     },
     total: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    sale: {
-      type: DataTypes.DECIMAL(10, 2), // decimal
       allowNull: true,
     },
-    // чи робити борг??
+    sale: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
+    },
     isPaid: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -26,11 +25,12 @@ const Receipt = db.define(
     // from client
     paymentType: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
     freezeTableName: true,
+    // timestamps: true,
     timestamps: false,
   }
 );

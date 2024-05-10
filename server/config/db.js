@@ -50,20 +50,22 @@ const syncTables = async () => {
   // M:M
   Patient.belongsToMany(Disease, { through: Anamnesis });
   Disease.belongsToMany(Patient, { through: Anamnesis });
-  // 1:M
-  Receipt.hasMany(ReceiptService);
-  ReceiptService.belongsTo(Receipt);
+  // M:M
+  Receipt.belongsToMany(Service, { through: ReceiptService });
+  Service.belongsToMany(Receipt, { through: ReceiptService });
   // 1:1
   Receipt.hasOne(Appointment);
   Appointment.belongsTo(Receipt);
-  // 1:M (user = doctor)
+  // 1:M (Sequilize doesn't support non-unique FKs, so we can't use M:M here)
   Patient.hasMany(Appointment);
   Appointment.belongsTo(Patient);
   User.hasMany(Appointment);
   Appointment.belongsTo(User);
-  // M:M
-  Patient.belongsToMany(User, { through: Dispensary });
-  User.belongsToMany(Patient, { through: Dispensary });
+  // 1:M (Sequilize doesn't support non-unique FKs, so we can't use M:M here)
+  Patient.hasMany(Dispensary);
+  Dispensary.belongsTo(Patient);
+  User.hasMany(Dispensary);
+  Dispensary.belongsTo(User);
   // 1:1
   Patient.hasOne(Form043);
   Form043.belongsTo(Patient);
