@@ -8,7 +8,7 @@ const {
   getAllPlans,
   findPlansByDate,
   // Ще мають бути нагадування [Історія повідомлень]
-  // Всі візити [Історія візитів]
+  getAppointments,
   deletePage, // by admin ( or auto delete after deleting Patient)
   updatePageInfo, // by patient (password, login)
 } = require('../controllers/patientsPageController');
@@ -23,5 +23,6 @@ router.get('/all/tplans', protectPatient, getAllPlans);
 router.get('/findtplans', protectPatient, findPlansByDate);
 router.delete('/delete/:uuid', protect, deletePage);
 router.put('/update', protectPatient, updatePageInfo);
+router.get('/appointments', protectPatient, getAppointments);
 
 module.exports = router;

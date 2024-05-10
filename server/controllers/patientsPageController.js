@@ -5,6 +5,9 @@ const User = require('../models/userModel');
 const Role = require('../models/roleModel');
 const Patient = require('../models/patientModel');
 const TreatmentPlanRecord = require('../models/treatmentPlanRecordModel');
+const Appointment = require('../models/appointmentModel');
+const Receipt = require('../models/receiptModel');
+const Service = require('../models/serviceModel');
 const { Op } = require('sequelize');
 
 // @desc    Create a page for a patient (administrator or main)
@@ -278,6 +281,49 @@ const updatePageInfo = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc   Get patient's appointments and receipts
+// @route  GET /api/patientspage/appointments
+// @access Private
+const getAppointments = asyncHandler(async (req, res) => {
+  const patient = await Patient.findByPk(req.patient.uuid);
+  if (!patient) {
+    res.status(404);
+    throw new Error('Patient not found');
+  }
+
+  const appointments = await Appointment.findAll({
+    where: { patientUuid: patient.uuid },
+    attributes: ['uuid', 'date', 'startTime', 'endTime', 'isFinished'],
+    include: [
+      {
+        model: Receipt,
+        attributes: ['uuid', 'total', 'isPaid', 'sale', 'paymentType'],
+        include: [
+          {
+            model: Service,
+            attributes: ['uuid', 'name', 'price'],
+            through: { attributes: ['quantity'] },
+          },
+        ],
+      },
+    ],
+  });
+
+  if (appointments) {
+    res.json({
+      patient: {
+        uuid: patient.uuid,
+        surname: patient.surname,
+        name: patient.name,
+      },
+      appointments: appointments,
+    });
+  } else {
+    res.status(404);
+    throw new Error('Appointments not found');
+  }
+});
+
 // @desc    Generate JWT
 // @access  Private
 const generateToken = (uuid) => {
@@ -295,4 +341,5 @@ module.exports = {
   deletePage,
   updatePageInfo,
   findPlansByDate,
+  getAppointments,
 };

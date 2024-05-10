@@ -1,6 +1,9 @@
 const asyncHandler = require('express-async-handler');
 const Patient = require('../models/patientModel');
 const { Op } = require('sequelize');
+const Appointment = require('../models/appointmentModel');
+const Receipt = require('../models/receiptModel');
+const Service = require('../models/serviceModel');
 
 // @desc    Register a new patient
 // @route   POST /api/patients/create
@@ -171,6 +174,61 @@ const findPatientByName = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Find all patient's appointments and receipts
+// @route   GET /api/patients/appointments/:uuid
+// @access  Public
+const findAppointments = asyncHandler(async (req, res) => {
+  const patient = await Patient.findByPk(req.params.uuid);
+
+  const patientsAppointments = await Appointment.findAll({
+    where: { patientUuid: req.params.uuid },
+    include: [
+      {
+        model: Receipt,
+        include: [
+          {
+            model: Service,
+            through: { attributes: ['quantity'] },
+          },
+        ],
+      },
+    ],
+  });
+
+  if (patientsAppointments) {
+    res.json({
+      patient: {
+        uuid: patient.uuid,
+        surname: patient.surname,
+        name: patient.name,
+      },
+      appointments: patientsAppointments,
+    });
+  } else {
+    res.status(404);
+    throw new Error('Patient`s appointments not found');
+  }
+});
+
+// @desc    Find all patient's receipts
+// @route   GET /api/patients/receipts/:uuid
+// @access  Public
+// const findReceipts = asyncHandler(async (req, res) => {
+//   const patient = await Patient.findByPk(req.params.uuid);
+//   if (!patient) {
+//     res.status(404);
+//     throw new Error('Patient not found');
+//   }
+
+//   const receipts = await patient.getReceipts();
+//   if (receipts) {
+//     res.json(receipts);
+//   } else {
+//     res.status(404);
+//     throw new Error('Receipts not found');
+//   }
+// });
+
 module.exports = {
   createPatient,
   getPatient,
@@ -179,4 +237,5 @@ module.exports = {
   updatePatient,
   findPatientByPhone,
   findPatientByName,
+  findAppointments,
 };
