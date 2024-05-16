@@ -11,15 +11,15 @@ const Clinic = db.define(
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     phone: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       validate: {
         is: /^\+(380)[0-9]{9}$/,
       },
@@ -33,11 +33,15 @@ const Clinic = db.define(
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       unique: true,
       validate: {
         isEmail: true,
       },
+    },
+    appPassword: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     website: {
       type: DataTypes.STRING,

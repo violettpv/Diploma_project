@@ -79,6 +79,10 @@ const updateTemplate = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('Template not found');
   }
+  if (template.uuid === '6d5c51a9-49c6-4510-8de3-afa55dc8ee8f') {
+    res.status(400);
+    throw new Error('Cannot update default template. Contact the developers');
+  }
 
   const { name, body } = req.body;
   template.set({ name, body });

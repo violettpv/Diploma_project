@@ -24,3 +24,10 @@
     // More teeth can be added here...
   ]
 }
+
+// send msgs using template
+{
+    "patients": ["14d8bc4d-e11d-4df0-803c-37c858428d1e", "6b53bd02-de76-481f-83fb-06a80adac466"],
+    "subject": "Відбілювання",
+    "templateUuid": "073a9e50-3081-440b-8fc8-da270b8a1e44"
+}

@@ -10,7 +10,7 @@ const { protect } = require('../middleware/authHandler');
 
 router.post('/create', protect, createClinic);
 router.get('/get/:uuid', protect, getClinic);
-router.delete('/delete/:uuid', protect, deleteClinic);
+router.delete('/delete/:uuid', protect, deleteClinic); // dev only
 router.put('/update/:uuid', protect, updateClinic);
 
 module.exports = router;

@@ -5,10 +5,10 @@ const Clinic = require('../models/clinicModel');
 // @route  POST /api/clinic
 // @access Private (main's admin)
 const createClinic = asyncHandler(async (req, res) => {
-  const { name, address, phone, phone2, email, website } = req.body;
+  const { name, address, phone, phone2, email, website, appPassword } = req.body;
 
   // чи зробити перевірку тільки на клієнті??
-  if (!name || !phone) {
+  if (!name || !phone || !appPassword || !email || !address) {
     res.status(400);
     throw new Error('Fill at least name and phone fields');
   }
@@ -19,7 +19,6 @@ const createClinic = asyncHandler(async (req, res) => {
     throw new Error('You are not allowed to add information about clinic');
   }
 
-  // [DON'T SURE IF IT'S NECESSARY] !!!!!!!!
   const clinicExists = await Clinic.findOne({ where: { name } });
   if (clinicExists) {
     res.status(400);
@@ -33,6 +32,7 @@ const createClinic = asyncHandler(async (req, res) => {
     phone2,
     email,
     website,
+    appPassword,
   });
 
   if (clinic) {
@@ -43,6 +43,7 @@ const createClinic = asyncHandler(async (req, res) => {
       phone: clinic.phone,
       phone2: clinic.phone2,
       email: clinic.email,
+      appPassword: clinic.appPassword,
       website: clinic.website,
     });
   } else {
@@ -65,6 +66,7 @@ const getClinic = asyncHandler(async (req, res) => {
       phone: clinic.phone,
       phone2: clinic.phone2,
       email: clinic.email,
+      appPassword: clinic.appPassword,
       website: clinic.website,
     });
   } else {
@@ -85,6 +87,7 @@ const updateClinic = asyncHandler(async (req, res) => {
     clinic.phone = req.body.phone || clinic.phone;
     clinic.phone2 = req.body.phone2 || clinic.phone2;
     clinic.email = req.body.email || clinic.email;
+    clinic.appPassword = req.body.appPassword || clinic.appPassword;
     clinic.website = req.body.website || clinic.website;
 
     await clinic.save();
@@ -96,6 +99,7 @@ const updateClinic = asyncHandler(async (req, res) => {
       phone: clinic.phone,
       phone2: clinic.phone2,
       email: clinic.email,
+      appPassword: clinic.appPassword,
       website: clinic.website,
     });
   } else {
@@ -106,7 +110,7 @@ const updateClinic = asyncHandler(async (req, res) => {
 
 // @desc  Delete a profile of a clinic
 // @route DELETE /api/clinic/delete/:uuid
-// @access Private (main's admin)
+// @access Private (dev only)
 const deleteClinic = asyncHandler(async (req, res) => {
   const clinic = await Clinic.findOne({ where: { uuid: req.params.uuid } });
 

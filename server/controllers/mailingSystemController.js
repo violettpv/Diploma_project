@@ -1,8 +1,5 @@
 const asyncHandler = require('express-async-handler');
 const nodemailer = require('nodemailer');
-const clinicEmail = process.env.EMAIL_USER;
-const clinicEmailPassword = process.env.EMAIL_PASSWORD;
-const clinicAppPassword = process.env.EMAIL_APP_PASSWORD;
 const { Op } = require('sequelize');
 const MessageTemplate = require('../models/messageTemplateModel');
 const Appointment = require('../models/appointmentModel');
@@ -49,10 +46,11 @@ const getAppointmentsByDate = asyncHandler(async (req, res) => {
 
   if (appointments) {
     res.json({
-      date: searchDate,
+      currentDate: searchDate,
       appointments: appointments.map((appointment) => {
         return {
           uuid: appointment.uuid,
+          date: appointment.date,
           patient: {
             uuid: appointment.patient.uuid,
             surname: appointment.patient.surname,
@@ -75,31 +73,32 @@ const getAppointmentsByDate = asyncHandler(async (req, res) => {
 // @route   POST /api/mailingsystem/sendreminders
 // @access  Public
 const sendReminders = asyncHandler(async (req, res) => {
-  // const { appointments } = req.body;
-  // if (!appointments) {
-  //   res.status(400);
-  //   throw new Error('Please provide appointments');
-  // }
-  // const clinic = await Clinic.findOne();
-  // const reminder = await MessageTemplate.findOne({ where: { name: 'Scheduled visit' } });
+  const { appointments } = req.body;
+  if (!appointments) {
+    res.status(400);
+    throw new Error('Please provide appointments');
+  }
 
-  // const data = appointments.map((appointment) => {
-  //   return {
-  //     uuid: appointment.uuid,
-  //     patient: {
-  //       uuid: appointment.patient.uuid,
-  //       surname: appointment.patient.surname,
-  //       name: appointment.patient.name,
-  //       patronymic: appointment.patient.patronymic,
-  //       email: appointment.patient.email,
-  //     },
-  //     startTime: appointment.startTime,
-  //     endTime: appointment.endTime,
-  //   };
-  // });
+  const clinic = await Clinic.findOne();
+  const clinicEmail = clinic.email;
+  const clinicAppPassword = clinic.appPassword;
+  const reminder = await MessageTemplate.findOne({ where: { name: 'Scheduled visit' } });
 
-  // EMAIL_USER = brightdent.dentistry@gmail.com
-  // EMAIL_PASSWORD = 2fhY@JIk1s93C0DwM@
+  const data = appointments.map((appointment) => {
+    return {
+      uuid: appointment.uuid,
+      patient: {
+        uuid: appointment.patient.uuid,
+        surname: appointment.patient.surname,
+        name: appointment.patient.name,
+        patronymic: appointment.patient.patronymic,
+        email: appointment.patient.email,
+      },
+      date: appointment.date,
+      startTime: appointment.startTime,
+      endTime: appointment.endTime,
+    };
+  });
 
   let transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -107,29 +106,195 @@ const sendReminders = asyncHandler(async (req, res) => {
     // port: 465,
     // secure: true,
     auth: {
-      user: 'brightdent.dentistry@gmail.com',
-      pass: 'vwaq iivx oohb wgyt',
+      user: clinicEmail,
+      pass: clinicAppPassword,
     },
   });
 
-  let mailOptions = {
-    from: 'brightdent.dentistry@gmail.com',
-    to: 'poltava.violetta@gmail.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!',
-  };
-
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      res.json({ message: 'Email sent' });
-      console.log('Email sent: ' + info.response);
+  for (const appointment of data) {
+    if (appointment.patient.email === null || appointment.patient.email === '') {
+      console.log(
+        `Patient ${patient.surname} ${patient.name} ${patient.patronymic} has no email`
+      );
+      continue;
     }
+
+    let date = appointment.date;
+    let time = appointment.startTime;
+    let clinicName = clinic.name;
+    let clinicAddress = clinic.address;
+    let clinicPhone = clinic.phone;
+
+    const reminderBody = reminder.body
+      .replace('{date}', date)
+      .replace('{time}', time)
+      .replace('{clinicAddress}', clinicAddress)
+      .replace('{clinicName}', clinicName)
+      .replace('{clinicPhone}', clinicPhone);
+
+    let mailOptions = {
+      from: clinicEmail,
+      to: appointment.patient.email,
+      subject: 'У Вас є запланований візит до BrightDent',
+      text: reminderBody,
+    };
+
+    try {
+      let info = await transporter.sendMail(mailOptions);
+      console.log('Email sent: ' + info.response);
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
+  }
+  res.json({ message: 'Emails sent' });
+});
+
+// @desc    Create a custom message
+// @route   POST /api/mailingsystem/createmsg
+// @access  Public
+const createMessage = asyncHandler(async (req, res) => {
+  const { patients, subject, body } = req.body;
+  if (!patients || !subject || !body) {
+    res.status(400);
+    throw new Error('Please provide all fields');
+  }
+
+  const clinic = await Clinic.findOne();
+  const patientsData = await Patient.findAll({
+    where: {
+      uuid: {
+        [Op.in]: patients,
+      },
+    },
   });
+
+  let transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: clinic.email,
+      pass: clinic.appPassword,
+    },
+  });
+
+  for (const patient of patientsData) {
+    if (patient.email === null || patient.email === '') {
+      console.log(
+        `Patient ${patient.surname} ${patient.name} ${patient.patronymic} has no email`
+      );
+      continue;
+    }
+
+    let mailOptions = {
+      from: clinic.email,
+      to: patient.email,
+      subject: subject,
+      text: body,
+    };
+
+    try {
+      let info = await transporter.sendMail(mailOptions);
+      console.log('Email sent: ' + info.response);
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
+  }
+  res.json({ message: 'Emails sent' });
+});
+
+// @desc    Send message using a template
+// @route   POST /api/mailingsystem/sendmsg
+// @access  Public
+const sendMessage = asyncHandler(async (req, res) => {
+  const { patients, subject, templateUuid } = req.body;
+  if (!patients || !subject || !templateUuid) {
+    res.status(400);
+    throw new Error('Please provide all fields');
+  }
+
+  const clinic = await Clinic.findOne();
+  const template = await MessageTemplate.findByPk(templateUuid);
+  const patientsData = await Patient.findAll({
+    where: {
+      uuid: {
+        [Op.in]: patients,
+      },
+    },
+  });
+
+  let transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: clinic.email,
+      pass: clinic.appPassword,
+    },
+  });
+
+  for (const patient of patientsData) {
+    if (patient.email === null || patient.email === '') {
+      console.log(
+        `Patient ${patient.surname} ${patient.name} ${patient.patronymic} has no email`
+      );
+      continue;
+    }
+
+    let mailOptions = {
+      from: clinic.email,
+      to: patient.email,
+      subject: subject,
+      text: template.body,
+    };
+
+    try {
+      let info = await transporter.sendMail(mailOptions);
+      console.log('Email sent: ' + info.response);
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
+  }
+  res.json({ message: 'Emails sent' });
+});
+
+// @desc    Get patients who have birthdays today
+// @route   GET /api/mailingsystem/getbirthdays
+// @access  Public
+const getBirthdays = asyncHandler(async (req, res) => {
+  // to send greeting use sendMessage method
+  let today = new Date();
+  let day = today.getDate();
+  let month = today.getMonth() + 1;
+
+  const patients = await Patient.findAll({
+    where: {
+      birthdate: {
+        [Op.substring]: `-${month.toString()}-${day.toString()}`,
+      },
+    },
+  });
+
+  if (patients) {
+    res.json({
+      currentDate: `${day}-${month}`,
+      patients: patients.map((patient) => {
+        return {
+          uuid: patient.uuid,
+          surname: patient.surname,
+          name: patient.name,
+          patronymic: patient.patronymic,
+          email: patient.email,
+          birthDate: patient.birthDate,
+        };
+      }),
+    });
+  } else {
+    res.status(404);
+    throw new Error('Patients not found');
+  }
 });
 
 module.exports = {
   getAppointmentsByDate,
   sendReminders,
+  createMessage,
+  sendMessage,
+  getBirthdays,
 };
