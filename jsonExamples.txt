@@ -1,0 +1,26 @@
+// Receipt json
+{
+    "services":["7e2b89fa-41ab-4d3d-b014-269028d44389","05360b50-2592-4c04-a035-5e49e3090c67","5c04c21a-4ef8-42d6-835f-2442faccd87a"],
+    "sale":0,
+    "paymentType":"card",
+    "quantities":[1,2,1]
+}
+
+// Dental Formula json
+{
+  "teeth": [
+    {
+      "id": 1,
+      "notations": ["dp", "op", "wp"]
+    },
+    {
+      "id": 2,
+      "notations": ["op"]
+    },
+    {
+      "id": 3,
+      "notations": ["dp", "wp"]
+    },
+    // More teeth can be added here...
+  ]
+}

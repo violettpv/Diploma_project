@@ -32,6 +32,7 @@ app.use('/api/patientspage', require('./routes/patientsPageRoute'));
 app.use('/api/msgtemplate', require('./routes/messageTemplateRoute'));
 app.use('/api/appointments', require('./routes/appointmentRoute'));
 app.use('/api/dentalformula', require('./routes/dentalFormulaRoute'));
+app.use('/api/mailingsystem', require('./routes/mailingSystemRoute'));
 
 app.use(errorHandler);
 

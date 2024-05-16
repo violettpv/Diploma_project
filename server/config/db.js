@@ -81,6 +81,7 @@ const syncTables = async () => {
     await db.sync();
     await checkExistingRoles();
     await checkExistingDiseases();
+    await createReminderTemplate();
     console.log('Tables synced');
   } catch (err) {
     console.error('Unable to sync tables:', err);
@@ -184,6 +185,26 @@ const checkExistingDiseases = async () => {
       // console.log(`Disease '${name}' already exists`);
     }
   }
+};
+
+const createReminderTemplate = async () => {
+  const MessageTemplate = require('../models/messageTemplateModel');
+  const visitReminder = {
+    name: 'Scheduled visit',
+    body: 'У Вас заплановано візит до стоматолога на {date} о {time}. Адреса: {clinicAddress}. З повагою, {clinicName}. Телефон: {clinicPhone}',
+  };
+
+  const existingTemplate = await MessageTemplate.findOne({
+    where: { name: visitReminder.name },
+  });
+
+  if (!existingTemplate) {
+    await MessageTemplate.create(visitReminder);
+    // console.log('Visit reminder template created');
+  }
+  // else {
+  //   console.log('Visit reminder template already exists');
+  // }
 };
 
 module.exports = { db, syncTables };

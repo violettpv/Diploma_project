@@ -57,6 +57,10 @@ const getAllTemplates = asyncHandler(async (req, res) => {
 // @access  Public
 const deleteTemplate = asyncHandler(async (req, res) => {
   const template = await MessageTemplate.findByPk(req.params.uuid);
+  if (template.uuid === '6d5c51a9-49c6-4510-8de3-afa55dc8ee8f') {
+    res.status(400);
+    throw new Error('Cannot delete default template');
+  }
   if (template) {
     await template.destroy();
     res.json({ message: 'Template removed' });
