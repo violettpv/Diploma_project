@@ -1,0 +1,24 @@
+.Navigator {
+  width: 5%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--charcoal);
+  padding: 20px;
+}
+.nav-button {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #ecf0f1;
+  text-decoration: none;
+  cursor: pointer;
+}
+.nav-button:hover {
+  background-color: #34495e;
+  border-radius: 10px;
+}
+.nav-icon {
+  font-size: 35px;
+}

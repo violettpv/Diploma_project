@@ -1,0 +1,28 @@
+.Header {
+  width: 100%;
+  height: 6vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--piction-blue);
+  /* box-shadow: 0px 4px 4px lightgray; */
+  box-shadow: 0 4px 2px -2px lightgray;
+}
+.app-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+a {
+  text-decoration: none;
+}
+a:visited,
+a:active,
+a:link {
+  color: white;
+}
+a:hover {
+  color: white;
+  cursor: pointer;
+}
