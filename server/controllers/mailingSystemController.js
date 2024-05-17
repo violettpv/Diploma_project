@@ -259,21 +259,23 @@ const sendMessage = asyncHandler(async (req, res) => {
 // @access  Public
 const getBirthdays = asyncHandler(async (req, res) => {
   // to send greeting use sendMessage method
+  // send array of uuids of patients who have birthdays today
   let today = new Date();
   let day = today.getDate();
   let month = today.getMonth() + 1;
+  let year = today.getFullYear();
 
   const patients = await Patient.findAll({
     where: {
       birthdate: {
-        [Op.substring]: `-${month.toString()}-${day.toString()}`,
+        [Op.endsWith]: `${month.toString()}-${day.toString()}`,
       },
     },
   });
 
   if (patients) {
     res.json({
-      currentDate: `${day}-${month}`,
+      currentDate: `${year}-${month}-${day}`,
       patients: patients.map((patient) => {
         return {
           uuid: patient.uuid,
@@ -281,7 +283,7 @@ const getBirthdays = asyncHandler(async (req, res) => {
           name: patient.name,
           patronymic: patient.patronymic,
           email: patient.email,
-          birthDate: patient.birthDate,
+          birthdate: patient.birthdate,
         };
       }),
     });

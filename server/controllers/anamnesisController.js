@@ -83,7 +83,7 @@ const getAllAnamnesis = asyncHandler(async (req, res) => {
 
 // @desc    Delete an anamnesis
 // @route   DELETE /api/anamnesis/delete/:uuid
-// @access  Public
+// @access  Public or PRIVATE. For development only
 const deleteAnamnesis = asyncHandler(async (req, res) => {
   const anamnesis = await Anamnesis.findOne({ where: { uuid: req.params.uuid } });
   if (anamnesis) {

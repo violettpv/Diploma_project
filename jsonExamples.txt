@@ -31,3 +31,43 @@
     "subject": "Відбілювання",
     "templateUuid": "073a9e50-3081-440b-8fc8-da270b8a1e44"
 }
+
+// custom message
+{
+    "patients": ["2157af33-4192-4d02-a04d-87e3530acb21", "6b53bd02-de76-481f-83fb-06a80adac466", "14d8bc4d-e11d-4df0-803c-37c858428d1e"],
+    "subject": "Тест (create msg)",
+    "body": "Hello world!"
+}
+
+// appointment reminders example
+{
+    "currentDate": "2024-06-02",
+    "appointments": [
+        {
+            "uuid": "0f8d3133-2a3f-4750-9468-5f2912cc78f8",
+            "date": "2024-06-02",
+            "patient": {
+                "uuid": "b972ccdc-d875-4e82-941c-8310d9a38e34",
+                "surname": "Коновальчук",
+                "name": "Андрій",
+                "patronymic": "Володимирович",
+                "email": "lucas.andrij@gmail.com"
+            },
+            "startTime": "09:00:00",
+            "endTime": "09:30:00"
+        },
+        {
+            "uuid": "b0d6a280-c16a-4408-bfb4-fa258bbbf331",
+            "date": "2024-06-02",
+            "patient": {
+                "uuid": "2157af33-4192-4d02-a04d-87e3530acb21",
+                "surname": "Полтава",
+                "name": "Віолетта",
+                "patronymic": "Віталіївна",
+                "email": "poltava.violetta@gmail.com"
+            },
+            "startTime": "09:00:00",
+            "endTime": "09:30:00"
+        }
+    ]
+}
