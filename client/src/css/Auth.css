@@ -1,0 +1,203 @@
+.Login,
+.Register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.login-container,
+.error-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+.login-form {
+  padding: 20px;
+  width: 40%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid lightslategray;
+  border-radius: 5px;
+  background-color: var(--platinum);
+}
+.form-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.login-intro {
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-inputs {
+  width: 250px;
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+.login-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+.error-paper {
+  width: 35%;
+  padding: 15px 10px;
+  margin: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.register-link {
+  margin: 7px 0 10px 0;
+  font-size: 14px;
+}
+
+/* ==== Register.jsx ==== */
+.register-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+.register-intro {
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.forms-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: start;
+  width: 100%;
+}
+.register-page-forms {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.forms-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: start;
+  width: 100%;
+}
+.register-form,
+.clinic-form {
+  padding: 15px;
+  width: 30%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid lightslategray;
+  border-radius: 5px;
+  background-color: var(--platinum);
+}
+.register-inputs,
+.clinic-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+.register-inputs .form-inputs,
+.clinic-inputs .form-inputs {
+  width: 250px;
+  padding: 8px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+.register-bottom-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* margin-top: 2px; */
+}
+
+.tooltip-app-password {
+  position: relative;
+}
+
+.tooltip-app-password .tooltiptext {
+  visibility: hidden;
+  width: fit-content;
+  background-color: var(--aero);
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip-app-password .tooltiptext::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent var(--aero) transparent;
+}
+
+.tooltip-app-password:hover .tooltiptext {
+  visibility: visible;
+}
+.submit-button-reg {
+  width: 140px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #009be5;
+  color: white;
+  cursor: pointer;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* ==== Mutual elements ==== */
+.submit-button {
+  width: 140px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #009be5;
+  color: white;
+  cursor: pointer;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.submit-button:hover {
+  background-color: #0077b3;
+}

@@ -1,33 +1,85 @@
 import React from 'react';
-import Header from '../components/Header';
-import '../css/Login.css';
+import '../css/Auth.css';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, reset } from '../features/user/userSlice';
+import HeaderMenu from '../components/HeaderMenu';
 
 export default function Login() {
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const { email, password } = formData;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user, isError, isSuccess, message } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (isError) {
+      console.log(message);
+    }
+
+    if (isSuccess || user) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    const userData = {
+      email,
+      password,
+    };
+
+    dispatch(login(userData));
+  };
+
   return (
     <>
+      <HeaderMenu />
       <div className="Login">
         <div className="login-container">
-          <form className="login-form">
-            <div className="introduction">
-              <span>
+          <form className="login-form" onSubmit={onSubmit}>
+            <div className="login-intro">
+              <p>
                 <b>BrightDent</b> вітає Вас!
-              </span>
+              </p>
+              <p>Увійти в акаунт</p>
             </div>
-            <p>Увійти в акаунт</p>
             <div className="login-inputs">
               <label>
                 Ел. пошта: &nbsp;
-                <input className="login-register-input" name="email" type="email"></input>
+                <input
+                  className="form-inputs"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={onChange}
+                />
               </label>
               <label>
                 Пароль: &nbsp;
                 <input
-                  className="login-register-input"
+                  className="form-inputs"
                   name="password"
                   type="password"
-                ></input>
+                  value={password}
+                  onChange={onChange}
+                />
               </label>
+              <button type="submit" className="submit-button">
+                Увійти
+              </button>
             </div>
             <span style={{ marginBottom: '8px', display: 'hidden', color: 'red' }}></span>
             <div className="register-link">
@@ -36,9 +88,6 @@ export default function Login() {
                 Зареєструватись.
               </Link>
             </div>
-            <button type="submit" className="login-button">
-              Увійти
-            </button>
           </form>
         </div>
       </div>

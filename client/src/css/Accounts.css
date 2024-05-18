@@ -1,0 +1,102 @@
+.Accounts {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.accounts-content {
+  width: 100%;
+}
+.accounts-body {
+  width: 100%;
+  height: 94vh;
+  padding: 28px;
+}
+.accounts-main {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.tabs-list {
+  display: flex;
+  flex-direction: row;
+}
+.tabs-logout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.tab {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  color: rgb(101, 116, 131);
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  background-color: transparent;
+  text-transform: uppercase;
+  margin-right: 7px;
+}
+.tab:hover {
+  color: var(--honululu-blue);
+}
+.logout-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 8px;
+}
+#logout-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  font-size: 26px;
+  color: var(--charcoal);
+}
+.tooltip {
+  position: relative;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: fit-content;
+  font-size: 14px;
+  background-color: var(--charcoal);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  right: 125%;
+}
+
+.tooltip .tooltiptext::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--charcoal);
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.accounts-hr {
+  margin: 5px 0;
+}
+.tab-panel {
+  padding: 10px;
+  height: 100%;
+  width: 100%;
+}

@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Clinic = require('../models/clinicModel');
 
 // @desc   Create a profile for a clinic
-// @route  POST /api/clinic
+// @route  POST /api/clinic/create
 // @access Private (main's admin)
 const createClinic = asyncHandler(async (req, res) => {
   const { name, address, phone, phone2, email, website, appPassword } = req.body;

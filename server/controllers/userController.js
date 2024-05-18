@@ -11,10 +11,24 @@ const UsersRole = require('../models/usersRoleModel');
 const registerUser = asyncHandler(async (req, res) => {
   const { email, password, surname, name, patronymic, phone } = req.body;
 
-  // чи зробити перевірку тільки на клієнті??
   if (!email || !password || !surname || !name || !phone) {
     res.status(400);
     throw new Error('Please add all fields');
+  }
+
+  // Check if main admin already exists
+  const findMain = await User.findAll({
+    include: {
+      model: Role,
+      where: {
+        role: 'main',
+      },
+      through: { attributes: [] },
+    },
+  });
+  if (findMain.length > 0) {
+    res.status(400);
+    throw new Error('Main admin already exists');
   }
 
   // Check if user exists
@@ -102,7 +116,6 @@ const loginUser = asyncHandler(async (req, res) => {
       name: user.name,
       patronymic: user.patronymic,
       phone: user.phone,
-      clinicUuid: user.clinicUuid,
       // Check user's role
       // roles: usersRole.roles.map((obj) => obj.role),
       token: generateToken(user.uuid),

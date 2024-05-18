@@ -2,10 +2,10 @@ import React from 'react';
 import '../css/Header.css';
 import { Link } from 'react-router-dom';
 
-function Header() {
+function HeaderMenu() {
   return (
     <>
-      <div className="Header">
+      <div className="HeaderMenu">
         <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
           <div className="app-name">BrightDent</div>
         </Link>
@@ -14,4 +14,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default HeaderMenu;

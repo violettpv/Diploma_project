@@ -2,10 +2,11 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 94vh;
+  height: 100vh;
   align-items: center;
 }
 .menu-buttons {
+  margin-top: 3%;
   display: flex;
   flex-direction: column;
   justify-content: center;
