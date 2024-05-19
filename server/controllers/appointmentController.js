@@ -625,6 +625,22 @@ const getFinishedAppointments = asyncHandler(async (req, res) => {
     order: [['startTime', 'ASC']],
   });
 
+  // count total sum of receipts paid by cash
+  let totalSumCash = 0;
+  for (let i = 0; i < appointments.length; i++) {
+    if (appointments[i].receipt.paymentType === 'cash') {
+      totalSumCash += parseFloat(appointments[i].receipt.total);
+    }
+  }
+
+  // count total sum of receipts paid by card
+  let totalSumCard = 0;
+  for (let i = 0; i < appointments.length; i++) {
+    if (appointments[i].receipt.paymentType === 'card') {
+      totalSumCard += parseFloat(appointments[i].receipt.total);
+    }
+  }
+
   // count total sum of all receipts
   let totalSum = 0;
   for (let i = 0; i < appointments.length; i++) {
@@ -633,7 +649,7 @@ const getFinishedAppointments = asyncHandler(async (req, res) => {
   // console.log(totalSum);
 
   if (appointments) {
-    res.json({ appointments, totalSum });
+    res.json({ appointments, totalSumCash, totalSumCard, totalSum });
   } else {
     res.status(404);
     throw new Error('Appointments not found');

@@ -88,6 +88,12 @@ export default function Login() {
                 Зареєструватись.
               </Link>
             </div>
+            <div className="register-link">
+              Увійти в&nbsp;
+              <Link to="/loginpatient" style={{ color: '#009be5', cursor: 'pointer' }}>
+                особистий кабінет пацієнта.
+              </Link>
+            </div>
           </form>
         </div>
       </div>

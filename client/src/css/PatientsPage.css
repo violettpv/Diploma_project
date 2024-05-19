@@ -1,0 +1,53 @@
+.Main {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.main-content {
+  width: 100%;
+}
+.main-body {
+  width: 100%;
+  height: 94vh;
+  padding: 28px;
+}
+.main-main {
+  height: 100%;
+  width: 100%;
+  padding: 25px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.intro-div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  font-size: 18px;
+}
+.intro-div p {
+  display: flex;
+  align-items: center;
+}
+.main-hr,
+.intro-div div {
+  margin: 8px 0;
+}
+.main-hr {
+  border: 1px solid #e0e0e0;
+}
+.icon {
+  margin-right: 8px;
+}
+.logout-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#logout-button {
+  margin-right: 10px;
+}
+
+/* Сторінка акаунту пацієнта */

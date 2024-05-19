@@ -1,0 +1,136 @@
+.Services {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.services-content {
+  width: 100%;
+}
+.services-body {
+  width: 100%;
+  height: 94vh;
+  padding: 35px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.services-main {
+  height: 100%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+.top-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.search-service {
+  display: flex;
+  flex-direction: row;
+}
+#search-input {
+  width: 100%;
+  height: 30px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 16px;
+  color: #333;
+  margin-right: 10px;
+}
+.service-buttons {
+  width: fit-content;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #009be5;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  align-self: center;
+}
+.service-buttons:hover {
+  background-color: #0077b3;
+}
+
+.table-container {
+  max-height: 75vh;
+  overflow-y: auto;
+}
+.icon {
+  color: black;
+  font-size: 18px;
+  align-self: center;
+  margin: 0 15px;
+}
+
+/* ===== AddService ===== */
+.add-service-body {
+  width: 100%;
+  height: 94vh;
+  padding: 40px 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.add-service-main {
+  padding: 30px;
+  height: 50%;
+  width: fit-content;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+.add-service-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.add-service-main hr {
+  width: 100%;
+  margin: 15px 0;
+  border: 1px solid #e0e0e0;
+}
+.add-service-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.add-service-inputs-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+}
+.add-service-inputs {
+  display: flex;
+  flex-direction: column;
+}
+.add-service-input input {
+  width: 100%;
+  height: 30px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 16px;
+  color: #333;
+  margin: 10px 0;
+}
+.add-service-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}

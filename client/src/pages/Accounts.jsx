@@ -1,10 +1,10 @@
 import React from 'react';
-import Header from '../../components/Header';
-import Navigator from '../../components/Navigator';
-import './../../css/Accounts.css';
+import Header from '../components/Header';
+import Navigator from '../components/Navigator';
+import '../css/Accounts.css';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logout, reset } from '../../features/user/userSlice';
+import { logout, reset } from '../features/user/userSlice';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { Tabs } from '@mui/base/Tabs';
 import { TabsList } from '@mui/base/TabsList';
