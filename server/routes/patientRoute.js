@@ -8,7 +8,7 @@ const {
   getPatients,
   findPatientByPhone,
   findPatientByName,
-  findAppointments,
+  getAllPatientsAppointments,
 } = require('../controllers/patientController');
 
 router.post('/create', createPatient);
@@ -18,6 +18,6 @@ router.get('/findbyphone', findPatientByPhone);
 router.get('/all', getPatients);
 router.delete('/delete/:uuid', deletePatient);
 router.put('/update/:uuid', updatePatient);
-router.get('/appointments/:uuid', findAppointments);
+router.get('/appointments/:uuid', getAllPatientsAppointments);
 
 module.exports = router;

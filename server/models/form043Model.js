@@ -30,7 +30,7 @@ const Form043 = db.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    oclussion: {
+    occlusion: {
       type: DataTypes.STRING,
       allowNull: false,
     },

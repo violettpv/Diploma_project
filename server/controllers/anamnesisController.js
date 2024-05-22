@@ -3,6 +3,19 @@ const Anamnesis = require('../models/anamnesisModel');
 const Disease = require('../models/diseaseModel');
 const Patient = require('../models/patientModel');
 
+// @desc    Get all diseases
+// @route   Get /api/anamnesis/diseases
+// @access  Public
+const getDiseases = asyncHandler(async (req, res) => {
+  const diseases = await Disease.findAll();
+  if (diseases) {
+    res.json(diseases);
+  } else {
+    res.status(404);
+    throw new Error('Diseases not found');
+  }
+});
+
 // @desc    Create a new anamnesis
 // @route   POST /api/anamnesis/create
 // @access  Public
@@ -106,7 +119,7 @@ const updateAnamnesis = asyncHandler(async (req, res) => {
   }
 
   const { patiendUuid, diseaseUuid, note } = req.body;
-  await anamnesis.set({ patiendUuid, diseaseUuid, note });
+  anamnesis.set({ patiendUuid, diseaseUuid, note });
   await anamnesis.save();
 
   if (anamnesis) {
@@ -123,6 +136,7 @@ const updateAnamnesis = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getDiseases,
   createAnamnesis,
   getAnamnesis,
   deleteAnamnesis,

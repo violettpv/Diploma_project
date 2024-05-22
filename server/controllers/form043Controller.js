@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Form043 = require('../models/form043Model');
 const User = require('../models/userModel');
 const Role = require('../models/roleModel');
+const Patient = require('../models/patientModel');
 
 // @desc    Create a new form043
 // @route   POST /api/form043/create
@@ -12,7 +13,7 @@ const createForm043 = asyncHandler(async (req, res) => {
     diagnosis,
     complaints,
     transferredAndAssociatedDiseases,
-    oclussion,
+    occlusion,
     medicalExaminationData,
     researchData,
     vitaScale,
@@ -47,7 +48,7 @@ const createForm043 = asyncHandler(async (req, res) => {
     diagnosis,
     complaints,
     transferredAndAssociatedDiseases,
-    oclussion,
+    occlusion,
     medicalExaminationData,
     researchData,
     vitaScale,
@@ -62,7 +63,7 @@ const createForm043 = asyncHandler(async (req, res) => {
       diagnosis: form043.diagnosis,
       complaints: form043.complaints,
       transferredAndAssociatedDiseases: form043.transferredAndAssociatedDiseases,
-      oclussion: form043.oclussion,
+      occlusion: form043.occlusion,
       medicalExaminationData: form043.medicalExaminationData,
       researchData: form043.researchData,
       vitaScale: form043.vitaScale,
@@ -169,10 +170,11 @@ const updateForm043 = asyncHandler(async (req, res) => {
   }
 
   const {
+    uuid,
     diagnosis,
     complaints,
     transferredAndAssociatedDiseases,
-    oclussion,
+    occlusion,
     medicalExaminationData,
     researchData,
     vitaScale,
@@ -184,7 +186,7 @@ const updateForm043 = asyncHandler(async (req, res) => {
     diagnosis,
     complaints,
     transferredAndAssociatedDiseases,
-    oclussion,
+    occlusion,
     medicalExaminationData,
     researchData,
     vitaScale,
@@ -200,7 +202,7 @@ const updateForm043 = asyncHandler(async (req, res) => {
       diagnosis: form043.diagnosis,
       complaints: form043.complaints,
       transferredAndAssociatedDiseases: form043.transferredAndAssociatedDiseases,
-      oclussion: form043.oclussion,
+      occlusion: form043.occlusion,
       medicalExaminationData: form043.medicalExaminationData,
       researchData: form043.researchData,
       vitaScale: form043.vitaScale,
@@ -211,6 +213,38 @@ const updateForm043 = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Invalid form043 data');
   }
+});
+
+// @desc    Create forms for all patients who don't have it
+// @route   POST /api/form043/createall
+// @access  Private \ For fixing the database
+const createForm043ForAllPatients = asyncHandler(async (req, res) => {
+  const patients = await Patient.findAll();
+
+  if (!patients) {
+    res.status(404);
+    throw new Error('Patients not found');
+  }
+
+  patients.forEach(async (patient) => {
+    const form043Exists = await Form043.findOne({ where: { patientUuid: patient.uuid } });
+    if (!form043Exists) {
+      await Form043.create({
+        patientUuid: patient.uuid,
+        diagnosis: '',
+        complaints: '',
+        transferredAndAssociatedDiseases: '',
+        occlusion: '',
+        medicalExaminationData: '',
+        researchData: '',
+        vitaScale: '',
+        oralHealthTrainingData: '',
+        oralHygieneControlData: '',
+      });
+    }
+  });
+
+  res.json({ message: 'Form043s created' });
 });
 
 module.exports = {

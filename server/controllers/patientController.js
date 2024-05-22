@@ -4,17 +4,22 @@ const { Op } = require('sequelize');
 const Appointment = require('../models/appointmentModel');
 const Receipt = require('../models/receiptModel');
 const Service = require('../models/serviceModel');
+const Form043 = require('../models/form043Model');
+const DentalFormula = require('../models/dentalFormulaModel');
 
 // @desc    Register a new patient
 // @route   POST /api/patients/create
 // @access  Public
 const createPatient = asyncHandler(async (req, res) => {
   const { surname, name, patronymic, phone, email, birthdate, address, notes } = req.body;
-
+  let newEmail = email;
   // чи зробити перевірку тільки на клієнті??
   if (!name || !phone) {
     res.status(400);
     throw new Error('You need to fill at least name and phone');
+  }
+  if (email === '') {
+    newEmail = null;
   }
 
   const patient = await Patient.create({
@@ -22,10 +27,19 @@ const createPatient = asyncHandler(async (req, res) => {
     name,
     patronymic,
     phone,
-    email,
+    email: newEmail,
     birthdate,
     address,
     notes,
+  });
+  const form043 = await Form043.create({
+    patientUuid: patient.uuid,
+    occlusion: '',
+    vitaScale: '',
+  });
+  const dentalFormula = await DentalFormula.create({
+    patientUuid: patient.uuid,
+    jsonDentalFormula: {},
   });
 
   res.status(201).json({
@@ -38,6 +52,11 @@ const createPatient = asyncHandler(async (req, res) => {
     birthdate: patient.birthdate,
     address: patient.address,
     notes: patient.notes,
+    // uuidForm043: form043.uuid,
+    // occlusion: form043.occlusion,
+    // vitaScale: form043.vitaScale,
+    // uuidDentalFormula: dentalFormula.uuid,
+    // jsonDentalFormula: dentalFormula.jsonDentalFormula,
   });
 });
 
@@ -58,12 +77,12 @@ const getPatient = asyncHandler(async (req, res) => {
 // @route   Get /api/patients/all?limit=&offset=
 // @access  Public
 const getPatients = asyncHandler(async (req, res) => {
-  const { limit, offset } = req.query;
+  // const { limit, offset } = req.query;
   const patients = await Patient.findAll({
     order: [['surname', 'ASC']],
-    limit: parseInt(limit),
-    offset: parseInt(offset),
-    subQuery: false,
+    // limit: parseInt(limit) || 10,
+    // offset: parseInt(offset) || 0,
+    // subQuery: false,
   });
   if (patients) {
     res.json(patients);
@@ -99,12 +118,17 @@ const updatePatient = asyncHandler(async (req, res) => {
 
   const { surname, name, patronymic, phone, email, birthdate, address, notes } = req.body;
 
+  let newEmail = email;
+  if (email === '') {
+    newEmail = null;
+  }
+
   patient.set({
     surname,
     name,
     patronymic,
     phone,
-    email,
+    email: newEmail,
     birthdate,
     address,
     notes,
@@ -177,17 +201,23 @@ const findPatientByName = asyncHandler(async (req, res) => {
 // @desc    Find all patient's appointments and receipts
 // @route   GET /api/patients/appointments/:uuid
 // @access  Public
-const findAppointments = asyncHandler(async (req, res) => {
+const getAllPatientsAppointments = asyncHandler(async (req, res) => {
   const patient = await Patient.findByPk(req.params.uuid);
-
-  const patientsAppointments = await Appointment.findAll({
-    where: { patientUuid: req.params.uuid },
+  if (!patient) {
+    res.status(404);
+    throw new Error('Patient not found');
+  }
+  const appointments = await Appointment.findAll({
+    where: { patientUuid: patient.uuid },
+    attributes: ['uuid', 'date', 'startTime', 'endTime', 'isFinished'],
     include: [
       {
         model: Receipt,
+        attributes: ['uuid', 'total', 'isPaid', 'sale', 'paymentType'],
         include: [
           {
             model: Service,
+            attributes: ['uuid', 'name', 'price'],
             through: { attributes: ['quantity'] },
           },
         ],
@@ -195,18 +225,11 @@ const findAppointments = asyncHandler(async (req, res) => {
     ],
   });
 
-  if (patientsAppointments) {
-    res.json({
-      patient: {
-        uuid: patient.uuid,
-        surname: patient.surname,
-        name: patient.name,
-      },
-      appointments: patientsAppointments,
-    });
+  if (appointments) {
+    res.json(appointments);
   } else {
     res.status(404);
-    throw new Error('Patient`s appointments not found');
+    throw new Error('Appointments not found');
   }
 });
 
@@ -237,5 +260,5 @@ module.exports = {
   updatePatient,
   findPatientByPhone,
   findPatientByName,
-  findAppointments,
+  getAllPatientsAppointments,
 };

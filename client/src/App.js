@@ -9,6 +9,7 @@ import Appointments from './pages/Appointments';
 import Dispensary from './pages/Dispensary';
 import Patients from './pages/Patients';
 import PatientsCard from './components/patients/PatientsCard';
+import CreatePatient from './components/patients/CreatePatient';
 import MailingSystem from './pages/MailingSystem';
 import Reports from './pages/Reports';
 import Services from './pages/Services';
@@ -33,7 +34,8 @@ function App() {
             <Route path="/services/update/" element={<EditService />} />
             <Route path="/services/create/" element={<AddService />} />
             <Route path="/patients" element={<Patients />} />
-            <Route path="/patients/get" element={<PatientsCard />} />
+            <Route path="/patients/get/:uuid" element={<PatientsCard />} />
+            <Route path="/patients/create/" element={<CreatePatient />} />
             {/* <Route path="/appointments" element={<Appointments />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/mailingsystem" element={<MailingSystem />} />

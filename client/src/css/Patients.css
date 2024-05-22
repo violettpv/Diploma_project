@@ -16,6 +16,8 @@
   justify-content: center;
   align-items: center;
 }
+
+/* ===== Patients =====  */
 .patients-main {
   height: 100%;
   width: 80%;
@@ -66,29 +68,62 @@
 }
 
 /* ===== Patient's Card =====  */
-.patients-card-main {
-  height: 100%;
-  width: 80%;
+.patients-card-tabs {
+  height: 82vh;
+  width: 85%;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
 }
-.patients-card-main hr {
-  margin: 12px 0;
+.patients-card-main {
+  width: 100%;
+  padding: 4px 20px;
+}
+.tabs-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 0 0 10px;
+}
+
+/* ===== Patient's Info =====  */
+.PatientsInfo {
+  height: 100%;
+  width: 100%;
+}
+.patients-info-main {
+  height: 100%;
+  width: 100%;
+}
+.patients-info-buttons-both {
+  padding-top: 10%;
+}
+.patients-hr {
+  width: 100%;
+  margin: 5px 0;
   border: 1px solid #e0e0e0;
+}
+.patients-fullname {
+  margin-top: 2px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
 }
 .patients-data {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
   width: 100%;
+  height: 40%;
 }
 .patients-data-row {
   display: flex;
   flex-direction: column;
-
-  /* width: 80%; */
+  justify-content: flex-start;
+  width: 100%;
+  /* height: 100%; */
+  margin-right: 10%;
+  margin-top: 12px;
 }
 .patients-data-row label {
   display: flex;
@@ -98,26 +133,284 @@
   width: 100%;
   font-size: 16px;
   color: #333;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 .patients-data-row span {
   margin-right: 5px;
 }
+.patients-data-row textarea,
+.patients-data-row input {
+  width: 60%;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #333;
+}
 .patients-data-row textarea {
-  /* width: 100%; */
+  resize: none;
   height: 100px;
+  padding: 10px;
+}
+.patients-data-row input {
+  height: 30px;
+  padding: 0 10px;
+}
+.patients-info-buttons,
+.patients-info-buttons-2 {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+.patients-info-buttons button,
+.patients-info-buttons-2 button {
+  width: 100px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #009be5;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.patients-info-buttons button:hover {
+  background-color: #0077b3;
+}
+#patients-info-button-delete {
+  background-color: #ff6467;
+}
+#patients-info-button-delete:hover {
+  background-color: #e63b3e;
+}
+.disabled {
+  display: none;
+}
+#patients-info-button-cancel {
+  background-color: #767676;
+}
+#patients-info-button-cancel:hover {
+  background-color: #585858;
+}
+#patients-info-button-save-updated {
+  background-color: #009be5;
+}
+#patients-info-button-save-updated:hover {
+  background-color: #0077b3;
+}
+/* ===== Anamnesis =====  */
+.table-container-diseases {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+.diseases-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.diseases-buttons button {
+  width: 100px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 10px 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+#diseases-button-save,
+#diseases-button-update {
+  background-color: #009be5;
+}
+#diseases-button-save:hover,
+#diseases-button-update:hover {
+  background-color: #0077b3;
+}
+#diseases-button-cancel {
+  background-color: #767676;
+}
+#diseases-button-cancel:hover {
+  background-color: #585858;
+}
+/* ===== Form043 =====  */
+.form043-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.form043-info {
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#form043-button-update,
+#form043-button-save,
+#form043-button-cancel {
+  width: fit-content;
+  height: fit-content;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+#form043-button-update,
+#form043-button-save {
+  background-color: #009be5;
+}
+#form043-button-cancel {
+  background-color: #767676;
+  margin-left: 10px;
+}
+#form043-button-update:hover,
+#form043-button-save:hover {
+  background-color: #0077b3;
+}
+#form043-button-cancel:hover {
+  background-color: #585858;
+}
+.form043-main {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+#form043 {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+#form043 label {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+#form043 span {
+  margin-bottom: 5px;
+}
+#form043 textarea {
+  width: 100%;
+  height: 30%; /* prev. 100px */
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 10px;
   font-size: 16px;
   color: #333;
+  margin-bottom: 10px;
   resize: none;
 }
-.patients-data-row input {
+
+/* ===== Treatment Plan =====  */
+/* ===== Doctor's Diary =====  */
+/* ===== Patient's Page Settings =====  */
+
+/* ===== Create Patient =====  */
+.create-patient-body {
+  width: 100%;
+  height: 94vh;
+  padding: 50px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.create-patient-main {
+  width: 80%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+.create-patient-intro {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+#create-patient {
+  width: 100%;
+  height: 100%;
+}
+#create-patient .patients-data-row {
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+#create-patient label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+#create-patient input {
+  width: 70%;
   height: 30px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 0 10px;
   font-size: 16px;
   color: #333;
+}
+#create-patient textarea {
+  width: 70%;
+  height: 100px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  resize: none;
+}
+.create-patient-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 20px;
+}
+#create-patient-button-save {
+  width: 100px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #009be5;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+#create-patient-button-save:hover {
+  background-color: #0077b3;
+}
+#create-patient-button-cancel {
+  width: 100px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #767676;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+#create-patient-button-cancel:hover {
+  background-color: #585858;
 }

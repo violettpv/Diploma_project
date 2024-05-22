@@ -15,12 +15,11 @@ export default function Accounts() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const logOut = () => {
-    dispatch(logout());
-    dispatch(reset);
-    navigate('/login');
-  };
-
+  // const logOut = () => {
+  //   dispatch(logout());
+  //   dispatch(reset);
+  //   navigate('/login');
+  // };
   return (
     <>
       <div className="Accounts">
@@ -45,7 +44,11 @@ export default function Accounts() {
                     </TabsList>
                   </div>
                   <div className="logout-container">
-                    <button className="tooltip" id="logout-button" onClick={logOut()}>
+                    <button
+                      className="tooltip"
+                      id="logout-button"
+                      // onClick={logOut()}
+                    >
                       <FaSignOutAlt />
                       <span class="tooltiptext">Вийти</span>
                     </button>

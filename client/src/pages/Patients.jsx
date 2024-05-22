@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import '../css/Patients.css';
 import Header from '../components/Header';
 import Navigator from '../components/Navigator';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { getPatients, reset } from '../features/patients/patientsSlice';
+import { resetPage, savePage } from '../features/other/otherSlice';
 import {
   Table,
   TableBody,
@@ -17,12 +19,48 @@ import {
 
 export default function Patients() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { patients, isError, message } = useSelector((state) => state.patients);
+  const { page } = useSelector((state) => state.other);
 
-  const [page, setPage] = useState(0);
+  useEffect(() => {
+    if (isError) {
+      console.error('Error:', message);
+    }
+
+    dispatch(getPatients());
+
+    return () => {
+      dispatch(reset());
+      dispatch(resetPage());
+    };
+  }, [navigate, isError, message, dispatch]);
+
+  // const [page, setPage] = useState(0);
   const rowsPerPage = 8;
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    // setPage(newPage);
+    dispatch(savePage(newPage));
+  };
+
+  // func to count patient's age from birthdate
+  const getAge = (birthdate) => {
+    let today = new Date();
+    let birthDate = new Date(birthdate);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    let monthDifference = today.getMonth() - birthDate.getMonth();
+
+    // Якщо місяць народження ще не настав у поточному році,
+    // або настав, але день народження ще не настав
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age -= 1;
+    }
+
+    return age;
   };
 
   return (
@@ -56,24 +94,24 @@ export default function Patients() {
                     <Table>
                       <TableHead>
                         <TableRow>
-                          <TableCell>ПІБ пацієнта</TableCell>
-                          <TableCell>Телефон</TableCell>
-                          <TableCell>Вік</TableCell>
+                          <TableCell sx={{ fontWeight: 'bold' }}>ПІБ пацієнта</TableCell>
+                          <TableCell sx={{ fontWeight: 'bold' }}>Телефон</TableCell>
+                          <TableCell sx={{ fontWeight: 'bold' }}>Вік</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {rows
+                        {patients
                           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                          .map((row, index) => (
-                            <TableRow key={index}>
+                          .map((patient) => (
+                            <TableRow key={patient.uuid}>
                               <TableCell
                                 sx={{ cursor: 'pointer' }}
-                                onClick={() => navigate(`/patients/get/`)}
+                                onClick={() => navigate(`/patients/get/${patient.uuid}`)}
                               >
-                                {row.surname} {row.name} {row.patronymic}
+                                {patient.surname} {patient.name} {patient.patronymic}
                               </TableCell>
-                              <TableCell>{row.phone}</TableCell>
-                              <TableCell>{row.age}</TableCell>
+                              <TableCell>{patient.phone}</TableCell>
+                              <TableCell>{getAge(patient.birthdate)}</TableCell>
                             </TableRow>
                           ))}
                       </TableBody>
@@ -82,10 +120,13 @@ export default function Patients() {
                   <TablePagination
                     rowsPerPageOptions={[]}
                     component="div"
-                    count={rows.length}
+                    count={patients.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
+                    labelDisplayedRows={({ from, to, count }) =>
+                      `${from}-${to} з ${count}`
+                    }
                   />
                 </Paper>
               </div>
@@ -96,36 +137,3 @@ export default function Patients() {
     </>
   );
 }
-
-function createData(surname, name, patronymic, phone, age) {
-  return { surname, name, patronymic, phone, age };
-}
-const rows = [
-  createData('Іванов', 'Іван', 'Іванович', '+380123456789', 30),
-  createData('Петров', 'Петро', 'Петрович', '+380123456789', 30),
-  createData('Сидоров', 'Сидір', 'Сидорович', '+380123456789', 30),
-  createData('Коваленко', 'Ковало', 'Коваленкович', '+380123456789', 30),
-  createData('Ковальчук', 'Ковало', 'Ковальчукович', '+380123456789', 30),
-  createData('Коваль', 'Ковало', 'Ковалович', '+380123456789', 30),
-  createData('Ковалев', 'Ковало', 'Ковалевич', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальченко', 'Ковало', 'Ковальченкович', '+380123456789', 30),
-  createData('Ковальчук', 'Ковало', 'Ковальчукович', '+380123456789', 30),
-  createData('Коваль', 'Ковало', 'Ковалович', '+380123456789', 30),
-  createData('Ковалев', 'Ковало', 'Ковалевич', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-  createData('Ковальський', 'Ковало', 'Ковальськович', '+380123456789', 30),
-];

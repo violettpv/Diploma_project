@@ -50,6 +50,31 @@ const createDentalFormula = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc create dental formulas for all patients who don't have them
+// @route POST /api/dentalformula/createall
+// @access Private \ For fixing the database
+const createAllDentalFormulas = asyncHandler(async (req, res) => {
+  const patients = await Patient.findAll();
+
+  if (!patients) {
+    res.status(400);
+    throw new Error('Patients not found');
+  }
+
+  patients.forEach(async (patient) => {
+    const dentalFormulaExists = await DentalFormula.findOne({
+      where: { patientUuid: patient.uuid },
+    });
+    if (!dentalFormulaExists) {
+      await DentalFormula.create({
+        jsonDentalFormula: {},
+        patientUuid: patient.uuid,
+      });
+    }
+  });
+  res.status(201).json({ message: 'Dental formulas created' });
+});
+
 // @desc    Get a dental formula
 // @route   GET /api/dentalformula/get/:uuid
 // @access  Private
@@ -164,4 +189,5 @@ module.exports = {
   deleteDentalFormula,
   updateDentalFormula,
   getAllDentalFormulas,
+  createAllDentalFormulas,
 };
