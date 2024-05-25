@@ -53,7 +53,18 @@ const createDispensary = asyncHandler(async (req, res) => {
 // @route   Get /api/dispensary/get/:uuid
 // @access  Public
 const getDispensary = asyncHandler(async (req, res) => {
-  const dispensary = await Dispensary.findByPk(req.params.uuid);
+  const dispensary = await Dispensary.findByPk(req.params.uuid, {
+    include: [
+      {
+        model: Patient,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+      {
+        model: User,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+    ],
+  });
   if (dispensary) {
     res.json(dispensary);
   } else {
@@ -66,12 +77,22 @@ const getDispensary = asyncHandler(async (req, res) => {
 // @route   Get /api/dispensary/all?limit=&offset=
 // @access  Public
 const getAllDispensary = asyncHandler(async (req, res) => {
-  const { limit, offset } = req.query;
+  // const { limit, offset } = req.query;
   const dispensary = await Dispensary.findAll({
+    include: [
+      {
+        model: Patient,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+      {
+        model: User,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+    ],
     order: [['dateOfTheVisit', 'ASC']],
-    limit: parseInt(limit),
-    offset: parseInt(offset),
-    subQuery: false,
+    // limit: parseInt(limit),
+    // offset: parseInt(offset),
+    // subQuery: false,
   });
   if (dispensary) {
     res.json(dispensary);
@@ -141,28 +162,29 @@ const updateDispensary = asyncHandler(async (req, res) => {
 });
 
 // @desc   Find all dispensary records of the patient
-// @route  GET /api/dispensary/findbypatient?surname=&name=&patronymic
+// @route  GET /api/dispensary/findbypatient?query=
 // @access Public
 const findRecordsOfPatient = asyncHandler(async (req, res) => {
-  // Split the query into words on client
-  const { surname, name, patronymic } = req.query;
-  const result = await Patient.findAll({
-    where: {
-      surname: { [Op.substring]: surname },
-      name: { [Op.substring]: name },
-      patronymic: { [Op.substring]: patronymic },
-    },
-    attributes: ['uuid', 'surname', 'name', 'patronymic'],
+  const { query } = req.query;
+  const result = await Dispensary.findAll({
     include: [
+      {
+        model: Patient,
+        where: {
+          [Op.or]: [
+            { surname: { [Op.substring]: query } },
+            { name: { [Op.substring]: query } },
+            { patronymic: { [Op.substring]: query } },
+          ],
+        },
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
       {
         model: User,
         attributes: ['uuid', 'surname', 'name', 'patronymic'],
-        through: {
-          attributes: ['uuid', 'dateOfTheVisit', 'timeNeeded', 'treatment', 'notes'],
-        },
       },
     ],
-    order: [[User, Dispensary, 'dateOfTheVisit', 'ASC']],
+    order: [['dateOfTheVisit', 'ASC']],
   });
 
   if (result) {
@@ -174,28 +196,30 @@ const findRecordsOfPatient = asyncHandler(async (req, res) => {
 });
 
 // @desc   Find all dispensary records of the user (doctor)
-// @route  GET /api/dispensary/findbydoctor?surname=&name=&patronymic
+// @route  GET /api/dispensary/findbydoctor?query
 // @access Public
 const findRecordsOfDoctor = asyncHandler(async (req, res) => {
-  // Split the query into words on client
-  const { surname, name, patronymic } = req.query;
-  const result = await User.findAll({
-    where: {
-      surname: { [Op.substring]: surname },
-      name: { [Op.substring]: name },
-      patronymic: { [Op.substring]: patronymic },
-    },
-    attributes: ['uuid', 'surname', 'name', 'patronymic'],
+  const { query } = req.query;
+  const result = await Dispensary.findAll({
     include: [
+      {
+        model: User,
+        where: {
+          // [Op.or]: [
+          //   { surname: { [Op.substring]: query } },
+          //   { name: { [Op.substring]: query } },
+          //   { patronymic: { [Op.substring]: query } },
+          // ],
+          uuid: { [Op.substring]: query },
+        },
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
       {
         model: Patient,
         attributes: ['uuid', 'surname', 'name', 'patronymic'],
-        through: {
-          attributes: ['uuid', 'dateOfTheVisit', 'timeNeeded', 'treatment', 'notes'],
-        },
       },
     ],
-    order: [[Patient, Dispensary, 'dateOfTheVisit', 'ASC']],
+    order: [['dateOfTheVisit', 'ASC']],
   });
 
   if (result) {
@@ -235,6 +259,16 @@ const findRecordsByDate = asyncHandler(async (req, res) => {
         [Op.eq]: searchDate,
       },
     },
+    include: [
+      {
+        model: Patient,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+      {
+        model: User,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+    ],
     order: [['dateOfTheVisit', 'ASC']],
   });
 

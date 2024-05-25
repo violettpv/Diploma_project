@@ -4,7 +4,7 @@ import '../css/Patients.css';
 import Header from '../components/Header';
 import Navigator from '../components/Navigator';
 import { useNavigate } from 'react-router-dom';
-import { getPatients, reset } from '../features/patients/patientsSlice';
+import { getPatients, findPatient, reset } from '../features/patients/patientsSlice';
 import { resetPage, savePage } from '../features/other/otherSlice';
 import {
   Table,
@@ -22,6 +22,7 @@ export default function Patients() {
   const dispatch = useDispatch();
   const { patients, isError, message } = useSelector((state) => state.patients);
   const { page } = useSelector((state) => state.other);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (isError) {
@@ -32,7 +33,7 @@ export default function Patients() {
 
     return () => {
       dispatch(reset());
-      dispatch(resetPage());
+      // dispatch(resetPage());
     };
   }, [navigate, isError, message, dispatch]);
 
@@ -44,13 +45,16 @@ export default function Patients() {
     dispatch(savePage(newPage));
   };
 
-  // func to count patient's age from birthdate
+  const handleSearch = (e) => {
+    e.preventDefault();
+    dispatch(findPatient(search));
+  };
+
   const getAge = (birthdate) => {
     let today = new Date();
     let birthDate = new Date(birthdate);
     let age = today.getFullYear() - birthDate.getFullYear();
     let monthDifference = today.getMonth() - birthDate.getMonth();
-
     // Якщо місяць народження ще не настав у поточному році,
     // або настав, але день народження ще не настав
     if (
@@ -59,7 +63,6 @@ export default function Patients() {
     ) {
       age -= 1;
     }
-
     return age;
   };
 
@@ -73,8 +76,18 @@ export default function Patients() {
             <div className="patients-main">
               <div className="top-block">
                 <div className="search-service">
-                  <input id="search-input" type="text" placeholder="Знайти пацієнта" />
-                  <button className="service-buttons" type="button">
+                  <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Знайти пацієнта"
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                  <button
+                    className="service-buttons"
+                    type="button"
+                    id="search-patient-button"
+                    onClick={(e) => handleSearch(e)}
+                  >
                     Пошук
                   </button>
                 </div>
@@ -111,7 +124,9 @@ export default function Patients() {
                                 {patient.surname} {patient.name} {patient.patronymic}
                               </TableCell>
                               <TableCell>{patient.phone}</TableCell>
-                              <TableCell>{getAge(patient.birthdate)}</TableCell>
+                              <TableCell>
+                                {patient.birthdate ? getAge(patient.birthdate) : '-'}
+                              </TableCell>
                             </TableRow>
                           ))}
                       </TableBody>

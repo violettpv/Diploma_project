@@ -36,6 +36,7 @@
 .search-service {
   display: flex;
   flex-direction: row;
+  width: 40%;
 }
 #search-input {
   width: 100%;
@@ -61,7 +62,6 @@
 .service-buttons:hover {
   background-color: #0077b3;
 }
-
 .table-container {
   max-height: 75vh;
   overflow-y: auto;
@@ -85,7 +85,7 @@
 .add-service-main {
   padding: 30px;
   height: 50%;
-  width: fit-content;
+  width: 50%;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -95,6 +95,7 @@
 .add-service-title {
   font-size: 20px;
   font-weight: bold;
+  color: var(--charcoal);
 }
 .add-service-main hr {
   width: 100%;
@@ -113,10 +114,12 @@
   flex-direction: column;
   justify-content: space-around;
   height: 100%;
+  width: 100%;
 }
 .add-service-inputs {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .add-service-input input {
   width: 100%;

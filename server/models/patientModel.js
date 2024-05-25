@@ -39,7 +39,8 @@ const Patient = db.define(
     },
     birthdate: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
+      // allowNull: false,
+      allowNull: true,
     },
     address: {
       type: DataTypes.STRING,

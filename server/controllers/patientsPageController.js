@@ -16,7 +16,6 @@ const { Op } = require('sequelize');
 const createPage = asyncHandler(async (req, res) => {
   const { login, password, patientUuid } = req.body;
 
-  // чи зробити перевірку тільки на клієнті??
   if (!login || !password) {
     res.status(400);
     throw new Error('Please fill in all fields');

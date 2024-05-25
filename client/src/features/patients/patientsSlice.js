@@ -1,16 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import patientsService from './patientsService';
 
-// const patients = JSON.parse(localStorage.getItem('patients'));
-// const anamnesis = JSON.parse(localStorage.getItem('anamnesis'));
-// const diseases = JSON.parse(localStorage.getItem('diseases'));
-
 const initialState = {
   patients: [],
   patient: {},
-  anamnesis: [],
+  anamnesis: {},
   diseases: [],
   form043: {},
+  appointments: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -51,7 +48,6 @@ export const createPatient = createAsyncThunk(
   'patients/createPatient',
   async (patientData, thunkAPI) => {
     try {
-      console.log('slice:', patientData);
       return await patientsService.createPatient(patientData);
     } catch (error) {
       const message =
@@ -93,26 +89,23 @@ export const deletePatient = createAsyncThunk(
   }
 );
 
-export const getAllPatientsAppointments = createAsyncThunk(
-  'patients/getAllPatientsAppointments',
-  async (uuid, thunkAPI) => {
+export const findPatient = createAsyncThunk(
+  'patients/findPatient',
+  async (searchData, thunkAPI) => {
     try {
-      return await patientsService.getAllPatientsAppointments(uuid);
+      return await patientsService.findPatient(searchData);
     } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error.response.data.message;
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
-export const createAnamnesis = createAsyncThunk(
-  'patients/createAnamnesis',
-  async (anamnesisData, thunkAPI) => {
+export const getAllPatientsAppointments = createAsyncThunk(
+  'patients/getAllPatientsAppointments',
+  async (uuid, thunkAPI) => {
     try {
-      return await patientsService.createAnamnesis(anamnesisData);
+      return await patientsService.getAllPatientsAppointments(uuid);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
@@ -140,22 +133,33 @@ export const getAnamnesis = createAsyncThunk(
 
 export const updateAnamnesis = createAsyncThunk(
   'patients/updateAnamnesis',
-  async (uuid, anamnesisData) => {
-    return await patientsService.updateAnamnesis(uuid, anamnesisData);
+  async (data, thunkAPI) => {
+    try {
+      return await patientsService.updateAnamnesis(data.uuid, data.diseases);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
   }
 );
 
-// If delete patient = delete all anamnesis
-export const deleteAnamnesis = createAsyncThunk(
-  'patients/deleteAnamnesis',
-  async (uuid) => {
-    return await patientsService.deleteAnamnesis(uuid);
+export const getAllDiseases = createAsyncThunk(
+  'patients/getAllDiseases',
+  async (_, thunkAPI) => {
+    try {
+      return await patientsService.getAllDiseases();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
   }
 );
-
-export const getAllDiseases = createAsyncThunk('patients/getAllDiseases', async () => {
-  return await patientsService.getAllDiseases();
-});
 
 export const getForm043 = createAsyncThunk(
   'patients/getForm043',
@@ -179,6 +183,24 @@ export const updateForm043 = createAsyncThunk(
     try {
       const token = thunkAPI.getState().user.user.token;
       return await patientsService.updateForm043(form043Data.uuid, form043Data, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// other functions here
+
+export const createPatientsPage = createAsyncThunk(
+  'patients/createPatientsPage',
+  async (pageData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.createPatientsPage(pageData, token);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
@@ -277,6 +299,20 @@ export const patientsSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
+      // === FIND PATIENT ===
+      .addCase(findPatient.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(findPatient.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.patients = action.payload;
+      })
+      .addCase(findPatient.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
       // === GET ALL PATIENTS APPOINTMENTS ===
       .addCase(getAllPatientsAppointments.pending, (state) => {
         state.isLoading = true;
@@ -287,20 +323,6 @@ export const patientsSlice = createSlice({
         state.appointments = action.payload;
       })
       .addCase(getAllPatientsAppointments.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      // === CREATE ANAMNESIS ===
-      .addCase(createAnamnesis.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createAnamnesis.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.anamnesis.push(action.payload);
-      })
-      .addCase(createAnamnesis.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -326,27 +348,9 @@ export const patientsSlice = createSlice({
       .addCase(updateAnamnesis.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.anamnesis = state.anamnesis.map((anamnesis) =>
-          anamnesis.uuid === action.payload.uuid ? action.payload : anamnesis
-        );
+        state.anamnesis = action.payload;
       })
       .addCase(updateAnamnesis.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      // === DELETE ANAMNESIS ===
-      .addCase(deleteAnamnesis.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(deleteAnamnesis.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.anamnesis = state.anamnesis.filter(
-          (anamnesis) => anamnesis.uuid !== action.payload
-        );
-      })
-      .addCase(deleteAnamnesis.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -389,6 +393,22 @@ export const patientsSlice = createSlice({
         state.form043 = action.payload;
       })
       .addCase(updateForm043.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === CREATE PATIENT'S PAGE ===
+      .addCase(createPatientsPage.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createPatientsPage.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.patients = state.patients.map((patient) =>
+          patient.uuid === action.payload.uuid ? action.payload : patient
+        );
+      })
+      .addCase(createPatientsPage.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

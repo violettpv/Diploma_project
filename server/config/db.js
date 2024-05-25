@@ -47,9 +47,9 @@ const syncTables = async () => {
   // M:M
   User.belongsToMany(Role, { through: UsersRole });
   Role.belongsToMany(User, { through: UsersRole });
-  // M:M
-  Patient.belongsToMany(Disease, { through: Anamnesis });
-  Disease.belongsToMany(Patient, { through: Anamnesis });
+  // 1:1
+  Patient.hasOne(Anamnesis);
+  Anamnesis.belongsTo(Patient);
   // M:M
   Receipt.belongsToMany(Service, { through: ReceiptService });
   Service.belongsToMany(Receipt, { through: ReceiptService });
@@ -79,6 +79,7 @@ const syncTables = async () => {
 
   try {
     await db.sync();
+    // await Patient.bulkCreate(patientsData);
     await checkExistingRoles();
     await checkExistingDiseases();
     await createReminderTemplate();
@@ -87,6 +88,123 @@ const syncTables = async () => {
     console.error('Unable to sync tables:', err);
   }
 };
+
+const patientsData = [
+  {
+    surname: 'Коваль',
+    name: 'Ірина',
+    patronymic: 'Володимирівна',
+    birthdate: '1987-01-12',
+    phone: '+380631234570',
+    email: 'i.koval87@gmail.com',
+  },
+  {
+    surname: 'Лисенко',
+    name: 'Павло',
+    patronymic: 'Ігорович',
+    birthdate: '1991-02-25',
+    phone: '+380981234570',
+    address: 'Київ, вул. Шевченка, 10',
+  },
+  {
+    surname: 'Гончар',
+    name: 'Ольга',
+    patronymic: 'Миколаївна',
+    birthdate: '1976-07-03',
+    phone: '+380501234570',
+  },
+  {
+    surname: 'Демченко',
+    name: 'Олександр',
+    patronymic: 'Юрійович',
+    birthdate: '1983-11-19',
+    phone: '+380671234570',
+    note: 'Пацієнт з астмою',
+  },
+  {
+    surname: 'Мартинюк',
+    name: 'Вікторія',
+    patronymic: 'Сергіївна',
+    birthdate: '1995-04-15',
+    phone: '+380931234570',
+  },
+  {
+    surname: 'Федоренко',
+    name: 'Анатолій',
+    patronymic: 'Олексійович',
+    birthdate: '1980-09-29',
+    phone: '+380961234570',
+    email: 'a.fedorenko80@ukr.net',
+  },
+  {
+    surname: 'Левченко',
+    name: 'Наталія',
+    patronymic: 'Іванівна',
+    birthdate: '1988-03-22',
+    phone: '+380671234571',
+  },
+  {
+    surname: 'Кириленко',
+    name: 'Василь',
+    patronymic: 'Степанович',
+    birthdate: '1979-12-30',
+    phone: '+380501234571',
+    address: 'Львів, вул. Городоцька, 23',
+  },
+  {
+    surname: 'Савченко',
+    name: 'Марина',
+    patronymic: 'Олегівна',
+    birthdate: '1993-08-05',
+    phone: '+380981234571',
+  },
+  {
+    surname: 'Романенко',
+    name: 'Олексій',
+    patronymic: 'Михайлович',
+    birthdate: '1985-05-14',
+    phone: '+380631234571',
+    email: 'o.romanenk85@mail.ua',
+  },
+  {
+    surname: 'Яровий',
+    name: 'Дмитро',
+    patronymic: 'Борисович',
+    birthdate: '1990-10-10',
+    phone: '+380991234570',
+  },
+  {
+    surname: 'Тимошенко',
+    name: 'Інна',
+    patronymic: 'Григорівна',
+    birthdate: '1982-06-07',
+    phone: '+380961234571',
+    note: 'Алергія на пил',
+  },
+  {
+    surname: 'Захаренко',
+    name: 'Галина',
+    patronymic: 'Петрівна',
+    birthdate: '1997-11-25',
+    phone: '+380671234572',
+  },
+  {
+    surname: 'Онищенко',
+    name: 'Євген',
+    patronymic: 'Васильович',
+    birthdate: '1978-04-17',
+    phone: '+380501234572',
+    email: 'e.onischenko78@gmail.com',
+  },
+  {
+    surname: 'Руденко',
+    name: 'Катерина',
+    patronymic: 'Андріївна',
+    birthdate: '1994-01-30',
+    phone: '+380981234572',
+    address: 'Одеса, вул. Дерибасівська, 5',
+  },
+];
 
 const checkExistingRoles = async () => {
   const Role = require('../models/roleModel');

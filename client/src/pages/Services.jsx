@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/Services.css';
 import Header from '../components/Header';
 import Navigator from '../components/Navigator';
@@ -13,29 +13,53 @@ import {
   TableRow,
   Paper,
 } from '@mui/material';
-
-function createData(name, price) {
-  return { name, price };
-}
-
-const rows = [
-  createData('Консультація стоматолога-терапевта', 350),
-  createData('Консультація стоматолога-ортопеда', 350),
-  createData('Консультація стоматолога-хірурга', 350),
-  createData('Консультація стоматолога-ортодонта', 350),
-  createData('Лікування карієсу I-рівень', 1200),
-  createData('Лікування карієсу II-рівень', 1450),
-  createData('Лікування карієсу II-рівень', 1450),
-  createData('Лікування карієсу II-рівень', 1450),
-  createData('Лікування карієсу II-рівень', 1450),
-  createData('Лікування карієсу II-рівень', 1450),
-  createData('Лікування карієсу II-рівень', 1450),
-  createData('Лікування карієсу II-рівень', 1450),
-  createData('Лікування карієсу II-рівень', 1450),
-];
+import {
+  getServices,
+  getService,
+  searchServices,
+  reset,
+  deleteService,
+} from '../features/services/serviceSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Services() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { services, isError, message } = useSelector((state) => state.services);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    if (isError) {
+      console.error('Error:', message);
+    }
+
+    dispatch(getServices());
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [navigate, isError, message, dispatch]);
+
+  if (!services) {
+    return <div>Loading...</div>;
+  }
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    dispatch(searchServices(search));
+  };
+  const handeDeleteService = (uuid) => {
+    if (window.confirm('Ви впевнені, що хочете видалити цю послугу?')) {
+      dispatch(deleteService(uuid));
+      alert('Послугу видалено');
+      dispatch(getServices());
+      navigate('/services');
+    }
+  };
+  const handleUpdateService = (uuid) => {
+    dispatch(getService(uuid));
+    navigate(`/services/update/${uuid}`);
+  };
 
   return (
     <>
@@ -47,8 +71,18 @@ export default function Services() {
             <div className="services-main">
               <div className="top-block">
                 <div className="search-service">
-                  <input id="search-input" type="text" placeholder="Знайти послугу" />
-                  <button className="service-buttons" type="button">
+                  <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Знайти послугу"
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                  <button
+                    id="search-services-button"
+                    className="service-buttons"
+                    type="button"
+                    onClick={(e) => handleSearch(e)}
+                  >
                     Пошук
                   </button>
                 </div>
@@ -77,23 +111,20 @@ export default function Services() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {rows.map((row) => (
-                        <TableRow
-                          key={row.name}
-                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {row.name}
-                          </TableCell>
-                          <TableCell align="center">{row.price}</TableCell>
+                      {services.map((service) => (
+                        <TableRow key={service.uuid}>
+                          <TableCell>{service.name}</TableCell>
+                          <TableCell align="center">{service.price}</TableCell>
                           <TableCell align="center">
                             <FaEdit
+                              cursor={'pointer'}
                               className="icon"
-                              onClick={() => navigate('/services/update/')}
+                              onClick={() => handleUpdateService(service.uuid)}
                             />
                             <FaRegTrashAlt
+                              cursor={'pointer'}
                               className="icon"
-                              onClick={() => navigate(`/services/delete/${row.id}`)}
+                              onClick={() => handeDeleteService(service.uuid)}
                             />
                           </TableCell>
                         </TableRow>

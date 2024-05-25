@@ -20,7 +20,6 @@ function Navigator() {
       <div className="nav-button" onClick={() => navigate('/')}>
         <FaTooth className="nav-icon" />
       </div>
-      {/* Перекидає на Логін! */}
       <div className="nav-button" onClick={() => navigate('/accounts')}>
         <FaUser className="nav-icon" />
       </div>

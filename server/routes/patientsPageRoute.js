@@ -7,7 +7,6 @@ const {
   getTreatmentPlan,
   getAllPlans,
   findPlansByDate,
-  // Ще мають бути нагадування [Історія повідомлень]
   getAppointments,
   deletePage, // by admin ( or auto delete after deleting Patient)
   updatePageInfo, // by patient (password, login)

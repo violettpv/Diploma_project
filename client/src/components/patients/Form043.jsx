@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '../../css/Patients.css';
+import '../../index.css';
+import Button from '../Button';
 import {
   getForm043,
   updateForm043,
   reset,
   getPatient,
 } from '../../features/patients/patientsSlice';
+import { getMe } from '../../features/user/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Form043({ uuid }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { patient, form043, isError, message } = useSelector((state) => state.patients);
+  const {
+    user,
+    isError: isErrorUser,
+    message: messageUser,
+  } = useSelector((state) => state.user);
   const form043Uuid = form043.uuid;
   const [diagnosis, setDiagnosis] = useState('');
   const [complaints, setComplaints] = useState('');
@@ -24,17 +34,26 @@ export default function Form043({ uuid }) {
   const [oralHygieneControlData, setOralHygieneControlData] = useState('');
 
   useEffect(() => {
+    // check user's role
+    // if (user) {
+    //   dispatch(getMe());
+    //   let role = user.role;
+    //   if (!(role === 'doctor' || role === 'main')) {
+    //     alert('Доступ заборонено');
+    //     // navigate('/');
+    //   }
+    // }
+
     if (isError) {
       console.error('Error:', message);
     }
 
-    // Testing
     dispatch(getPatient(uuid));
     dispatch(getForm043(uuid));
     return () => {
       dispatch(reset());
     };
-  }, [isError, message, dispatch]);
+  }, [isError, message, dispatch, uuid]);
 
   if (!form043) {
     return <div>Loading...</div>;
@@ -91,36 +110,33 @@ export default function Form043({ uuid }) {
             </div>
             <div className="form043-buttons">
               <div className="form043-buttons-1">
-                <button
+                <Button
                   form="form043"
-                  id="form043-button-update"
                   type="button"
                   onClick={enableEditForm}
-                >
-                  Редагувати
-                </button>
+                  text="Редагувати"
+                  color="var(--piction-blue)"
+                />
               </div>
               <div className="form043-buttons-2 disabled">
-                <button
+                <Button
                   form="form043"
-                  id="form043-button-save"
                   type="button"
-                  onClick={onSubmitUpdate}
-                >
-                  Зберегти
-                </button>
-                <button
+                  onClick={(e) => onSubmitUpdate(e)}
+                  text="Зберегти"
+                  color="var(--piction-blue)"
+                />
+                <Button
                   form="form043"
-                  id="form043-button-cancel"
                   type="button"
+                  text="Скасувати"
+                  color="gray"
                   onClick={cancelEditForm}
-                >
-                  Скасувати
-                </button>
+                />
               </div>
             </div>
           </div>
-          <hr className="patients-hr" />
+          <hr className="custom-hr" />
           <div className="form043-main">
             <form id="form043">
               <label>

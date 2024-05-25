@@ -5,7 +5,7 @@ const Receipt = require('../models/receiptModel');
 const Appointment = require('../models/appointmentModel');
 const ReceiptService = require('../models/receiptServiceModel');
 const Service = require('../models/serviceModel');
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 
 // @desc    Create a new appointment
 // @route   POST /api/appointments/create
@@ -65,6 +65,14 @@ const getAppointment = asyncHandler(async (req, res) => {
   const appointment = await Appointment.findByPk(req.params.uuid, {
     include: [
       {
+        model: Patient,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+      {
+        model: User,
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+      {
         model: Receipt,
         attributes: ['uuid', 'sale', 'paymentType', 'isPaid', 'total'],
         include: [
@@ -82,33 +90,6 @@ const getAppointment = asyncHandler(async (req, res) => {
   } else {
     res.status(404);
     throw new Error('Appointment not found');
-  }
-});
-
-// @desc    Get all appointments
-// @route   GET /api/appointments/alldev
-// @access  Private (for development)
-const getAllAppointmentsDev = asyncHandler(async (req, res) => {
-  const appointments = await Appointment.findAll({
-    include: [
-      {
-        model: Receipt,
-        attributes: ['uuid', 'sale', 'paymentType', 'isPaid', 'total'],
-        include: [
-          {
-            model: Service,
-            attributes: ['uuid', 'name', 'price'],
-            through: { attributes: ['uuid', 'receiptUuid', 'serviceUuid', 'quantity'] },
-          },
-        ],
-      },
-    ],
-  });
-  if (appointments) {
-    res.json(appointments);
-  } else {
-    res.status(404);
-    throw new Error('Appointments not found');
   }
 });
 
@@ -137,11 +118,32 @@ const getAllAppointments = asyncHandler(async (req, res) => {
   const searchDate = `${year}-${month}-${date}`;
   const appointments = await Appointment.findAll({
     where: {
-      date: {
-        [Op.eq]: searchDate,
-      },
+      date: searchDate,
     },
     order: [['startTime', 'ASC']],
+    include: [
+      {
+        model: Patient,
+        as: 'patient',
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+      {
+        model: User,
+        as: 'user',
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+      {
+        model: Receipt,
+        attributes: ['uuid', 'sale', 'paymentType', 'isPaid', 'total'],
+        include: [
+          {
+            model: Service,
+            attributes: ['uuid', 'name', 'price'],
+            through: { attributes: ['uuid', 'receiptUuid', 'serviceUuid', 'quantity'] },
+          },
+        ],
+      },
+    ],
   });
 
   if (appointments) {
@@ -356,16 +358,17 @@ const payReceipt = asyncHandler(async (req, res) => {
     throw new Error('Invalid payment type');
   }
 
-  const appointment = await Appointment.findByPk(req.params.uuid);
-  if (!appointment) {
-    res.status(404);
-    throw new Error('Appointment not found');
-  }
-
-  const receipt = await Receipt.findByPk(appointment.receiptUuid);
+  const receipt = await Receipt.findByPk(req.params.uuid);
   if (!receipt) {
     res.status(404);
     throw new Error('Receipt not found');
+  }
+  const appointment = await Appointment.findOne({
+    where: { receiptUuid: req.params.uuid },
+  });
+  if (!appointment) {
+    res.status(404);
+    throw new Error('Appointment not found');
   }
 
   receipt.set({
@@ -374,21 +377,19 @@ const payReceipt = asyncHandler(async (req, res) => {
   });
   await receipt.save();
 
-  // appointment.set({
-  //   isFinished: true,
-  // });
-  // await appointment.save();
+  appointment.set({
+    isFinished: true,
+  });
+  await appointment.save();
 
   if (receipt) {
     res.status(200).json({
-      appointmentUuid: appointment.uuid,
-      appointmentDate: appointment.date,
-      isFinished: appointment.isFinished,
-      receiptUuid: receipt.uuid,
+      uuid: receipt.uuid,
       sale: receipt.sale,
       paymentType: receipt.paymentType,
       isPaid: receipt.isPaid,
       total: receipt.total,
+      appointmentUuid: appointment.uuid,
     });
   } else {
     res.status(400);
@@ -603,12 +604,20 @@ const getFinishedAppointments = asyncHandler(async (req, res) => {
   const searchDate = `${year}-${month}-${date}`;
   const appointments = await Appointment.findAll({
     where: {
-      date: {
-        [Op.eq]: searchDate,
-      },
+      date: searchDate,
       isFinished: true,
     },
     include: [
+      {
+        model: Patient,
+        as: 'patient',
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
+      {
+        model: User,
+        as: 'user',
+        attributes: ['uuid', 'surname', 'name', 'patronymic'],
+      },
       {
         model: Receipt,
         attributes: ['uuid', 'sale', 'paymentType', 'isPaid', 'total'],
@@ -650,6 +659,33 @@ const getFinishedAppointments = asyncHandler(async (req, res) => {
 
   if (appointments) {
     res.json({ appointments, totalSumCash, totalSumCard, totalSum });
+  } else {
+    res.status(404);
+    throw new Error('Appointments not found');
+  }
+});
+
+// @desc    Get all appointments
+// @route   GET /api/appointments/alldev
+// @access  Private (for development)
+const getAllAppointmentsDev = asyncHandler(async (req, res) => {
+  const appointments = await Appointment.findAll({
+    include: [
+      {
+        model: Receipt,
+        attributes: ['uuid', 'sale', 'paymentType', 'isPaid', 'total'],
+        include: [
+          {
+            model: Service,
+            attributes: ['uuid', 'name', 'price'],
+            through: { attributes: ['uuid', 'receiptUuid', 'serviceUuid', 'quantity'] },
+          },
+        ],
+      },
+    ],
+  });
+  if (appointments) {
+    res.json(appointments);
   } else {
     res.status(404);
     throw new Error('Appointments not found');

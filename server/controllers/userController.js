@@ -95,7 +95,10 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   // Check if user exists
-  const user = await User.findOne({ where: { email } });
+  const user = await User.findOne({
+    where: { email },
+    include: { model: Role, attributes: ['role'], through: { attributes: [] } },
+  });
   if (!user) {
     res.status(400);
     throw new Error('Invalid email or password');
@@ -116,6 +119,7 @@ const loginUser = asyncHandler(async (req, res) => {
       name: user.name,
       patronymic: user.patronymic,
       phone: user.phone,
+      role: user.roles[0].role,
       // Check user's role
       // roles: usersRole.roles.map((obj) => obj.role),
       token: generateToken(user.uuid),
@@ -281,8 +285,21 @@ const updateUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users/getusers
 // @access  Private
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.findAll();
-  res.json(users);
+  const users = await User.findAll({
+    include: { model: Role, attributes: ['role'], through: { attributes: [] } },
+  });
+
+  res.json(
+    users.map((x) => ({
+      uuid: x.uuid,
+      email: x.email,
+      surname: x.surname,
+      name: x.name,
+      patronymic: x.patronymic,
+      phone: x.phone,
+      role: x.roles[0].role,
+    }))
+  );
 });
 
 // @desc    Get user profile

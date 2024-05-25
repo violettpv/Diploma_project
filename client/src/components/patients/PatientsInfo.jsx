@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
+import '../../index.css';
+import Button from '../Button';
 import {
   getPatient,
   deletePatient,
   updatePatient,
   reset,
 } from '../../features/patients/patientsSlice';
+import { savePage } from '../../features/other/otherSlice';
 
 export default function PatientsInfo({ uuid }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { patients, patient, isError, message } = useSelector((state) => state.patients);
+  const { page } = useSelector((state) => state.other);
   const [surname, setSurname] = useState('');
   const [name, setName] = useState('');
   const [patronymic, setPatronymic] = useState('');
@@ -31,23 +35,26 @@ export default function PatientsInfo({ uuid }) {
     return () => {
       dispatch(reset());
     };
-  }, [isError, message, dispatch]);
+  }, [isError, message, dispatch, uuid]);
 
   if (!patients) {
     return <div>Loading...</div>;
   }
 
-  const onSubmitDelete = async () => {
+  const onSubmitDelete = async (e) => {
+    e.preventDefault();
     if (window.confirm('Ви впевнені, що хочете видалити цього пацієнта?')) {
       dispatch(deletePatient(uuid));
       alert('Пацієнта видалено');
+      dispatch(savePage(page));
       navigate('/patients');
     }
   };
 
   const onSubmitUpdate = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    const isValid = await validateForm();
+    if (isValid) {
       const data = {
         uuid: uuid,
         surname: surname || patient.surname,
@@ -63,6 +70,10 @@ export default function PatientsInfo({ uuid }) {
       alert('Дані пацієнта оновлено');
       cancelEditForm();
       dispatch(getPatient(uuid));
+    } else {
+      alert(
+        'Помилка при оновленні даних пацієнта. Перевірте правильність введених даних.'
+      );
     }
   };
 
@@ -95,7 +106,6 @@ export default function PatientsInfo({ uuid }) {
     let email = patientsForm['email'].value;
     let birthdate = patientsForm['birthdate'].value;
     let address = patientsForm['address'].value;
-    // let notes = patientsForm['notes'].value;
     if (surname === '' || name === '' || phone === '' || birthdate === '') {
       alert("Заповніть обов'язкові поля: прізвище, ім'я, телефон, дату народження");
       return false;
@@ -108,10 +118,6 @@ export default function PatientsInfo({ uuid }) {
       alert('Невірний формат дати народження. Введіть у форматі рррр.мм.дд');
       return false;
     }
-    // if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-    //   alert('Невірний формат email');
-    //   return false;
-    // }
     if (!email === '') {
       if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
         alert('Невірний формат email');
@@ -144,7 +150,7 @@ export default function PatientsInfo({ uuid }) {
           <div className="patients-fullname">
             {patient.surname} {patient.name} {patient.patronymic}
           </div>
-          <hr className="patients-hr" />
+          <hr className="custom-hr" />
           <form id="patients-info" className="patients-data">
             <div className="patients-data-row">
               <label>
@@ -240,40 +246,36 @@ export default function PatientsInfo({ uuid }) {
           </form>
           <div className="patients-info-buttons-both">
             <div className="patients-info-buttons">
-              <button
+              <Button
                 form="patients-info"
-                id="patients-info-button-update"
                 type="button"
                 onClick={enableEditForm}
-              >
-                Редагувати
-              </button>
-              <button
+                text="Редагувати"
+                color="var(--piction-blue)"
+              />
+              <Button
                 form="patients-info"
-                id="patients-info-button-delete"
                 type="button"
-                onClick={onSubmitDelete}
-              >
-                Видалити
-              </button>
+                onClick={(e) => onSubmitDelete(e)}
+                text="Видалити"
+                color="var(--delete-button-color)"
+              />
             </div>
             <div className="patients-info-buttons-2 disabled">
-              <button
+              <Button
                 form="patients-info"
-                id="patients-info-button-save-updated"
                 type="button"
-                onClick={onSubmitUpdate}
-              >
-                Зберегти
-              </button>
-              <button
+                onClick={(e) => onSubmitUpdate(e)}
+                text="Зберегти"
+                color="var(--piction-blue)"
+              />
+              <Button
                 form="patients-info"
-                id="patients-info-button-cancel"
                 type="button"
                 onClick={cancelEditForm}
-              >
-                Скасувати
-              </button>
+                text="Скасувати"
+                color="gray"
+              />
             </div>
           </div>
         </div>

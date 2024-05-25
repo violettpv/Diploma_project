@@ -1,0 +1,172 @@
+.Dispensary,
+.CreateDispensaryRecord,
+.EditDispensaryRecord {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.dispensary-content {
+  width: 100%;
+}
+.dispensary-body {
+  width: 100%;
+  height: 94vh;
+  padding: 28px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.dispensary-main {
+  height: 100%;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+}
+.dispensary-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+  margin-bottom: 10px;
+}
+#dispensary-title {
+  font-size: 18px;
+  color: var(--charcoal);
+  font-weight: bold;
+}
+.search-by-date,
+.search-by-patient,
+.search-by-doctor {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.dispensary-buttons {
+  border: none;
+  border-radius: 8px;
+  margin: 0;
+  padding: 8px;
+  font-size: 20px;
+  background-color: var(--piction-blue);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-self: center;
+}
+
+.search-by-date input,
+.search-by-patient input,
+.search-by-doctor select {
+  width: fit-content;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  color: var(--charcoal);
+  margin-right: 5px;
+}
+#add-dispensary-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  border: none;
+  border-radius: 8px;
+  margin: 0;
+  padding: 8px;
+  font-size: 14px;
+  background-color: var(--piction-blue);
+  color: white;
+  cursor: pointer;
+}
+.search-by-date button:hover,
+.search-by-patient button:hover,
+.search-by-doctor button:hover,
+#add-dispensary-button:hover {
+  background-color: var(--aero);
+}
+.record-icon {
+  color: black;
+  font-size: 15px;
+  align-self: center;
+  margin: 0 10px;
+}
+
+/*region Create Dispensary, Edit Dispensary */
+.create-dispensary-main {
+  width: 80%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 30px;
+}
+.dispensary-intro {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: var(--charcoal);
+}
+#create-drecord,
+#edit-drecord {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.drecords-data-row {
+  display: flex;
+  height: 100%;
+  width: 40%;
+  margin-top: 25px;
+  flex-direction: column;
+}
+
+#edit-record-patient-input {
+  margin-top: 10px;
+  width: 65%;
+}
+#patient-list {
+  width: 100% !important;
+  border: none !important;
+  height: 22px !important;
+  padding: 5px 10px !important;
+  margin-top: 0 !important;
+}
+.drecords-data-row input,
+.drecords-data-row select {
+  width: fit-content;
+  height: 35px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+.drecords-data-row textarea {
+  resize: none;
+  width: 100%;
+  height: 100px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin-top: 5px;
+}
+.drecords-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+/*endregion */

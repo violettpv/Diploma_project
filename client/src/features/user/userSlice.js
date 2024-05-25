@@ -2,15 +2,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import userService from './userService';
 
 const user = JSON.parse(localStorage.getItem('user'));
-// const clinic = JSON.parse(localStorage.getItem('clinic'));
 
 const initialState = {
   user: user ? user : null,
-  // clinic: clinic ? clinic : null,
+  users: [],
+  clinic: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: '',
+  role: '',
 };
 
 export const login = createAsyncThunk('user/login', async (user, thunkAPI) => {
@@ -39,6 +40,31 @@ export const register = createAsyncThunk('user/register', async (user, thunkAPI)
 
 export const logout = createAsyncThunk('user/logout', async () => {
   await userService.logout();
+});
+
+export const getMe = createAsyncThunk('user/getMe', async (_, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().user.user.token;
+    return await userService.getMe(token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const getUsers = createAsyncThunk('user/getUsers', async (_, thunkAPI) => {
+  try {
+    return await userService.getUsers();
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
 });
 
 export const createClinic = createAsyncThunk(
@@ -99,6 +125,34 @@ export const userSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+      })
+      // GET ME (ROLES)
+      .addCase(getMe.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getMe.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // state.isSuccess = true;
+        state.role = action.payload;
+      })
+      .addCase(getMe.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.user = [];
+      })
+      .addCase(getUsers.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.users = action.payload;
+      })
+      .addCase(getUsers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       })
       .addCase(createClinic.pending, (state) => {
         state.isLoading = true;

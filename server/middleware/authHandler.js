@@ -16,7 +16,7 @@ const protect = asyncHandler(async (req, res, next) => {
       // Get user from the token
       const user = await User.findByPk(decoded.uuid, {
         attributes: { exclude: ['password'] },
-        include: { model: Role, through: { attributes: [] } },
+        include: { model: Role, attributes: ['role'], through: { attributes: [] } },
       });
       req.user = {
         uuid: user.uuid,
@@ -25,7 +25,8 @@ const protect = asyncHandler(async (req, res, next) => {
         name: user.name,
         patronymic: user.patronymic,
         phone: user.phone,
-        roles: user.roles.map((obj) => obj.role),
+        role: user.roles[0].role,
+        // roles: user.roles.map((obj) => obj.role),
       };
 
       next(); // call next func in the middleware

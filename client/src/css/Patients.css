@@ -17,7 +17,7 @@
   align-items: center;
 }
 
-/* ===== Patients =====  */
+/*#region Patients  */
 .patients-main {
   height: 100%;
   width: 80%;
@@ -66,8 +66,9 @@
 .table-block {
   width: 100%;
 }
+/*#endregion */
 
-/* ===== Patient's Card =====  */
+/*#region Patient's Card  */
 .patients-card-tabs {
   height: 82vh;
   width: 85%;
@@ -86,8 +87,9 @@
   align-items: center;
   padding: 10px 0 0 10px;
 }
+/*#endregion */
 
-/* ===== Patient's Info =====  */
+/*#region Patient's Info  */
 .PatientsInfo {
   height: 100%;
   width: 100%;
@@ -99,16 +101,12 @@
 .patients-info-buttons-both {
   padding-top: 10%;
 }
-.patients-hr {
-  width: 100%;
-  margin: 5px 0;
-  border: 1px solid #e0e0e0;
-}
 .patients-fullname {
   margin-top: 2px;
   margin-bottom: 10px;
   font-size: 20px;
   font-weight: 600;
+  color: var(--charcoal);
 }
 .patients-data {
   display: flex;
@@ -121,7 +119,6 @@
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
-  /* height: 100%; */
   margin-right: 10%;
   margin-top: 12px;
 }
@@ -164,55 +161,41 @@
   width: 100%;
   margin-top: 20px;
 }
-.patients-info-buttons button,
-.patients-info-buttons-2 button {
-  width: 100px;
-  height: 40px;
-  border: none;
-  border-radius: 5px;
-  background-color: #009be5;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  margin: 0 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.patients-info-buttons button:hover {
-  background-color: #0077b3;
-}
-#patients-info-button-delete {
-  background-color: #ff6467;
-}
-#patients-info-button-delete:hover {
-  background-color: #e63b3e;
-}
-.disabled {
+/* .disabled {
   display: none;
-}
-#patients-info-button-cancel {
-  background-color: #767676;
-}
-#patients-info-button-cancel:hover {
-  background-color: #585858;
-}
-#patients-info-button-save-updated {
-  background-color: #009be5;
-}
-#patients-info-button-save-updated:hover {
-  background-color: #0077b3;
-}
-/* ===== Anamnesis =====  */
+} */
+/*#endregion */
+
+/*#region Anamnesis  */
 .table-container-diseases {
-  max-height: 65vh;
+  max-height: 63vh;
   overflow-y: auto;
 }
-.diseases-buttons {
+.checkbox-disease {
+  width: 100%;
+  height: 20px;
+}
+.textarea-note {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px;
+  color: #333;
+  resize: none;
+}
+.anamnesis-buttons,
+.anamnesis-buttons-2 {
+  margin-top: 5px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
 }
-.diseases-buttons button {
+/* .disabled {
+  display: none;
+} */
+/* .diseases-buttons button {
   width: 100px;
   height: 40px;
   border: none;
@@ -222,8 +205,8 @@
   font-size: 14px;
   margin: 10px 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-#diseases-button-save,
+} */
+/* #diseases-button-save,
 #diseases-button-update {
   background-color: #009be5;
 }
@@ -236,8 +219,10 @@
 }
 #diseases-button-cancel:hover {
   background-color: #585858;
-}
-/* ===== Form043 =====  */
+} */
+/*#endregion */
+
+/*#region Form043  */
 .form043-header {
   display: flex;
   flex-direction: row;
@@ -249,34 +234,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-#form043-button-update,
-#form043-button-save,
-#form043-button-cancel {
-  width: fit-content;
-  height: fit-content;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-}
-#form043-button-update,
-#form043-button-save {
-  background-color: #009be5;
-}
-#form043-button-cancel {
-  background-color: #767676;
-  margin-left: 10px;
-}
-#form043-button-update:hover,
-#form043-button-save:hover {
-  background-color: #0077b3;
-}
-#form043-button-cancel:hover {
-  background-color: #585858;
+  color: var(--charcoal);
 }
 .form043-main {
   display: flex;
@@ -309,12 +267,37 @@
   margin-bottom: 10px;
   resize: none;
 }
+/*#endregion */
 
-/* ===== Treatment Plan =====  */
-/* ===== Doctor's Diary =====  */
-/* ===== Patient's Page Settings =====  */
+/*#region Treatment Plan  */
+/*#endregion */
 
-/* ===== Create Patient =====  */
+/*#region Doctor's Diary  */
+/*#endregion */
+
+/*#region Patient's Appointments  */
+.PatientsAppointments {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.patients-appointments-header {
+  height: 100%;
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  color: var(--charcoal);
+}
+.patients-appointments-table {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+/*#endregion */
+
+/*#region Create Patient  */
 .create-patient-body {
   width: 100%;
   height: 94vh;
@@ -384,33 +367,90 @@
   justify-content: center;
   margin-top: 20px;
 }
-#create-patient-button-save {
-  width: 100px;
+/*#endregion */
+
+/*#region Patient's Page Settings  */
+.PPageSettings {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.ppage-header,
+.ppage-footer {
+  width: 100%;
+  height: 100%;
+}
+.ppage-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  color: var(--charcoal);
+}
+.ppage-main {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+.ppage-info-item {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 10px;
+}
+.ppage-info-item label {
+  font-size: 18px;
+  margin-right: 10px;
+}
+.ppage-info-item input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 16px;
+  color: #333;
+}
+.ppage-info-text p {
+  font-size: 16px;
+  color: #333;
+  margin: 10px 0;
+}
+#create-ppage-button,
+#delete-ppage-button {
+  width: fit-content;
+  padding: 5px 10px;
   height: 40px;
   border: none;
   border-radius: 5px;
-  background-color: #009be5;
   color: white;
   cursor: pointer;
   font-size: 14px;
-  margin: 0 10px;
+  margin: 10px 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-#create-patient-button-save:hover {
+#create-ppage-button {
+  background-color: var(--piction-blue);
+}
+#create-ppage-button:hover {
   background-color: #0077b3;
 }
-#create-patient-button-cancel {
-  width: 100px;
-  height: 40px;
-  border: none;
-  border-radius: 5px;
-  background-color: #767676;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  margin: 0 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+#delete-ppage-button {
+  background-color: var(--delete-button-color);
 }
-#create-patient-button-cancel:hover {
-  background-color: #585858;
+#delete-ppage-button:hover {
+  background-color: #ff4d5a;
 }
+.disabled-ppage-button {
+  background-color: gray !important;
+  cursor: not-allowed;
+}
+/*#endregion */
+
+/*#region Other styles  */
+.disabled {
+  display: none;
+}
+/*#endregion */

@@ -1,9 +1,9 @@
 import React from 'react';
 import '../../css/Patients.css';
+import '../../index.css';
 import Header from '../../components/Header';
 import Navigator from '../../components/Navigator';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Tabs } from '@mui/base/Tabs';
 import { TabsList } from '@mui/base/TabsList';
 import { TabPanel } from '@mui/base/TabPanel';
@@ -15,7 +15,7 @@ import TreatmentPlan from './TreatmentPlan';
 import DoctorsDiary from './DoctorsDiary';
 import DentalFormula from './DentalFormula';
 import PatientsAppointments from './PatientsAppointments';
-import PatientsPage from './PatientsPage';
+import PPSettings from './PPageSettings';
 
 export default function PatientsCard() {
   const { uuid } = useParams();
@@ -38,7 +38,7 @@ export default function PatientsCard() {
                 <Tab className="tab">Візити</Tab>
                 <Tab className="tab">Кабінет</Tab>
               </TabsList>
-              <hr className="patients-hr" />
+              <hr className="custom-hr" />
               <div className="patients-card-main">
                 <TabPanel value={0}>
                   <PatientsInfo uuid={uuid} />
@@ -62,7 +62,7 @@ export default function PatientsCard() {
                   <PatientsAppointments uuid={uuid} />
                 </TabPanel>
                 <TabPanel value={7}>
-                  <PatientsPage uuid={uuid} />
+                  <PPSettings uuid={uuid} />
                 </TabPanel>
               </div>
             </Tabs>

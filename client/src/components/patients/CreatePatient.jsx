@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
+import '../../index.css';
 import Navigator from '../Navigator';
 import Header from '../Header';
+import Button from '../Button';
 import { createPatient } from '../../features/patients/patientsSlice';
 
 export default function CreatePatient() {
@@ -26,22 +28,20 @@ export default function CreatePatient() {
     let birthdate = document.forms['create-patient']['birthdate'].value;
     let email = document.forms['create-patient']['email'].value;
     let address = document.forms['create-patient']['address'].value;
-    if (surname === '' || name === '' || phone === '' || birthdate === '') {
-      alert("Заповніть обов'язкові поля: прізвище, ім'я, телефон, дату народження");
+    if (surname === '' || name === '' || phone === '') {
+      alert("Заповніть обов'язкові поля: прізвище, ім'я, телефон.");
       return false;
     }
     if (!phone.match(/^\+380\d{9}$/)) {
       alert('Невірний формат телефону. Введіть у форматі +380123456789');
       return false;
     }
-    if (!birthdate.match(/^\d{4}\-\d{2}\-\d{2}$/)) {
-      alert('Невірний формат дати народження. Введіть у форматі рррр.мм.дд');
-      return false;
+    if (!(birthdate === '' || birthdate === null)) {
+      if (!birthdate.match(/^\d{4}\-\d{2}\-\d{2}$/)) {
+        alert('Невірний формат дати народження. Введіть у форматі рррр.мм.дд');
+        return false;
+      }
     }
-    // if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-    //   alert('Невірний формат email');
-    //   return false;
-    // }
     if (!email === '') {
       if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
         alert('Невірний формат email');
@@ -69,9 +69,8 @@ export default function CreatePatient() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('Form is valid');
-      console.log(surname, name, patronymic, phone, email, birthdate, address, notes);
+    const isValid = await validateForm();
+    if (isValid) {
       dispatch(
         createPatient({
           surname,
@@ -94,6 +93,8 @@ export default function CreatePatient() {
       setAddress('');
       setNotes('');
       navigate('/patients');
+    } else {
+      alert('Помилка при створенні пацієнта. Перевірте правильність введених даних.');
     }
   };
 
@@ -106,7 +107,7 @@ export default function CreatePatient() {
           <div className="create-patient-body">
             <div className="create-patient-main">
               <div className="create-patient-intro">Створити картку пацієнта</div>
-              <hr className="patients-hr" />
+              <hr className="custom-hr" />
               <form name="create-patient" id="create-patient" className="patients-data">
                 <div className="patients-data-row">
                   <label>
@@ -201,22 +202,20 @@ export default function CreatePatient() {
                 </div>
               </form>
               <div className="create-patient-buttons">
-                <button
+                <Button
                   form="create-patient"
-                  id="create-patient-button-save"
                   type="submit"
-                  onClick={handleSubmit}
-                >
-                  Зберегти
-                </button>
-                <button
+                  onClick={(e) => handleSubmit(e)}
+                  text="Створити"
+                  color="var(--piction-blue)"
+                />
+                <Button
                   form="create-patient"
-                  id="create-patient-button-cancel"
                   type="button"
-                  onClick={() => navigate('/patients')}
-                >
-                  Скасувати
-                </button>
+                  onClick={() => navigate('/appointments')}
+                  text="Скасувати"
+                  color="gray"
+                />
               </div>
             </div>
           </div>

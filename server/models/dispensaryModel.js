@@ -41,7 +41,8 @@ const Dispensary = db.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /[0-9]{2}:[0-9]{2}/,
+        // is: /[0-9]{2}:[0-9]{2}/,
+        is: /^\d{1,2}:\d{2}$/,
       },
     },
     treatment: {

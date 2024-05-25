@@ -16,6 +16,7 @@ const getDiseases = asyncHandler(async (req, res) => {
   }
 });
 
+// ATTENTION! DEPRECATED!
 // @desc    Create a new anamnesis
 // @route   POST /api/anamnesis/create
 // @access  Public
@@ -53,10 +54,11 @@ const createAnamnesis = asyncHandler(async (req, res) => {
   }
 });
 
+// ATTENTION! DEPRECATED!
 // @desc    Get an anamnesis of a patient
 // @route   Get /api/anamnesis/get/:uuid
-// @access  Public
-const getAnamnesis = asyncHandler(async (req, res) => {
+// @access  Private
+const getAnamnesisPrevVer = asyncHandler(async (req, res) => {
   const patient = await Patient.findByPk(req.params.uuid);
   const anamnesis = await Patient.findByPk(patient.uuid, {
     include: [
@@ -75,6 +77,29 @@ const getAnamnesis = asyncHandler(async (req, res) => {
       name: patient.name,
       anamnesis: anamnesis.diseases,
     });
+  } else {
+    res.status(404);
+    throw new Error('Anamnesis not found');
+  }
+});
+
+// @desc    Get an anamnesis of a patient
+// @route   Get /api/anamnesis/get/:uuid
+// @access  Public
+const getAnamnesis = asyncHandler(async (req, res) => {
+  const patient = await Patient.findByPk(req.params.uuid);
+  const anamnesis = await Anamnesis.findOne({
+    where: { patientUuid: patient.uuid },
+    include: [
+      {
+        model: Patient,
+        attributes: ['surname', 'name', 'patronymic'],
+      },
+    ],
+  });
+
+  if (anamnesis) {
+    res.json(anamnesis);
   } else {
     res.status(404);
     throw new Error('Anamnesis not found');
@@ -110,7 +135,7 @@ const deleteAnamnesis = asyncHandler(async (req, res) => {
 
 // @desc    Update an anamnesis
 // @route   PUT /api/anamnesis/update/:uuid
-// @access  Private. For development only
+// @access  Public
 const updateAnamnesis = asyncHandler(async (req, res) => {
   const anamnesis = await Anamnesis.findOne({ where: { uuid: req.params.uuid } });
   if (!anamnesis) {
@@ -118,16 +143,15 @@ const updateAnamnesis = asyncHandler(async (req, res) => {
     throw new Error('Anamnesis not found');
   }
 
-  const { patiendUuid, diseaseUuid, note } = req.body;
-  anamnesis.set({ patiendUuid, diseaseUuid, note });
+  const { jsonAnamnesis } = req.body;
+  anamnesis.set({ jsonAnamnesis });
   await anamnesis.save();
 
   if (anamnesis) {
     res.status(200).json({
       uuid: anamnesis.uuid,
       patientUuid: anamnesis.patientUuid,
-      diseaseUuid: anamnesis.diseaseUuid,
-      note: anamnesis.note,
+      jsonAnamnesis: anamnesis.jsonAnamnesis,
     });
   } else {
     res.status(400);
@@ -135,11 +159,28 @@ const updateAnamnesis = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Create anamnesis for all patients who have no anamnesis
+// @route   POST /api/anamnesis/createAll
+// @access  Private. For development only
+const createAllAnamnesis = asyncHandler(async (req, res) => {
+  const patients = await Patient.findAll();
+
+  patients.forEach(async (patient) => {
+    const anamnesisExists = await Anamnesis.findOne({
+      where: { patientUuid: patient.uuid },
+    });
+    if (!anamnesisExists) {
+      await Anamnesis.create({ patientUuid: patient.uuid, jsonAnamnesis: {} });
+    }
+  });
+
+  res.json({ message: 'Anamnesis created for all patients' });
+});
+
 module.exports = {
   getDiseases,
-  createAnamnesis,
   getAnamnesis,
-  deleteAnamnesis,
+  // deleteAnamnesis,
   updateAnamnesis,
   getAllAnamnesis,
 };

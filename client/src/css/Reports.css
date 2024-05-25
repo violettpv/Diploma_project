@@ -1,0 +1,75 @@
+.Reports {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.reports-content {
+  width: 100%;
+}
+.reports-body {
+  width: 100%;
+  height: 94vh;
+  padding: 35px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.reports-main {
+  height: 100%;
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+}
+.reports-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+#reports-title {
+  font-size: 18px;
+  color: var(--charcoal);
+  font-weight: bold;
+  padding-left: 5px;
+}
+.search-date-reports {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+.search-date-reports input {
+  width: 20%;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  color: var(--charcoal);
+  margin-right: 10px;
+}
+.search-date-reports button {
+  width: fit-content;
+  height: fit-content;
+  cursor: pointer;
+  border: none;
+  background-color: var(--piction-blue);
+  padding: 8px 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+}
+.reports-table-div {
+}
+.reports-table {
+  max-height: 65vh;
+  overflow-y: auto;
+}

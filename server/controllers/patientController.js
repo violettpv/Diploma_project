@@ -6,6 +6,7 @@ const Receipt = require('../models/receiptModel');
 const Service = require('../models/serviceModel');
 const Form043 = require('../models/form043Model');
 const DentalFormula = require('../models/dentalFormulaModel');
+const Anamnesis = require('../models/anamnesisModel');
 
 // @desc    Register a new patient
 // @route   POST /api/patients/create
@@ -13,13 +14,17 @@ const DentalFormula = require('../models/dentalFormulaModel');
 const createPatient = asyncHandler(async (req, res) => {
   const { surname, name, patronymic, phone, email, birthdate, address, notes } = req.body;
   let newEmail = email;
-  // чи зробити перевірку тільки на клієнті??
-  if (!name || !phone) {
+  let newBirthdate = birthdate;
+
+  if (!surname || !name || !phone) {
     res.status(400);
     throw new Error('You need to fill at least name and phone');
   }
   if (email === '') {
     newEmail = null;
+  }
+  if (birthdate === '') {
+    newBirthdate = null;
   }
 
   const patient = await Patient.create({
@@ -28,7 +33,7 @@ const createPatient = asyncHandler(async (req, res) => {
     patronymic,
     phone,
     email: newEmail,
-    birthdate,
+    birthdate: newBirthdate,
     address,
     notes,
   });
@@ -40,6 +45,10 @@ const createPatient = asyncHandler(async (req, res) => {
   const dentalFormula = await DentalFormula.create({
     patientUuid: patient.uuid,
     jsonDentalFormula: {},
+  });
+  const anamnesis = await Anamnesis.create({
+    patientUuid: patient.uuid,
+    jsonAnamnesis: {},
   });
 
   res.status(201).json({
@@ -57,6 +66,8 @@ const createPatient = asyncHandler(async (req, res) => {
     // vitaScale: form043.vitaScale,
     // uuidDentalFormula: dentalFormula.uuid,
     // jsonDentalFormula: dentalFormula.jsonDentalFormula,
+    // uuidAnamnesis: anamnesis.uuid,
+    // jsonAnamnesis: anamnesis.jsonAnamnesis,
   });
 });
 
@@ -79,7 +90,11 @@ const getPatient = asyncHandler(async (req, res) => {
 const getPatients = asyncHandler(async (req, res) => {
   // const { limit, offset } = req.query;
   const patients = await Patient.findAll({
-    order: [['surname', 'ASC']],
+    order: [
+      ['surname', 'ASC'],
+      ['name', 'ASC'],
+      ['patronymic', 'ASC'],
+    ],
     // limit: parseInt(limit) || 10,
     // offset: parseInt(offset) || 0,
     // subQuery: false,
@@ -174,8 +189,8 @@ const findPatientByPhone = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc   Find a patient by full name (surname, name, patronymic)
-// @route  GET /api/patients/findbyname?surname=&name=&patronymic=
+// @desc   Find a patient by full name (surname, name, patronymic, phone)
+// @route  GET /api/patients/findbyname?surname=&name=&patronymic=&phone=
 // @access Public
 const findPatientByName = asyncHandler(async (req, res) => {
   // Split the query into words on client
@@ -187,6 +202,28 @@ const findPatientByName = asyncHandler(async (req, res) => {
       patronymic: { [Op.substring]: patronymic },
     },
     // attributes: ['uuid', 'surname', 'name', 'patronymic'],
+    order: [['surname', 'ASC']],
+  });
+
+  if (result) {
+    res.json(result);
+  } else {
+    res.status(404);
+    throw new Error('Patient not found');
+  }
+});
+
+const findPatient = asyncHandler(async (req, res) => {
+  const { query } = req.query;
+  const result = await Patient.findAll({
+    where: {
+      [Op.or]: [
+        { surname: { [Op.substring]: query } },
+        { name: { [Op.substring]: query } },
+        { patronymic: { [Op.substring]: query } },
+        { phone: { [Op.substring]: query } },
+      ],
+    },
     order: [['surname', 'ASC']],
   });
 
@@ -223,6 +260,7 @@ const getAllPatientsAppointments = asyncHandler(async (req, res) => {
         ],
       },
     ],
+    order: [['date', 'DESC']],
   });
 
   if (appointments) {
@@ -260,5 +298,6 @@ module.exports = {
   updatePatient,
   findPatientByPhone,
   findPatientByName,
+  findPatient,
   getAllPatientsAppointments,
 };

@@ -5,6 +5,7 @@ const API_URL_FORM043 = '/api/form043/';
 const API_URL_TPLAN = '/api/tplan/';
 const API_URL_DOCSDIARY = '/api/docsdiary/';
 const API_URL_DENTALFORMULA = '/api/dentalformula/';
+const API_URL_PPAGE = '/api/patientspage/';
 
 const getPatients = async () => {
   const response = await axios.get(API_URL_PATIENTS + 'all');
@@ -16,18 +17,10 @@ const getPatient = async (uuid) => {
   return response.data;
 };
 
-// const findByName = async (surname, name, patronymic) => {
-//   const response = await axios.get(
-//     API_URL_PATIENTS +
-//       'findbyname?surname=' +
-//       surname +
-//       '&name=' +
-//       name +
-//       '&patronymic=' +
-//       patronymic
-//   );
-//   return response.data;
-// };
+const findPatient = async (query) => {
+  const response = await axios.get(API_URL_PATIENTS + `find?query=${query}`);
+  return response.data;
+};
 
 const createPatient = async (patientData) => {
   console.log(patientData);
@@ -50,23 +43,17 @@ const getAllPatientsAppointments = async (uuid) => {
   return response.data;
 };
 
-const createAnamnesis = async (anamnesisData) => {
-  const response = await axios.post(API_URL_ANAMNESIS + 'create', anamnesisData);
-  return response.data;
-};
-
 const getAnamnesis = async (uuid) => {
+  // uuid of patient
   const response = await axios.get(API_URL_ANAMNESIS + 'get/' + uuid);
   return response.data;
 };
 
 const updateAnamnesis = async (uuid, anamnesisData) => {
-  const response = await axios.put(API_URL_ANAMNESIS + 'update/' + uuid, anamnesisData);
-  return response.data;
-};
-
-const deleteAnamnesis = async (uuid) => {
-  const response = await axios.delete(API_URL_ANAMNESIS + 'delete/' + uuid);
+  // uuid of anamnesis
+  const response = await axios.put(API_URL_ANAMNESIS + 'update/' + uuid, {
+    jsonAnamnesis: JSON.stringify(anamnesisData),
+  });
   return response.data;
 };
 
@@ -95,20 +82,43 @@ const updateForm043 = async (uuid, formData, token) => {
   return response.data;
 };
 
+// fit other functions here
+
+const createPatientsPage = async (pageData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.post(API_URL_PPAGE + 'create', pageData, config);
+  return response.data;
+};
+
+const deletePatientsPage = async (uuid, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.delete(API_URL_PPAGE + 'delete/' + uuid, config);
+  return response.data;
+};
+
 const patientsService = {
   getPatients,
   getPatient,
   createPatient,
   updatePatient,
   deletePatient,
+  findPatient,
   getAllPatientsAppointments,
-  createAnamnesis,
   getAnamnesis,
   updateAnamnesis,
-  deleteAnamnesis,
   getAllDiseases,
   getForm043,
   updateForm043,
+  createPatientsPage,
+  deletePatientsPage,
 };
 
 export default patientsService;

@@ -27,11 +27,30 @@ const createClinic = async (clinicData) => {
   return response.data;
 };
 
+const getMe = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL + 'getme', config);
+  return response.data;
+};
+
+const getUsers = async () => {
+  const response = await axios.get(API_URL + 'getusers');
+  return response.data;
+};
+
+// getClinic, updateClinic
+
 const userService = {
   login,
   register,
   logout,
   createClinic,
+  getMe,
+  getUsers,
 };
 
 export default userService;

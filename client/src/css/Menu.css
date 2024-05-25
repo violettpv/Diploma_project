@@ -34,6 +34,11 @@
   cursor: pointer;
   border: 0.5px solid rgb(93, 179, 213);
   padding: 0 2%;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.menu-button:hover {
+  background-color: #00a6f4;
 }
 .menu-icon {
   margin-left: 20px;
