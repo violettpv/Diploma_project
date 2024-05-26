@@ -1,12 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/Notes.css';
 import '../index.css';
 import Header from '../components/Header';
 import Navigator from '../components/Navigator';
-import NoteCard from '../components/notes/NoteCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getNotes } from '../features/notes/noteSlice';
+import { getAllNotes, reset } from '../features/notes/noteSlice';
+import { resetPage, savePage } from '../features/other/otherSlice';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  TablePagination,
+  Paper,
+} from '@mui/material';
 
 export default function Notes() {
   const dispatch = useDispatch();
@@ -19,7 +28,39 @@ export default function Notes() {
     }
   }, []);
 
-  // const { notes, isError, message } = useSelector((state) => state.notes);
+  const { notes, isError, message } = useSelector((state) => state.notes);
+  const { page } = useSelector((state) => state.other);
+
+  useEffect(() => {
+    if (isError) {
+      console.error('Error:', message);
+    }
+
+    dispatch(getAllNotes());
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch, isError, message]);
+
+  const rowsPerPage = 8;
+  const handleChangePage = (event, newPage) => {
+    // setPage(newPage);
+    dispatch(savePage(newPage));
+  };
+
+  const handleCreateNote = (e) => {
+    e.preventDefault();
+    navigate('/notes/create');
+  };
+
+  const truncateContent = (content, maxLength) => {
+    if (content.length > maxLength) {
+      return content.substring(0, maxLength) + '...';
+    }
+    return content;
+  };
+
   return (
     <>
       <div className="Notes">
@@ -34,16 +75,49 @@ export default function Notes() {
                   id="create-note-button"
                   className="notes-buttons"
                   type="button"
-                  // onClick={() => console.log('Create note')}
+                  onClick={(e) => handleCreateNote(e)}
                 >
                   Додати нотаток
                 </button>
               </div>
               <div className="notes-list">
-                {/* {notes.map((note) => (
-                  <NoteCard key={note.id} data={note} />
-                ))} */}
-                В процесі розробки :D
+                <Paper>
+                  <TableContainer sx={{ height: '68vh', width: '1000px' }}>
+                    <Table>
+                      <TableBody>
+                        {notes
+                          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                          .map((note) => (
+                            <TableRow key={note.uuid}>
+                              <TableCell
+                                sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+                                onClick={() => navigate(`/notes/get/${note.uuid}`)}
+                              >
+                                {note.title}
+                              </TableCell>
+                              <TableCell sx={{ width: '50%' }}>
+                                {truncateContent(note.content, 80)}
+                              </TableCell>
+                              <TableCell>
+                                {new Date(note.createdAt).toLocaleDateString()}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  <TablePagination
+                    rowsPerPageOptions={[]}
+                    component="div"
+                    count={notes.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    labelDisplayedRows={({ from, to, count }) =>
+                      `${from}-${to} з ${count}`
+                    }
+                  />
+                </Paper>
               </div>
             </div>
           </div>

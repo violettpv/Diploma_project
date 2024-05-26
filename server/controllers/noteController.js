@@ -43,7 +43,7 @@ const getNote = asyncHandler(async (req, res) => {
 // @route   Get /api/notes/all
 // @access  Public
 const getNotes = asyncHandler(async (req, res) => {
-  const notes = await Note.findAll({ order: [['uuid', 'DESC']] });
+  const notes = await Note.findAll({ order: [['updatedAt', 'DESC']] });
   if (notes) {
     res.json(notes);
   } else {

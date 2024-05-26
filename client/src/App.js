@@ -32,6 +32,7 @@ import AddService from './components/services/AddService';
 // Notes
 import Notes from './pages/Notes';
 import NoteCard from './components/notes/NoteCard';
+import CreateNote from './components/notes/CreateNote';
 // Patient's Page
 import PatientLogin from './patientsPage/PatientLogin';
 import PatientsPageMain from './patientsPage/Main';
@@ -49,7 +50,6 @@ function App() {
             <Route path="/loginpatient" element={<PatientLogin />} />
             <Route path="/register" element={<Register />} />
             <Route path="/accounts" element={<Accounts />} />
-
             <Route path="/accounts" element={<CreateUser />} />
             <Route path="/services" element={<Services />} />
             <Route path="/services/update/:uuid" element={<EditService />} />
@@ -68,6 +68,7 @@ function App() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/notes/get/:uuid" element={<NoteCard />} />
+            <Route path="/notes/create" element={<CreateNote />} />
             <Route path="/mailingsystem" element={<MailingSystem />} />
             <Route path="/patientspage" element={<PatientsPageMain />} />
             <Route path="/patientspage/appointments" element={<PAppointments />} />

@@ -78,7 +78,7 @@ const deleteUser = async (uuid, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.delete(API_URL + 'delete' + uuid, config);
+  const response = await axios.delete(API_URL + 'delete/' + uuid, config);
   return response.data;
 };
 

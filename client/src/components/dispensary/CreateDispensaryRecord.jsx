@@ -25,6 +25,7 @@ export default function CreateDispensaryRecord() {
   const {
     users,
     isError: isErrorUsers,
+    isSuccess,
     message: messageUsers,
   } = useSelector((state) => state.user);
 
@@ -152,8 +153,11 @@ export default function CreateDispensaryRecord() {
                       {users &&
                         users.length > 0 &&
                         users
+                          .filter((user) => user.roles.length > 0)
                           .filter(
-                            (user) => user.role === 'doctor' || user.role === 'main'
+                            (user) =>
+                              user.roles[0].role === 'doctor' ||
+                              user.roles[0].role === 'main'
                           )
                           .map((user) => (
                             <option key={user.uuid} value={user.uuid}>

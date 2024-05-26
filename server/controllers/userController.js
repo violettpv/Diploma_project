@@ -180,7 +180,7 @@ const createUser = asyncHandler(async (req, res) => {
     phone,
   });
 
-  const findRole = await Role.findOne({ where: { role: role } });
+  const findRole = await Role.findOrCreate({ where: { role: role } });
   if (!findRole) {
     res.status(400);
     throw new Error('Role not found');
@@ -189,7 +189,7 @@ const createUser = asyncHandler(async (req, res) => {
   // Add role to user
   const usersRole = await UsersRole.create({
     userUuid: user.uuid,
-    roleUuid: findRole.uuid,
+    roleUuid: findRole[0].uuid,
   });
 
   if (user) {
@@ -201,7 +201,7 @@ const createUser = asyncHandler(async (req, res) => {
       name: user.name,
       patronymic: user.patronymic,
       phone: user.phone,
-      // roles: [role],
+      roles: [role],
       token: generateToken(user.uuid),
     });
   } else {

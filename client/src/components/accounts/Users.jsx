@@ -45,7 +45,9 @@ export default function Users() {
 
   const handleDeleteUser = async (e, uuid) => {
     e.preventDefault();
-    dispatch(deleteUser(uuid));
+    if (window.confirm('Ви впевнені, що хочете видалити цього користувача?')) {
+      dispatch(deleteUser(uuid));
+    }
     dispatch(reset());
     dispatch(getUsers());
   };
@@ -76,8 +78,8 @@ export default function Users() {
                       <TableCell>{oneUser.phone}</TableCell>
                       <TableCell>{oneUser.email}</TableCell>
                       <TableCell>
-                        {oneUser.role
-                          ? oneUser.role === 'doctor'
+                        {oneUser.roles[0].role
+                          ? oneUser.roles[0].role === 'doctor'
                             ? 'Лікар'
                             : 'Адміністратор'
                           : '-'}

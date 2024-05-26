@@ -165,7 +165,12 @@ export default function Appointments() {
                     {users &&
                       users.length > 0 &&
                       users
-                        .filter((user) => user.role === 'doctor' || user.role === 'main')
+                        .filter((user) => user.roles.length > 0)
+                        .filter(
+                          (user) =>
+                            user.roles[0].role === 'doctor' ||
+                            user.roles[0].role === 'main'
+                        )
                         .map((user) => (
                           <option key={user.uuid} value={user.uuid}>
                             {user.surname} {user.name}
