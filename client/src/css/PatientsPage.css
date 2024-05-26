@@ -1,4 +1,5 @@
-.Main {
+.Main,
+.PAppointments {
   height: 100vh;
   width: 100%;
   display: flex;
@@ -11,10 +12,14 @@
   width: 100%;
   height: 94vh;
   padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .main-main {
   height: 100%;
-  width: 100%;
+  width: 60%;
   padding: 25px;
   background-color: white;
   border-radius: 10px;
@@ -49,5 +54,56 @@
 #logout-button {
   margin-right: 10px;
 }
+/* ==== PAppointments ==== */
+.pa-page-main {
+  height: 100%;
+  width: 85%;
+  padding: 15px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.pa-page-header {
+  margin: 10px 10px 15px 10px;
+}
+.pa-table-div {
+  width: 100%;
+  height: 95%;
+  display: flex;
+  flex-direction: column;
+}
 
-/* Сторінка акаунту пацієнта */
+/* ==== PAccount ==== */
+.p-account-main {
+  /* height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: pa; */
+  height: 100%;
+  width: 70%;
+  padding: 15px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+#pa-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+#pa-form input {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+}
+.disabled {
+  display: none;
+}

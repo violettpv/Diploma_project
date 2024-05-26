@@ -18,13 +18,18 @@ const createService = asyncHandler(async (req, res) => {
   }
 
   // Check if user's role is 'main' or 'doctor'
-  const findUsersRole = await User.findByPk(req.user.uuid, {
-    include: { model: Role, through: { attributes: [] } },
-  });
-  const usersRole = findUsersRole.roles[0].role;
-  if (!(usersRole === 'main')) {
-    res.status(400);
-    throw new Error('User is not a main admin');
+  // const findUsersRole = await User.findByPk(req.user.uuid, {
+  //   include: { model: Role, through: { attributes: [] } },
+  // });
+  // const usersRole = findUsersRole.roles[0].role;
+  // if (!(usersRole === 'main')) {
+  //   res.status(400);
+  //   throw new Error('User is not a main admin');
+  // }
+
+  if (!req.user.role === 'main') {
+    res.status(403);
+    throw new Error('You are not allowed to create a new service');
   }
 
   const service = await Service.create({ name, price });
@@ -94,13 +99,17 @@ const deleteService = asyncHandler(async (req, res) => {
   const service = await Service.findOne({ where: { uuid: req.params.uuid } });
 
   // Check if user's role is 'main' or 'doctor'
-  const findUsersRole = await User.findByPk(req.user.uuid, {
-    include: { model: Role, through: { attributes: [] } },
-  });
-  const usersRole = findUsersRole.roles[0].role;
-  if (!(usersRole === 'main')) {
-    res.status(400);
-    throw new Error('User is not a main admin');
+  // const findUsersRole = await User.findByPk(req.user.uuid, {
+  //   include: { model: Role, through: { attributes: [] } },
+  // });
+  // const usersRole = findUsersRole.roles[0].role;
+  // if (!(usersRole === 'main')) {
+  //   res.status(400);
+  //   throw new Error('User is not a main admin');
+  // }
+  if (!req.user.role === 'main') {
+    res.status(403);
+    throw new Error('You are not allowed to create a new service');
   }
 
   if (service) {
@@ -123,13 +132,17 @@ const updateService = asyncHandler(async (req, res) => {
   }
 
   // Check if user's role is 'main' or 'doctor'
-  const findUsersRole = await User.findByPk(req.user.uuid, {
-    include: { model: Role, through: { attributes: [] } },
-  });
-  const usersRole = findUsersRole.roles[0].role;
-  if (!(usersRole === 'main')) {
-    res.status(400);
-    throw new Error('User is not a main admin');
+  // const findUsersRole = await User.findByPk(req.user.uuid, {
+  //   include: { model: Role, through: { attributes: [] } },
+  // });
+  // const usersRole = findUsersRole.roles[0].role;
+  // if (!(usersRole === 'main')) {
+  //   res.status(400);
+  //   throw new Error('User is not a main admin');
+  // }
+  if (!req.user.role === 'main') {
+    res.status(403);
+    throw new Error('You are not allowed to create a new service');
   }
 
   const { name, price } = req.body;

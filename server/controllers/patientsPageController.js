@@ -22,14 +22,14 @@ const createPage = asyncHandler(async (req, res) => {
   }
 
   // Check if user's role is 'administrator' or 'main'
-  const findUser = await User.findByPk(req.user.uuid, {
-    include: { model: Role, through: { attributes: [] } },
-  });
-  const usersRole = findUser.roles[0].role;
-  if (!(usersRole === 'main' || usersRole === 'administrator')) {
-    res.status(400);
-    throw new Error('User is not a main admin or an administrator');
-  }
+  // const findUser = await User.findByPk(req.user.uuid, {
+  //   include: { model: Role, through: { attributes: [] } },
+  // });
+  // const usersRole = findUser.roles[0].role;
+  // if (!(usersRole === 'main' || usersRole === 'administrator')) {
+  //   res.status(400);
+  //   throw new Error('User is not a main admin or an administrator');
+  // }
 
   const patient = await Patient.findByPk(patientUuid);
   if (!patient) {
@@ -102,7 +102,7 @@ const loginPatient = asyncHandler(async (req, res) => {
 // @route   GET /api/patientspage/all/tplans?limit=&offset=
 // @access  Private
 const getAllPlans = asyncHandler(async (req, res) => {
-  const { limit, offset } = req.query;
+  // const { limit, offset } = req.query;
   const patient = await Patient.findByPk(req.patient.uuid);
   if (!patient) {
     res.status(400);
@@ -117,18 +117,13 @@ const getAllPlans = asyncHandler(async (req, res) => {
       },
     ],
     order: [[TreatmentPlanRecord, 'date', 'DESC']],
-    limit: parseInt(limit),
-    offset: parseInt(offset),
-    subQuery: false,
+    // limit: parseInt(limit),
+    // offset: parseInt(offset),
+    // subQuery: false,
   });
 
   if (allTrPlans) {
-    res.json({
-      patient: patient.uuid,
-      surname: patient.surname,
-      name: patient.name,
-      treatmentPlans: allTrPlans.treatmentPlanRecords,
-    });
+    res.json(allTrPlans);
   } else {
     res.status(404);
     throw new Error('Treatment plans not found');
@@ -231,14 +226,14 @@ const deletePage = asyncHandler(async (req, res) => {
   }
 
   // Check if user's role is 'administrator' or 'main'
-  const findUser = await User.findByPk(req.user.uuid, {
-    include: { model: Role, through: { attributes: [] } },
-  });
-  const usersRole = findUser.roles[0].role;
-  if (!(usersRole === 'main' || usersRole === 'administrator')) {
-    res.status(400);
-    throw new Error('User is not a main admin or an administrator');
-  }
+  // const findUser = await User.findByPk(req.user.uuid, {
+  //   include: { model: Role, through: { attributes: [] } },
+  // });
+  // const usersRole = findUser.roles[0].role;
+  // if (!(usersRole === 'main' || usersRole === 'administrator')) {
+  //   res.status(400);
+  //   throw new Error('User is not a main admin or an administrator');
+  // }
 
   patient.set({
     login: null,
@@ -260,15 +255,32 @@ const updatePageInfo = asyncHandler(async (req, res) => {
     throw new Error('Patient not found');
   }
 
-  const { login, password } = req.body;
+  // const { login, password } = req.body;
 
   // Hash password
+  // const salt = await bcrypt.genSalt(10);
+  // const hashedPassword = await bcrypt.hash(password, salt);
+
+  // patient.set({
+  //   login,
+  //   password: hashedPassword,
+  // });
+  // await patient.save();
+
+  const { login, oldPassword, newPassword } = req.body;
+
+  const isMatch = await bcrypt.compare(oldPassword, patient.password);
+  if (!isMatch) {
+    res.status(400);
+    throw new Error('Incorrect old password');
+  }
+
   const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+  const hashedNewPassword = await bcrypt.hash(newPassword, salt);
 
   patient.set({
     login,
-    password: hashedPassword,
+    password: hashedNewPassword,
   });
   await patient.save();
 
@@ -309,14 +321,7 @@ const getAppointments = asyncHandler(async (req, res) => {
   });
 
   if (appointments) {
-    res.json({
-      patient: {
-        uuid: patient.uuid,
-        surname: patient.surname,
-        name: patient.name,
-      },
-      appointments: appointments,
-    });
+    res.json(appointments);
   } else {
     res.status(404);
     throw new Error('Appointments not found');

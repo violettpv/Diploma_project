@@ -23,10 +23,43 @@ const getMePatient = async (token) => {
   return response.data;
 };
 
+const getAllTreatmentPlans = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL + 'all/tplans', config);
+  return response.data;
+};
+
+const updatePatient = async (patientData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.put(API_URL + 'update', patientData, config);
+  return response.data;
+};
+
+const getAppointments = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL + 'appointments', config);
+  return response.data;
+};
+
 const patientService = {
   loginPatient,
   logoutPatient,
   getMePatient,
+  updatePatient,
+  getAllTreatmentPlans,
+  getAppointments,
 };
 
 export default patientService;

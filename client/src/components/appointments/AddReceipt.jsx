@@ -27,6 +27,13 @@ export default function AddReceipt() {
   const [sale, setSale] = useState('');
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   useEffect(() => {
     if (isError) {
       console.error('Error:', message);

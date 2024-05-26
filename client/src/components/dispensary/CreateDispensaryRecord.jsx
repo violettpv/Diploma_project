@@ -28,6 +28,13 @@ export default function CreateDispensaryRecord() {
     message: messageUsers,
   } = useSelector((state) => state.user);
 
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedDate, setSelectedDate] = useState('');

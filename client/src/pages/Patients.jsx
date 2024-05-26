@@ -20,6 +20,14 @@ import {
 export default function Patients() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const { patients, isError, message } = useSelector((state) => state.patients);
   const { page } = useSelector((state) => state.other);
   const [search, setSearch] = useState('');

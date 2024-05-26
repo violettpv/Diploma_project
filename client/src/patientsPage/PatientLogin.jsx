@@ -8,53 +8,47 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginPatient, reset } from '../features/patientsPage/patientSlice';
 
 export default function PatientLogin() {
-  // const [formData, setFormData] = useState({ login: '', password: '' });
-  // const { login, password } = formData;
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  // const { patient, isError, isSuccess, message } = useSelector((state) => state.patient);
+  const [formData, setFormData] = useState({ login: '', password: '' });
+  const { login, password } = formData;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { patient, isError, isSuccess, message } = useSelector((state) => state.patient);
 
-  // useEffect(() => {
-  //   if (isError) {
-  //     console.log(message);
-  //   }
+  useEffect(() => {
+    if (isError) {
+      console.log(message);
+    }
 
-  //   if (isSuccess || patient) {
-  //     navigate('/patientspage');
-  //   }
+    if (isSuccess || patient) {
+      navigate('/patientspage');
+    }
 
-  //   return () => {
-  //     dispatch(reset());
-  //   };
-  // }, [patient, isError, isSuccess, message, navigate, dispatch]);
+    dispatch(reset());
+  }, [patient, isError, isSuccess, message, navigate, dispatch]);
 
-  // const onChange = (e) => {
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     [e.target.name]: e.target.value,
-  //   }));
-  // };
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-  // const onSubmit = (e) => {
-  //   e.preventDefault();
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const patientData = {
+      login,
+      password,
+    };
 
-  //   const patientData = {
-  //     login,
-  //     password,
-  //   };
-
-  //   dispatch(loginPatient(patientData));
-  // };
+    dispatch(loginPatient(patientData));
+  };
 
   return (
     <>
       <HeaderMenu />
       <div className="Login">
         <div className="login-container">
-          <form
-            className="login-form"
-            //  onSubmit={onSubmit}
-          >
+          <form className="login-form" onSubmit={onSubmit}>
             <div className="login-intro">
               <p>
                 <b>BrightDent</b> вітає Вас!
@@ -69,8 +63,8 @@ export default function PatientLogin() {
                   placeholder="Пошта або телефон"
                   name="login"
                   type="text"
-                  // value={login}
-                  // onChange={onChange}
+                  value={login}
+                  onChange={onChange}
                 />
               </label>
               <label>
@@ -79,8 +73,8 @@ export default function PatientLogin() {
                   className="form-inputs"
                   name="password"
                   type="password"
-                  // value={password}
-                  // onChange={onChange}
+                  value={password}
+                  onChange={onChange}
                 />
               </label>
               <button type="submit" className="submit-button">

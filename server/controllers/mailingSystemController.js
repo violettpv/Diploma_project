@@ -5,6 +5,8 @@ const MessageTemplate = require('../models/messageTemplateModel');
 const Appointment = require('../models/appointmentModel');
 const Patient = require('../models/patientModel');
 const Clinic = require('../models/clinicModel');
+const EMAIL = process.env.EMAIL;
+const APP_PASSWORD = process.env.APP_PASSWORD;
 
 // @desc    Create a new message template
 // @route   GET /api/mailingsystem/getappointments?date=&month=&year=
@@ -78,11 +80,13 @@ const sendReminders = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Please provide appointments');
   }
+  // console.log('appointments:', appointments);
 
   const clinic = await Clinic.findOne();
-  const clinicEmail = clinic.email;
-  const clinicAppPassword = clinic.appPassword;
-  const reminder = await MessageTemplate.findOne({ where: { name: 'Scheduled visit' } });
+  // const clinicEmail = clinic.email;
+  // const clinicAppPassword = clinic.appPassword;
+  // const reminder = await MessageTemplate.findOne({ where: { name: 'Scheduled visit' } });
+  const reminder = await MessageTemplate.findByPk('6d5c51a9-49c6-4510-8de3-afa55dc8ee8f');
 
   const data = appointments.map((appointment) => {
     return {
@@ -99,6 +103,7 @@ const sendReminders = asyncHandler(async (req, res) => {
       endTime: appointment.endTime,
     };
   });
+  // console.log('data:', data);
 
   let transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -106,18 +111,23 @@ const sendReminders = asyncHandler(async (req, res) => {
     // port: 465,
     // secure: true,
     auth: {
-      user: clinicEmail,
-      pass: clinicAppPassword,
+      user: EMAIL,
+      pass: APP_PASSWORD,
     },
   });
 
-  for (const appointment of data) {
-    if (appointment.patient.email === null || appointment.patient.email === '') {
-      console.log(
-        `Patient ${patient.surname} ${patient.name} ${patient.patronymic} has no email`
-      );
-      continue;
-    }
+  const filteredData = data.filter(
+    (appointment) =>
+      appointment.patient.email !== null && appointment.patient.email !== ''
+  );
+
+  for (const appointment of filteredData) {
+    // if (appointment.patient.email === null || appointment.patient.email === '') {
+    //   console.log(
+    //     `Patient ${appointment.patient.surname} ${appointment.patient.name} ${appointment.patient.patronymic} has no email`
+    //   );
+    //   continue;
+    // }
 
     let date = appointment.date;
     let time = appointment.startTime;
@@ -133,7 +143,7 @@ const sendReminders = asyncHandler(async (req, res) => {
       .replace('{clinicPhone}', clinicPhone);
 
     let mailOptions = {
-      from: clinicEmail,
+      from: EMAIL,
       to: appointment.patient.email,
       subject: 'У Вас є запланований візит до BrightDent',
       text: reminderBody,
@@ -141,12 +151,12 @@ const sendReminders = asyncHandler(async (req, res) => {
 
     try {
       let info = await transporter.sendMail(mailOptions);
+      res.json({ message: 'Emails sent' });
       console.log('Email sent: ' + info.response);
     } catch (error) {
       console.error('Error sending email:', error);
     }
   }
-  res.json({ message: 'Emails sent' });
 });
 
 // @desc    Create a custom message

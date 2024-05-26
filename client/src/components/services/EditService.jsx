@@ -15,10 +15,26 @@ export default function EditService() {
   const [serviceData, setServiceData] = useState({ name: '', price: '' });
   const { name, price } = serviceData;
 
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+    if (!user || user.role !== 'main') {
+      navigate('/services');
+      alert('У вас немає доступу до цієї сторінки');
+    }
+  }, []);
+
   useEffect(() => {
     if (isError) {
       console.error('Error:', message);
     }
+
+    // if (!user || user.role !== 'main') {
+    //   navigate('/services');
+    //   alert('У вас немає доступу до цієї сторінки');
+    // }
 
     dispatch(getService(serviceUuid));
     return () => {

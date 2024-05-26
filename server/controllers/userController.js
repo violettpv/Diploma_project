@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const Role = require('../models/roleModel');
 const UsersRole = require('../models/usersRoleModel');
+const { Op } = require('sequelize');
 
 // @desc    Register a new user (main admin) and a new clinic
 // @route   POST /api/users
@@ -131,7 +132,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 // @desc   Create a user and give him/her a role
-// @route  POST /api/users
+// @route  POST /api/users/newuser
 // @access Private (main's admin)
 const createUser = asyncHandler(async (req, res) => {
   const { email, password, surname, name, patronymic, phone, role } = req.body;
@@ -142,14 +143,18 @@ const createUser = asyncHandler(async (req, res) => {
     throw new Error('Please add all fields');
   }
 
+  // console.log(req.user.role);
   // Check if current user's role is 'main'
-  if (!req.user.roles.find((role) => role === 'main')) {
+  if (!req.user.role === 'main') {
     res.status(403);
     throw new Error('You are not allowed to create a new user');
   }
 
-  // Check if user exists
-  const userExists = await User.findOne({ where: { email } });
+  const userExists = await User.findOne({
+    where: {
+      [Op.or]: [{ email }, { phone }],
+    },
+  });
   if (userExists) {
     res.status(400);
     throw new Error('User already exists');
@@ -175,7 +180,7 @@ const createUser = asyncHandler(async (req, res) => {
     phone,
   });
 
-  const findRole = await Role.findOrCreate({ where: { role: role } });
+  const findRole = await Role.findOne({ where: { role: role } });
   if (!findRole) {
     res.status(400);
     throw new Error('Role not found');
@@ -184,7 +189,7 @@ const createUser = asyncHandler(async (req, res) => {
   // Add role to user
   const usersRole = await UsersRole.create({
     userUuid: user.uuid,
-    roleUuid: findRole[0].uuid,
+    roleUuid: findRole.uuid,
   });
 
   if (user) {
@@ -216,9 +221,9 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 
   // Check if current user's role is 'main'
-  if (!req.user.roles.find((role) => role === 'main')) {
+  if (!req.user.role === 'main') {
     res.status(403);
-    throw new Error('You are not allowed to delete a user');
+    throw new Error('You are not allowed to create a new user');
   }
 
   await user.destroy();
@@ -241,9 +246,9 @@ const updateUser = asyncHandler(async (req, res) => {
   // });
 
   // Check if current user's role is 'main'
-  if (!req.user.roles.find((role) => role === 'main')) {
+  if (!req.user.role === 'main') {
     res.status(403);
-    throw new Error('Role error. This user has to be main admin');
+    throw new Error('You are not allowed to create a new user');
   }
 
   const { email, password, surname, name, patronymic, phone } = req.body;
@@ -289,17 +294,7 @@ const getUsers = asyncHandler(async (req, res) => {
     include: { model: Role, attributes: ['role'], through: { attributes: [] } },
   });
 
-  res.json(
-    users.map((x) => ({
-      uuid: x.uuid,
-      email: x.email,
-      surname: x.surname,
-      name: x.name,
-      patronymic: x.patronymic,
-      phone: x.phone,
-      role: x.roles[0].role,
-    }))
-  );
+  res.json(users);
 });
 
 // @desc    Get user profile

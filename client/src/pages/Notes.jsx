@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../css/Notes.css';
 import '../index.css';
 import Header from '../components/Header';
@@ -11,6 +11,14 @@ import { getNotes } from '../features/notes/noteSlice';
 export default function Notes() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   // const { notes, isError, message } = useSelector((state) => state.notes);
   return (
     <>
@@ -35,6 +43,7 @@ export default function Notes() {
                 {/* {notes.map((note) => (
                   <NoteCard key={note.id} data={note} />
                 ))} */}
+                В процесі розробки :D
               </div>
             </div>
           </div>

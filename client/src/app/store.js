@@ -7,6 +7,7 @@ import { serviceSlice } from '../features/services/serviceSlice';
 import { appointmentSlice } from '../features/appointments/appointmentSlice';
 import { dispensarySlice } from '../features/dispensary/dispensarySlice';
 import { noteSlice } from '../features/notes/noteSlice';
+import { msysSlice } from '../features/mailingsystem/msysSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,6 @@ export const store = configureStore({
     appointments: appointmentSlice.reducer,
     dispensary: dispensarySlice.reducer,
     notes: noteSlice.reducer,
-    // mailing system
+    msystem: msysSlice.reducer,
   },
 });

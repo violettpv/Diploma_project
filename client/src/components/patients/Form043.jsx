@@ -16,11 +16,14 @@ export default function Form043({ uuid }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { patient, form043, isError, message } = useSelector((state) => state.patients);
-  const {
-    user,
-    isError: isErrorUser,
-    message: messageUser,
-  } = useSelector((state) => state.user);
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const form043Uuid = form043.uuid;
   const [diagnosis, setDiagnosis] = useState('');
   const [complaints, setComplaints] = useState('');
@@ -34,18 +37,13 @@ export default function Form043({ uuid }) {
   const [oralHygieneControlData, setOralHygieneControlData] = useState('');
 
   useEffect(() => {
-    // check user's role
-    // if (user) {
-    //   dispatch(getMe());
-    //   let role = user.role;
-    //   if (!(role === 'doctor' || role === 'main')) {
-    //     alert('Доступ заборонено');
-    //     // navigate('/');
-    //   }
-    // }
-
     if (isError) {
       console.error('Error:', message);
+    }
+
+    if (!user || !(user.role === 'doctor' || user.role === 'main')) {
+      navigate('/');
+      alert('У вас немає доступу до цієї сторінки');
     }
 
     dispatch(getPatient(uuid));

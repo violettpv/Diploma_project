@@ -25,6 +25,13 @@ export default function EditDispensaryRecord() {
   } = useSelector((state) => state.user);
   const { oneDispensary, isError, message } = useSelector((state) => state.dispensary);
 
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [timeData, setTimeData] = useState('');

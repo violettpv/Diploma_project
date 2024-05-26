@@ -5,6 +5,8 @@ const patient = JSON.parse(localStorage.getItem('patient'));
 
 const initialState = {
   patient: patient ? patient : null,
+  treatmentPlans: [],
+  appointments: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -42,6 +44,61 @@ export const getMePatient = createAsyncThunk('patient/me', async (_, thunkAPI) =
     return thunkAPI.rejectWithValue(message);
   }
 });
+
+export const updatePatient = createAsyncThunk(
+  'patient/update',
+  async (patientData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().patient.patient.token;
+      return await patientService.updatePatient(
+        {
+          login: patientData.login,
+          oldPassword: patientData.oldPassword,
+          newPassword: patientData.newPassword,
+        },
+        token
+      );
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getAllTreatmentPlans = createAsyncThunk(
+  'patient/allTreatmentPlans',
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().patient.patient.token;
+      return await patientService.getAllTreatmentPlans(token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getAppointments = createAsyncThunk(
+  'patient/appointments',
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().patient.patient.token;
+      return await patientService.getAppointments(token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const patientSlice = createSlice({
   name: 'patient',
@@ -86,6 +143,45 @@ export const patientSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.patient = null;
+      })
+      .addCase(updatePatient.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updatePatient.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.patient = action.payload;
+      })
+      .addCase(updatePatient.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getAllTreatmentPlans.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllTreatmentPlans.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.treatmentPlans = action.payload;
+      })
+      .addCase(getAllTreatmentPlans.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getAppointments.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAppointments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.appointments = action.payload;
+      })
+      .addCase(getAppointments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });

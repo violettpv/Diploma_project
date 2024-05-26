@@ -10,7 +10,7 @@ function NavigatorMenu() {
       <div className="nav-button" onClick={() => navigate('/patientspage/')}>
         <FaTooth className="nav-icon" />
       </div>
-      <div className="nav-button" onClick={() => navigate('/patientspage/me')}>
+      <div className="nav-button" onClick={() => navigate('/patientspage/account')}>
         <FaUser className="nav-icon" />
       </div>
       <div className="nav-button" onClick={() => navigate('/patientspage/appointments')}>

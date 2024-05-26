@@ -24,6 +24,7 @@ const protectPatient = asyncHandler(async (req, res, next) => {
         patronymic: patient.patronymic,
         phone: patient.phone,
         login: patient.login,
+        token: token,
         // password: patient.password,
       };
 

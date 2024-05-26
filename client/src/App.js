@@ -6,6 +6,7 @@ import Menu from './pages/Menu';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Accounts from './pages/Accounts';
+import CreateUser from './components/accounts/CreateUser';
 // Appointments
 import Appointments from './pages/Appointments';
 import CreateAppointment from './components/appointments/CreateAppointment';
@@ -34,6 +35,8 @@ import NoteCard from './components/notes/NoteCard';
 // Patient's Page
 import PatientLogin from './patientsPage/PatientLogin';
 import PatientsPageMain from './patientsPage/Main';
+import PAppointments from './patientsPage/PAppointments';
+import PAccount from './patientsPage/PAccount';
 
 function App() {
   return (
@@ -46,6 +49,8 @@ function App() {
             <Route path="/loginpatient" element={<PatientLogin />} />
             <Route path="/register" element={<Register />} />
             <Route path="/accounts" element={<Accounts />} />
+
+            <Route path="/accounts" element={<CreateUser />} />
             <Route path="/services" element={<Services />} />
             <Route path="/services/update/:uuid" element={<EditService />} />
             <Route path="/services/create/" element={<AddService />} />
@@ -63,8 +68,11 @@ function App() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/notes/get/:uuid" element={<NoteCard />} />
-            <Route path="/patientspage" element={<PatientsPageMain />} />
             <Route path="/mailingsystem" element={<MailingSystem />} />
+            <Route path="/patientspage" element={<PatientsPageMain />} />
+            <Route path="/patientspage/appointments" element={<PAppointments />} />
+            <Route path="/patientspage/account" element={<PAccount />} />
+            {/* <Route path="*" element={<h1>Not Found</h1>} /> */}
           </Routes>
         </div>
       </Router>

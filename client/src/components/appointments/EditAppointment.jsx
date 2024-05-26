@@ -34,6 +34,13 @@ export default function EditAppointment() {
   } = useSelector((state) => state.patients);
   const { oneAppointment, isError, message } = useSelector((state) => state.appointments);
 
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const [appointmentData, setAppointmentData] = useState({
     doctor: '',
     date: '',

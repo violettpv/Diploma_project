@@ -18,9 +18,19 @@ import {
   getFinishedAppointments,
   reset,
 } from '../features/appointments/appointmentSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Reports() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const { appointments, isError, message } = useSelector((state) => state.appointments);
 
   const getToday = () => {

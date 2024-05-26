@@ -35,7 +35,6 @@ export default function Login() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
     const userData = {
       email,
       password,

@@ -34,6 +34,14 @@ import { resetPage, savePage } from '../features/other/otherSlice';
 export default function Appointments() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const { dispensary, isError, message } = useSelector((state) => state.dispensary);
   const {
     users,

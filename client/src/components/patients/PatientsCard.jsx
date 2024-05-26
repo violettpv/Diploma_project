@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../../css/Patients.css';
 import '../../index.css';
 import Header from '../../components/Header';
 import Navigator from '../../components/Navigator';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Tabs } from '@mui/base/Tabs';
 import { TabsList } from '@mui/base/TabsList';
 import { TabPanel } from '@mui/base/TabPanel';
@@ -16,8 +16,18 @@ import DoctorsDiary from './DoctorsDiary';
 import DentalFormula from './DentalFormula';
 import PatientsAppointments from './PatientsAppointments';
 import PPSettings from './PPageSettings';
+import { useSelector } from 'react-redux';
 
 export default function PatientsCard() {
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const { uuid } = useParams();
 
   return (

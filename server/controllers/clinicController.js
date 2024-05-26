@@ -14,9 +14,14 @@ const createClinic = asyncHandler(async (req, res) => {
   }
 
   // Check if current user's role is 'main'
-  if (!req.user.roles.find((role) => role === 'main')) {
+  // if (!req.user.roles.find((role) => role === 'main')) {
+  //   res.status(403);
+  //   throw new Error('You are not allowed to add information about clinic');
+  // }
+
+  if (!req.user.role === 'main') {
     res.status(403);
-    throw new Error('You are not allowed to add information about clinic');
+    throw new Error('You are not allowed to create a new user');
   }
 
   const clinicExists = await Clinic.findOne({ where: { name } });
@@ -56,7 +61,8 @@ const createClinic = asyncHandler(async (req, res) => {
 // @route GET /api/clinic/get/:uuid
 // @access Private (main's admin)
 const getClinic = asyncHandler(async (req, res) => {
-  const clinic = await Clinic.findOne({ where: { uuid: req.params.uuid } });
+  // const clinic = await Clinic.findOne({ where: { uuid: req.params.uuid } });
+  const clinic = await Clinic.findOne();
 
   if (clinic) {
     res.status(200).json({
@@ -79,7 +85,13 @@ const getClinic = asyncHandler(async (req, res) => {
 // @route PUT /api/clinic/update/:uuid
 // @access Private (main's admin)
 const updateClinic = asyncHandler(async (req, res) => {
-  const clinic = await Clinic.findOne({ where: { uuid: req.params.uuid } });
+  const clinic = await Clinic.findOne();
+
+  // Check if current user's role is 'main'
+  if (!req.user.role === 'main') {
+    res.status(403);
+    throw new Error('You are not allowed to create a new user');
+  }
 
   if (clinic) {
     clinic.name = req.body.name || clinic.name;
@@ -112,7 +124,13 @@ const updateClinic = asyncHandler(async (req, res) => {
 // @route DELETE /api/clinic/delete/:uuid
 // @access Private (dev only)
 const deleteClinic = asyncHandler(async (req, res) => {
-  const clinic = await Clinic.findOne({ where: { uuid: req.params.uuid } });
+  const clinic = await Clinic.findOne();
+
+  // Check if current user's role is 'main'
+  if (!req.user.role === 'main') {
+    res.status(403);
+    throw new Error('You are not allowed to create a new user');
+  }
 
   if (clinic) {
     await clinic.destroy();

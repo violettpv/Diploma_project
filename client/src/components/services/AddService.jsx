@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/Services.css';
 import Header from '../Header';
 import Navigator from '../Navigator';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createService } from '../../features/services/serviceSlice';
 
 export default function AddService() {
@@ -11,6 +11,17 @@ export default function AddService() {
   const dispatch = useDispatch();
   const [serviceData, setServiceData] = useState({ name: '', price: '' });
   const { name, price } = serviceData;
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+    if (!user || user.role !== 'main') {
+      navigate('/services');
+      alert('У вас немає доступу до цієї сторінки');
+    }
+  }, []);
 
   const onChange = (e) => {
     setServiceData((prevState) => ({
@@ -42,7 +53,6 @@ export default function AddService() {
     let isValid = await validateForm();
     if (isValid) {
       const serviceData = { name, price };
-      console.log(serviceData);
       dispatch(createService(serviceData));
       alert('Послугу створено');
       setServiceData({ name: '', price: '' });

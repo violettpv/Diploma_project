@@ -1,0 +1,63 @@
+.MailingSystem {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.msys-content {
+  width: 100%;
+}
+.msys-body {
+  width: 100%;
+  height: 94vh;
+  padding: 35px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.msys-card-tabs {
+  height: 82vh;
+  width: 85%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.msys-card-main {
+  width: 100%;
+  padding: 5px 20px;
+}
+.msys-tabs-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 0 0 10px;
+}
+
+/*#region MSysInfo */
+.MSysInfo {
+  height: 100%;
+  width: 100%;
+}
+.msys-info-main {
+  height: 100%;
+  width: 100%;
+}
+/*#endregion MSysInfo */
+
+/*#region MailingSystem */
+.msys-header {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.msys-table-block,
+.msys-table-container {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+/*#endregion MailingSystem */

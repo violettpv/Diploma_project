@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Navigator from '../components/Navigator';
 import '../css/Accounts.css';
-import { useDispatch } from 'react-redux';
+import '../index.css';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout, reset } from '../features/user/userSlice';
 import { FaSignOutAlt } from 'react-icons/fa';
@@ -10,14 +11,25 @@ import { Tabs } from '@mui/base/Tabs';
 import { TabsList } from '@mui/base/TabsList';
 import { TabPanel } from '@mui/base/TabPanel';
 import { Tab } from '@mui/base/Tab';
+import UserPage from '../components/accounts/UserPage';
+import Clinic from '../components/accounts/Clinic';
+import Users from '../components/accounts/Users';
 
 export default function Accounts() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const logOut = async () => {
     await dispatch(logout());
-    dispatch(reset);
+    dispatch(reset());
     navigate('/login');
   };
   return (
@@ -46,17 +58,21 @@ export default function Accounts() {
                   <div className="logout-container">
                     <button className="tooltip" id="logout-button" onClick={logOut}>
                       <FaSignOutAlt />
-                      <span class="tooltiptext">Вийти</span>
+                      <span className="tooltiptext">Вийти</span>
                     </button>
                   </div>
                 </div>
-                <div className="accounts-hr">
-                  <hr />
-                </div>
+                <hr className="custom-hr" />
                 <div className="tab-panel">
-                  <TabPanel value={0}>Мій акаунт</TabPanel>
-                  <TabPanel value={1}>Працівники</TabPanel>
-                  <TabPanel value={2}>Клініка</TabPanel>
+                  <TabPanel value={0}>
+                    <UserPage />
+                  </TabPanel>
+                  <TabPanel value={1}>
+                    <Users />
+                  </TabPanel>
+                  <TabPanel value={2}>
+                    <Clinic />
+                  </TabPanel>
                 </div>
               </Tabs>
             </div>

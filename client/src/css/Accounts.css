@@ -11,10 +11,14 @@
   width: 100%;
   height: 94vh;
   padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .accounts-main {
   height: 100%;
-  width: 100%;
+  width: 80%;
   padding: 10px;
   background-color: white;
   border-radius: 10px;
@@ -97,7 +101,16 @@
   border: 1px solid #e0e0e0;
 }
 .tab-panel {
-  padding: 10px;
+  /* padding: 10px; */
   height: 100%;
   width: 100%;
+}
+
+/* Users */
+.Users {
+  display: flex;
+  flex-direction: column;
+  /* height: 100%; */
+  /* justify-content: center;
+  align-items: center; */
 }

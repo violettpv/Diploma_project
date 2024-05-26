@@ -26,6 +26,7 @@ const protect = asyncHandler(async (req, res, next) => {
         patronymic: user.patronymic,
         phone: user.phone,
         role: user.roles[0].role,
+        token: token,
         // roles: user.roles.map((obj) => obj.role),
       };
 

@@ -15,6 +15,14 @@ import { savePage } from '../../features/other/otherSlice';
 export default function PatientsInfo({ uuid }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const { patients, patient, isError, message } = useSelector((state) => state.patients);
   const { page } = useSelector((state) => state.other);
   const [surname, setSurname] = useState('');

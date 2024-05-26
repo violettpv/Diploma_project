@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
 import '../../index.css';
 import {
@@ -19,22 +20,21 @@ import {
 
 export default function PatientsAppointments({ uuid }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const patientUuid = uuid;
   const { patient, appointments, isError, message } = useSelector(
     (state) => state.patients
   );
 
   useEffect(() => {
-    // check user's role
-    // if (user) {
-    //   dispatch(getMe());
-    //   let role = user.role;
-    //   if (!(role === 'doctor' || role === 'main')) {
-    //     alert('Доступ заборонено');
-    //     // navigate('/');
-    //   }
-    // }
-
     if (isError) {
       console.error('Error:', message);
     }

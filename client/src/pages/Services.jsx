@@ -28,6 +28,13 @@ export default function Services() {
   const { services, isError, message } = useSelector((state) => state.services);
   const [search, setSearch] = useState('');
 
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   useEffect(() => {
     if (isError) {
       console.error('Error:', message);
@@ -49,6 +56,10 @@ export default function Services() {
     dispatch(searchServices(search));
   };
   const handeDeleteService = (uuid) => {
+    if (!user || user.role !== 'main') {
+      alert('У вас немає доступу до видалення послуги');
+      return;
+    }
     if (window.confirm('Ви впевнені, що хочете видалити цю послугу?')) {
       dispatch(deleteService(uuid));
       alert('Послугу видалено');
@@ -56,6 +67,7 @@ export default function Services() {
       navigate('/services');
     }
   };
+
   const handleUpdateService = (uuid) => {
     dispatch(getService(uuid));
     navigate(`/services/update/${uuid}`);

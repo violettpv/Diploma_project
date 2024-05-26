@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
 import '../../index.css';
@@ -11,6 +11,14 @@ import { createPatient } from '../../features/patients/patientsSlice';
 export default function CreatePatient() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const [surname, setSurname] = useState('');
   const [name, setName] = useState('');
   const [patronymic, setPatronymic] = useState('');

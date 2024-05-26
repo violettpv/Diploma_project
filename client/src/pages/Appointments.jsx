@@ -25,6 +25,14 @@ import {
 export default function Appointments() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const { appointments, oneAppointment, isError, message } = useSelector(
     (state) => state.appointments
   );
@@ -162,10 +170,6 @@ export default function Appointments() {
                             <TableCell align="center">{appointment.roomNumber}</TableCell>
                             <TableCell align="center">{appointment.note}</TableCell>
                             <TableCell align="center">
-                              {/* <MdOutlinePayments
-                                cursor={'pointer'}
-                                className="icon"
-                              /> */}
                               {appointment.receiptUuid !== null ? (
                                 appointment.receipt.isPaid ? (
                                   <MdOutlinePayments

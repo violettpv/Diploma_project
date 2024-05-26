@@ -26,6 +26,14 @@ export default function Anamnesis({ uuid }) {
   const { diseases, anamnesis, isSuccess, isLoading, isError, message } = useSelector(
     (state) => state.patients
   );
+
+  const { user } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
   const [selectedDiseases, setSelectedDiseases] = useState({});
   const [notes, setNotes] = useState({});
 

@@ -82,6 +82,64 @@ export const createClinic = createAsyncThunk(
   }
 );
 
+export const updateClinic = createAsyncThunk(
+  'user/updateClinic',
+  async (clinic, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await userService.updateClinic(clinic, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getClinic = createAsyncThunk('user/getClinic', async (_, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().user.user.token;
+    return await userService.getClinic(token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const deleteUser = createAsyncThunk('user/deleteUser', async (uuid, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().user.user.token;
+    return await userService.deleteUser(uuid, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+export const createUser = createAsyncThunk(
+  'user/createUser',
+  async (userData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await userService.createUser(userData, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -95,6 +153,7 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // REGISTER
       .addCase(register.pending, (state) => {
         state.isLoading = true;
       })
@@ -109,6 +168,7 @@ export const userSlice = createSlice({
         state.message = action.payload;
         state.user = null;
       })
+      // LOGIN
       .addCase(login.pending, (state) => {
         state.isLoading = true;
       })
@@ -123,6 +183,7 @@ export const userSlice = createSlice({
         state.message = action.payload;
         state.user = null;
       })
+      // LOGOUT
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
       })
@@ -141,6 +202,7 @@ export const userSlice = createSlice({
         state.message = action.payload;
         state.user = [];
       })
+      // GET USERS
       .addCase(getUsers.pending, (state) => {
         state.isLoading = true;
       })
@@ -154,6 +216,7 @@ export const userSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
+      // CREATE CLINIC
       .addCase(createClinic.pending, (state) => {
         state.isLoading = true;
       })
@@ -167,6 +230,63 @@ export const userSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.clinic = null;
+      })
+      // UPDATE CLINIC
+      .addCase(updateClinic.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateClinic.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.clinic = action.payload;
+      })
+      .addCase(updateClinic.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.clinic = null;
+      })
+      // GET CLINIC
+      .addCase(getClinic.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getClinic.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.clinic = action.payload;
+      })
+      .addCase(getClinic.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // DELETE USER
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.users = state.users.filter((user) => user.uuid !== action.payload);
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // CREATE USER
+      .addCase(createUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.users.push(action.payload);
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });

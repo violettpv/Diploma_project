@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../css/Menu.css';
 import {
   FaUser,
@@ -12,9 +12,17 @@ import {
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import HeaderMenu from '../components/HeaderMenu';
+import { useSelector } from 'react-redux';
 
 function Menu() {
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
 
   return (
     <>
