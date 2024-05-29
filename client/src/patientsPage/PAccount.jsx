@@ -134,7 +134,7 @@ export default function Main() {
                       name="login"
                       type="text"
                       className="form-inputs"
-                      defaultValue={patient.login}
+                      defaultValue={patient && patient.login}
                       onChange={(e) => setLogin(e.target.value)}
                     />
                   </label>

@@ -5,7 +5,6 @@ const Receipt = require('../models/receiptModel');
 const Appointment = require('../models/appointmentModel');
 const ReceiptService = require('../models/receiptServiceModel');
 const Service = require('../models/serviceModel');
-const { Op, where } = require('sequelize');
 
 // @desc    Create a new appointment
 // @route   POST /api/appointments/create
@@ -302,10 +301,7 @@ const addReceipt = asyncHandler(async (req, res) => {
     throw new Error('Invalid total');
   }
   if (sale !== 0) {
-    // check if formula is correct
     total = total - (total * sale) / 100;
-    // 2000 - (2000 * 10) / 100
-    // 2000 - 200 = 1800
   }
 
   receipt.set({

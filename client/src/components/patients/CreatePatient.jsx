@@ -28,7 +28,7 @@ export default function CreatePatient() {
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');
 
-  const validateForm = async () => {
+  const validateForm = () => {
     let surname = document.forms['create-patient']['surname'].value;
     let name = document.forms['create-patient']['name'].value;
     let patronymic = document.forms['create-patient']['patronymic'].value;
@@ -77,9 +77,9 @@ export default function CreatePatient() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const isValid = await validateForm();
+    const isValid = validateForm();
     if (isValid) {
-      dispatch(
+      await dispatch(
         createPatient({
           surname,
           name,
@@ -182,7 +182,7 @@ export default function CreatePatient() {
                       name="birthdate"
                       type="text"
                       className="card-inputs"
-                      placeholder="Формат: рррр.мм.дд"
+                      placeholder="Необов'язково. Формат: рррр.мм.дд"
                       value={birthdate}
                       onChange={(e) => setBirthdate(e.target.value)}
                     />
@@ -220,7 +220,7 @@ export default function CreatePatient() {
                 <Button
                   form="create-patient"
                   type="button"
-                  onClick={() => navigate('/appointments')}
+                  onClick={() => navigate('/patients')}
                   text="Скасувати"
                   color="gray"
                 />

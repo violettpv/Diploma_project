@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/Auth.css';
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { register, createClinic, reset } from '../features/user/userSlice';
 import HeaderMenu from '../components/HeaderMenu';
@@ -98,6 +96,27 @@ export default function Register() {
       dispatch(register(userData));
       dispatch(createClinic(clinicData));
     }
+  };
+
+  // check email and role main
+  const validateForm = () => {
+    if (
+      email === '' ||
+      password === '' ||
+      password2 === '' ||
+      surname === '' ||
+      name === '' ||
+      patronymic === '' ||
+      phone === '' ||
+      clinicName === '' ||
+      clinicAddress === '' ||
+      clinicPhone === '' ||
+      clinicEmail === '' ||
+      appPassword === ''
+    ) {
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -263,9 +282,6 @@ export default function Register() {
                 </div>
               </div>
               <div className="register-bottom-info">
-                <span
-                  style={{ marginBottom: '8px', display: 'hidden', color: 'red' }}
-                ></span>
                 <button type="submit" className="submit-button-reg">
                   Зареєструватись
                 </button>

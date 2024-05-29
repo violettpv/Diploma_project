@@ -296,8 +296,8 @@ module.exports = {
   getPatients,
   deletePatient,
   updatePatient,
-  findPatientByPhone,
-  findPatientByName,
+  // findPatientByPhone,
+  // findPatientByName,
   findPatient,
   getAllPatientsAppointments,
 };

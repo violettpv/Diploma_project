@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const { db } = require('../config/db');
 
 const Receipt = db.define(
@@ -22,7 +22,6 @@ const Receipt = db.define(
       allowNull: false,
       defaultValue: false,
     },
-    // from client
     paymentType: {
       type: DataTypes.STRING,
       allowNull: true,

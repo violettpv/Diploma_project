@@ -64,7 +64,9 @@ export default function Users() {
                   <TableCell sx={{ fontWeight: 'bold' }}>Телефон</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Пошта</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Роль</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Дії</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                    Дії
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

@@ -25,7 +25,6 @@ const protectPatient = asyncHandler(async (req, res, next) => {
         phone: patient.phone,
         login: patient.login,
         token: token,
-        // password: patient.password,
       };
 
       next(); // call next func in the middleware
