@@ -251,19 +251,26 @@ const updateUser = asyncHandler(async (req, res) => {
     throw new Error('You are not allowed to create a new user');
   }
 
-  const { email, password, surname, name, patronymic, phone } = req.body;
+  const {
+    // email,
+    password,
+    surname,
+    name,
+    patronymic,
+    // phone
+  } = req.body;
 
   // Hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
   user.set({
-    email,
+    // email,
     password: hashedPassword,
     surname,
     name,
     patronymic,
-    phone,
+    // phone,
   });
   await user.save();
 

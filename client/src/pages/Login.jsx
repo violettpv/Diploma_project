@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, reset } from '../features/user/userSlice';
 import HeaderMenu from '../components/HeaderMenu';
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -14,7 +15,17 @@ export default function Login() {
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
+      // console.log(message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     if (isSuccess || user) {

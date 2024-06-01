@@ -32,6 +32,7 @@ export default function Accounts() {
     dispatch(reset());
     navigate('/login');
   };
+
   return (
     <>
       <div className="Accounts">

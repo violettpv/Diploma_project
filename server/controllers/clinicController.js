@@ -93,27 +93,21 @@ const updateClinic = asyncHandler(async (req, res) => {
     throw new Error('You are not allowed to create a new user');
   }
 
+  const { name, address, phone, phone2, email, website, appPassword } = req.body;
+
+  clinic.set({
+    name: name || clinic.name,
+    address: address || clinic.address,
+    phone: phone || clinic.phone,
+    phone2: phone2 || clinic.phone2,
+    email: email || clinic.email,
+    appPassword: appPassword || clinic.appPassword,
+    website: website || clinic.website,
+  });
+  await clinic.save();
+
   if (clinic) {
-    clinic.name = req.body.name || clinic.name;
-    clinic.address = req.body.address || clinic.address;
-    clinic.phone = req.body.phone || clinic.phone;
-    clinic.phone2 = req.body.phone2 || clinic.phone2;
-    clinic.email = req.body.email || clinic.email;
-    clinic.appPassword = req.body.appPassword || clinic.appPassword;
-    clinic.website = req.body.website || clinic.website;
-
-    await clinic.save();
-
-    res.status(200).json({
-      uuid: clinic.uuid,
-      name: clinic.name,
-      address: clinic.address,
-      phone: clinic.phone,
-      phone2: clinic.phone2,
-      email: clinic.email,
-      appPassword: clinic.appPassword,
-      website: clinic.website,
-    });
+    res.status(200).json(clinic);
   } else {
     res.status(404);
     throw new Error('Clinic not found');

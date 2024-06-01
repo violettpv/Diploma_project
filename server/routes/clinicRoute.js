@@ -9,7 +9,7 @@ const {
 const { protect } = require('../middleware/authHandler');
 
 router.post('/create', protect, createClinic);
-router.get('/get', protect, getClinic);
+router.get('/get', getClinic);
 router.delete('/delete/:uuid', protect, deleteClinic); // dev only
 router.put('/update', protect, updateClinic);
 

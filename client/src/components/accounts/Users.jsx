@@ -1,12 +1,11 @@
 import React from 'react';
 import { useEffect } from 'react';
-import Header from '../../components/Header';
-import Navigator from '../../components/Navigator';
 import '../../css/Accounts.css';
 import '../../index.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaRegTrashAlt, FaEdit } from 'react-icons/fa';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import {
   Table,
   TableBody,
@@ -23,15 +22,39 @@ export default function Users() {
   const { user, users, isError, isSuccess, message } = useSelector((state) => state.user);
 
   useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, []);
+
+  useEffect(() => {
     if (isError) {
-      console.log(message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1100,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     if (!user || user.role !== 'main') {
       navigate('/');
-      alert('У вас немає доступу до цієї сторінки');
+      toast.warn('У вас немає доступу до цієї сторінки', {
+        position: 'top-right',
+        autoClose: 1100,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     } else {
-      dispatch(getUsers(user.token));
+      dispatch(getUsers());
     }
 
     return () => {
@@ -72,34 +95,41 @@ export default function Users() {
               <TableBody>
                 {users &&
                   users.length > 0 &&
-                  users.map((oneUser) => (
-                    <TableRow key={oneUser.uuid}>
-                      <TableCell>
-                        {oneUser.surname} {oneUser.name} {oneUser.patronymic}
-                      </TableCell>
-                      <TableCell>{oneUser.phone}</TableCell>
-                      <TableCell>{oneUser.email}</TableCell>
-                      <TableCell>
-                        {oneUser.roles[0].role
-                          ? oneUser.roles[0].role === 'doctor'
-                            ? 'Лікар'
-                            : 'Адміністратор'
-                          : '-'}
-                      </TableCell>
-                      <TableCell align="center">
-                        {/* <FaEdit
+                  users
+                    .filter((oneUser) => oneUser.roles.length > 0)
+                    .filter(
+                      (oneUser) =>
+                        oneUser.roles[0].role === 'doctor' ||
+                        oneUser.roles[0].role === 'administrator'
+                    )
+                    .map((oneUser) => (
+                      <TableRow key={oneUser.uuid}>
+                        <TableCell>
+                          {oneUser.surname} {oneUser.name} {oneUser.patronymic}
+                        </TableCell>
+                        <TableCell>{oneUser.phone}</TableCell>
+                        <TableCell>{oneUser.email}</TableCell>
+                        <TableCell>
+                          {oneUser.roles[0].role
+                            ? oneUser.roles[0].role === 'doctor'
+                              ? 'Лікар'
+                              : 'Адміністратор'
+                            : '-'}
+                        </TableCell>
+                        <TableCell align="center">
+                          {/* <FaEdit
                           cursor={'pointer'}
                           className="icon"
                           onClick={(e) => handleUpdateAppointment(e, appointment.uuid)}
                         /> */}
-                        <FaRegTrashAlt
-                          cursor={'pointer'}
-                          className="icon"
-                          onClick={(e) => handleDeleteUser(e, oneUser.uuid)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                          <FaRegTrashAlt
+                            cursor={'pointer'}
+                            className="icon"
+                            onClick={(e) => handleDeleteUser(e, oneUser.uuid)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
               </TableBody>
             </Table>
           </TableContainer>

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { register, createClinic, reset } from '../features/user/userSlice';
 import HeaderMenu from '../components/HeaderMenu';
+import { toast } from 'react-toastify';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -45,7 +46,17 @@ export default function Register() {
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
+      // console.log(message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     if (isSuccess || user) {
@@ -98,25 +109,8 @@ export default function Register() {
     }
   };
 
-  // check email and role main
   const validateForm = () => {
-    if (
-      email === '' ||
-      password === '' ||
-      password2 === '' ||
-      surname === '' ||
-      name === '' ||
-      patronymic === '' ||
-      phone === '' ||
-      clinicName === '' ||
-      clinicAddress === '' ||
-      clinicPhone === '' ||
-      clinicEmail === '' ||
-      appPassword === ''
-    ) {
-      return false;
-    }
-    return true;
+    // check email and role main already exists
   };
 
   return (

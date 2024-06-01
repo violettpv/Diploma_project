@@ -100,8 +100,7 @@ export const updateClinic = createAsyncThunk(
 
 export const getClinic = createAsyncThunk('user/getClinic', async (_, thunkAPI) => {
   try {
-    const token = thunkAPI.getState().user.user.token;
-    return await userService.getClinic(token);
+    return await userService.getClinic();
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||

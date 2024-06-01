@@ -24,6 +24,7 @@
   border: 1.5px solid lightslategray;
   border-radius: 5px;
   background-color: white;
+  box-shadow: 0 0 10px 5px rgba(11, 118, 185, 0.2);
 }
 .form-info {
   display: flex;
@@ -37,6 +38,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.login-intro p {
+  margin: 5px 0;
 }
 .form-inputs {
   width: 250px;
@@ -78,6 +82,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .register-intro {
   font-size: 20px;
   display: flex;
@@ -85,20 +90,12 @@
   align-items: center;
   margin-bottom: 10px;
 }
-.forms-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: start;
-  width: 100%;
+
+.register-intro p {
+  margin: 4px 0;
 }
-.register-page-forms {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
+
+.forms-container,
 .forms-row {
   display: flex;
   flex-direction: row;
@@ -106,6 +103,15 @@
   align-items: start;
   width: 100%;
 }
+
+.register-page-forms {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .register-form,
 .clinic-form {
   padding: 15px;
@@ -118,7 +124,9 @@
   border: 1.5px solid lightslategray;
   border-radius: 5px;
   background-color: white;
+  box-shadow: 0 0 10px 5px rgba(11, 118, 185, 0.2);
 }
+
 .register-inputs,
 .clinic-inputs {
   display: flex;
@@ -126,6 +134,7 @@
   justify-content: center;
   align-items: flex-end;
 }
+
 .register-inputs .form-inputs,
 .clinic-inputs .form-inputs {
   width: 250px;
@@ -134,6 +143,7 @@
   border-radius: 5px;
   margin: 10px 0;
 }
+
 .register-bottom-info {
   display: flex;
   flex-direction: column;
@@ -173,6 +183,7 @@
 .tooltip-app-password:hover .tooltiptext {
   visibility: visible;
 }
+
 .submit-button-reg {
   width: 140px;
   padding: 10px;

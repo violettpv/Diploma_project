@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Menu from './pages/Menu';
 // Account
 import Login from './pages/Login';
@@ -44,13 +46,26 @@ function App() {
     <>
       <Router>
         <div className="App">
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            limit={5}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
           <Routes>
             <Route path="/" element={<Menu />} />
             <Route path="/login" element={<Login />} />
             <Route path="/loginpatient" element={<PatientLogin />} />
             <Route path="/register" element={<Register />} />
             <Route path="/accounts" element={<Accounts />} />
-            <Route path="/accounts" element={<CreateUser />} />
+            <Route path="/accounts/createuser" element={<CreateUser />} />
             <Route path="/services" element={<Services />} />
             <Route path="/services/update/:uuid" element={<EditService />} />
             <Route path="/services/create/" element={<AddService />} />

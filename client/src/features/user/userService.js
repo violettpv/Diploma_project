@@ -27,17 +27,17 @@ const createClinic = async (clinicData) => {
   return response.data;
 };
 
-const updateClinic = async (clinicData) => {
-  const response = await axios.put(API_URL_CLINIC + 'update', clinicData);
-  return response.data;
-};
-
-const getClinic = async (token) => {
+const updateClinic = async (clinicData, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
+  const response = await axios.put(API_URL_CLINIC + 'update', clinicData, config);
+  return response.data;
+};
+
+const getClinic = async () => {
   const response = await axios.get(API_URL_CLINIC + 'get');
   return response.data;
 };
