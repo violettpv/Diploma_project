@@ -4,7 +4,7 @@ import '../../css/Accounts.css';
 import '../../index.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaRegTrashAlt, FaEdit } from 'react-icons/fa';
+import { FaRegTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import {
   Table,
@@ -75,11 +75,6 @@ export default function Users() {
     dispatch(getUsers());
   };
 
-  const handleUpdateUser = (e, uuid) => {
-    e.preventDefault();
-    navigate(`/accounts/updateuser/${uuid}`);
-  };
-
   return (
     <>
       <div className="Users">
@@ -122,11 +117,6 @@ export default function Users() {
                             : '-'}
                         </TableCell>
                         <TableCell align="center">
-                          <FaEdit
-                            cursor={'pointer'}
-                            className="icon"
-                            onClick={(e) => handleUpdateUser(e, oneUser.uuid)}
-                          />
                           <FaRegTrashAlt
                             cursor={'pointer'}
                             className="icon"

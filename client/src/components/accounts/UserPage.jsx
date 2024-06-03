@@ -145,6 +145,10 @@ export default function UserPage() {
     return true;
   };
 
+  // const userForm = document.getElementById('user-page');
+  // const buttonsEditDelete = document.getElementsByClassName('clinic-buttons');
+  // const buttonsSaveCancel = document.getElementsByClassName('clinic-buttons-2');
+
   return (
     <>
       <div className="UserPage">
@@ -152,7 +156,7 @@ export default function UserPage() {
           <form id="user-page" name="user-page">
             <div className="user-row">
               <label>
-                <span>Прізивище:</span>
+                <span>Прізвище:</span>
                 <input
                   name="surname"
                   type="text"

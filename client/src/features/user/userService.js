@@ -91,17 +91,6 @@ const updateUser = async (uuid, userData, token) => {
   return response.data;
 };
 
-const getUser = async (uuid, token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  // console.log('Service: ', uuid, token);
-  const response = await axios.get(API_URL + 'get/' + uuid, config);
-  return response.data;
-};
-
 const userService = {
   login,
   register,
@@ -114,7 +103,6 @@ const userService = {
   updateClinic,
   getClinic,
   updateUser,
-  getUser,
 };
 
 export default userService;

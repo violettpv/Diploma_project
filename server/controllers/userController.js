@@ -234,7 +234,9 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/:uuid
 // @access  Private
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findByPk(req.params.uuid);
+  const user = await User.findByPk(req.params.uuid, {
+    include: { model: Role, through: { attributes: [] } },
+  });
   if (!user) {
     return res.status(400).json('User not found');
   }
@@ -285,7 +287,7 @@ const updateUser = asyncHandler(async (req, res) => {
       phone: user.phone,
       // roles: req.user.roles, (from authHandler.js)
       // User's role
-      // roles: usersRole.roles.map((obj) => obj.role),
+      role: user.roles[0].role,
       token: generateToken(req.user.uuid),
     });
   } else {
@@ -306,7 +308,7 @@ const getUsers = asyncHandler(async (req, res) => {
 
 // @desc   Get user by id
 // @route  GET /api/users/get/:uuid
-// @access Private
+// @access Private (dev)
 const getUser = asyncHandler(async (req, res) => {
   const user = await User.findByPk(req.params.uuid, {
     include: { model: Role, attributes: ['role'], through: { attributes: [] } },
@@ -349,5 +351,4 @@ module.exports = {
   getUsers,
   deleteUser,
   updateUser,
-  getUser,
 };
