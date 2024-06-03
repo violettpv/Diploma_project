@@ -9,10 +9,9 @@ import { createAppointment } from '../../features/appointments/appointmentSlice'
 import Button from '../Button';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { toast } from 'react-toastify';
 import {
-  getPatient,
   getPatients,
-  findPatient,
   reset as resetPatients,
 } from '../../features/patients/patientsSlice';
 import { getUsers, reset as resetUsers } from '../../features/user/userSlice';
@@ -48,10 +47,28 @@ export default function CreateAppointment() {
 
   useEffect(() => {
     if (isErrorPatients) {
-      console.error('Error:', messagePatients);
+      toast.error(messagePatients, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
     if (isErrorUsers) {
-      console.error('Error:', messageUsers);
+      toast.error(messageUsers, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getPatients());
@@ -106,7 +123,16 @@ export default function CreateAppointment() {
           note: noteData,
         })
       );
-      alert('Запис створено');
+      toast.success('Запис створено', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       navigate('/appointments');
     }
   };
@@ -120,13 +146,32 @@ export default function CreateAppointment() {
       !selectedStartTime ||
       !selectedEndTime
     ) {
-      alert(
-        'Заповніть необхідні поля: пацієнт, лікар, дата, час початку, час завершення, № кабінету.'
+      toast.error(
+        'Заповніть необхідні поля: пацієнт, лікар, дата, час початку, час завершення, № кабінету.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
       );
       return false;
     }
     if (selectedStartTime >= selectedEndTime) {
-      alert('Час початку повинен бути меншим за час завершення');
+      toast.error('Час початку повинен бути меншим за час завершення', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     return true;
@@ -289,11 +334,7 @@ const patientSelectStylesDisabled = {
     boxShadow: 'none',
     padding: 0,
   },
-  '& .MuiOutlinedInput-notchedOutline': {
-    // border: 'none',
-  },
   '& .MuiAutocomplete-endAdornment': {
-    // display: 'none',
     right: 0,
   },
   '& .MuiInputLabel-root': {

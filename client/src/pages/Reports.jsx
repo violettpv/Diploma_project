@@ -151,7 +151,7 @@ export default function Reports() {
                           </TableRow>
                         ))}
                     </TableBody>
-                    <TableFooter>
+                    <TableFooter sx={footerSticky}>
                       <TableRow>
                         <TableCell sx={footerStyles}>
                           Сума оплат карткою: {appointments.totalSumCard} грн.
@@ -175,6 +175,11 @@ export default function Reports() {
   );
 }
 
+const footerSticky = {
+  position: 'sticky',
+  bottom: 0,
+  backgroundColor: 'white',
+};
 const footerStyles = {
   color: 'black',
   fontSize: '14px',

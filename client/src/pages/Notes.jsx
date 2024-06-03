@@ -3,19 +3,11 @@ import '../css/Notes.css';
 import '../index.css';
 import Header from '../components/Header';
 import Navigator from '../components/Navigator';
+import Note from '../components/notes/Note';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getAllNotes, reset } from '../features/notes/noteSlice';
-import { resetPage, savePage } from '../features/other/otherSlice';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TablePagination,
-  Paper,
-} from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 
 export default function Notes() {
   const dispatch = useDispatch();
@@ -29,7 +21,9 @@ export default function Notes() {
   }, []);
 
   const { notes, isError, message } = useSelector((state) => state.notes);
-  const { page } = useSelector((state) => state.other);
+
+  const [page, setPage] = useState(1);
+  const notesPerPage = 12;
 
   useEffect(() => {
     if (isError) {
@@ -43,23 +37,16 @@ export default function Notes() {
     };
   }, [dispatch, isError, message]);
 
-  const rowsPerPage = 8;
-  const handleChangePage = (event, newPage) => {
-    // setPage(newPage);
-    dispatch(savePage(newPage));
-  };
-
   const handleCreateNote = (e) => {
     e.preventDefault();
     navigate('/notes/create');
   };
 
-  const truncateContent = (content, maxLength) => {
-    if (content.length > maxLength) {
-      return content.substring(0, maxLength) + '...';
-    }
-    return content;
+  const handleChangePage = (event, value) => {
+    setPage(value);
   };
+
+  const displayedNotes = notes.slice((page - 1) * notesPerPage, page * notesPerPage);
 
   return (
     <>
@@ -81,44 +68,16 @@ export default function Notes() {
                 </button>
               </div>
               <div className="notes-list">
-                <Paper>
-                  <TableContainer sx={{ height: '68vh', width: '1000px' }}>
-                    <Table>
-                      <TableBody>
-                        {notes
-                          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                          .map((note) => (
-                            <TableRow key={note.uuid}>
-                              <TableCell
-                                sx={{ cursor: 'pointer', fontWeight: 'bold' }}
-                                onClick={() => navigate(`/notes/get/${note.uuid}`)}
-                              >
-                                {note.title}
-                              </TableCell>
-                              <TableCell sx={{ width: '50%' }}>
-                                {truncateContent(note.content, 80)}
-                              </TableCell>
-                              <TableCell>
-                                {new Date(note.createdAt).toLocaleDateString()}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                  <TablePagination
-                    rowsPerPageOptions={[]}
-                    component="div"
-                    count={notes.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    labelDisplayedRows={({ from, to, count }) =>
-                      `${from}-${to} з ${count}`
-                    }
-                  />
-                </Paper>
+                {displayedNotes.map((note) => (
+                  <Note key={note.uuid} note={note} />
+                ))}
               </div>
+              <Pagination
+                count={Math.ceil(notes.length / notesPerPage)}
+                page={page}
+                onChange={handleChangePage}
+                sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
+              />
             </div>
           </div>
         </div>

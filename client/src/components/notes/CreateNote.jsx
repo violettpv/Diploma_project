@@ -7,6 +7,7 @@ import '../../index.css';
 import Button from '../Button';
 import Header from '../Header';
 import Navigator from '../Navigator';
+import { toast } from 'react-toastify';
 
 export default function CreateNote() {
   const navigate = useNavigate();
@@ -48,11 +49,30 @@ export default function CreateNote() {
         content: content,
       };
       await dispatch(createNote(data));
-      alert('Нотаток створено');
+      toast.success('Нотаток створено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       navigate('/notes');
     } else {
-      alert(
-        'Помилка при оновленні даних нотатки. Перевірте правильність введених даних.'
+      toast.error(
+        'Помилка при оновленні даних нотатки. Перевірте правильність введених даних.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
       );
     }
   };
@@ -64,10 +84,10 @@ export default function CreateNote() {
         <div className="notes-content">
           <Header />
           <div className="notes-body">
-            <div className="note-info-main">
-              <div className="note-fullname">Нотаток</div>
+            <div className="create-note-main">
+              <div className="note-fullname">Створити нотаток</div>
               <hr className="custom-hr" />
-              <form id="note-info" className="note-data">
+              <form id="create-note" name="create-note">
                 <div className="note-data-row">
                   <label>
                     <span>Назва:</span>
@@ -94,14 +114,14 @@ export default function CreateNote() {
               <div className="note-info-buttons-both">
                 <div className="note-info-buttons">
                   <Button
-                    form="note-info"
+                    form="create-note"
                     type="button"
                     onClick={(e) => onSubmitCreate(e)}
                     text="Зберегти"
                     color="var(--piction-blue)"
                   />
                   <Button
-                    form="note-info"
+                    form="create-note"
                     type="button"
                     onClick={(e) => handleCancel(e)}
                     text="Скасувати"

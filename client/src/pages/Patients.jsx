@@ -41,15 +41,11 @@ export default function Patients() {
 
     return () => {
       dispatch(reset());
-      // dispatch(resetPage());
     };
   }, [navigate, isError, message, dispatch]);
 
-  // const [page, setPage] = useState(0);
   const rowsPerPage = 8;
-
   const handleChangePage = (event, newPage) => {
-    // setPage(newPage);
     dispatch(savePage(newPage));
   };
 

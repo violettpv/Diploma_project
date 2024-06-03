@@ -8,6 +8,7 @@ import Header from '../Header';
 import Button from '../Button';
 import { Autocomplete, TextField } from '@mui/material';
 import { createDispensary } from '../../features/dispensary/dispensarySlice';
+import { toast } from 'react-toastify';
 import {
   getPatients,
   reset as resetPatients,
@@ -45,10 +46,28 @@ export default function CreateDispensaryRecord() {
 
   useEffect(() => {
     if (isErrorPatients) {
-      console.error('Error:', messagePatients);
+      toast.error(messagePatients, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
     if (isErrorUsers) {
-      console.error('Error:', messageUsers);
+      toast.error(messageUsers, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getPatients());
@@ -79,7 +98,16 @@ export default function CreateDispensaryRecord() {
           notes: notesData,
         })
       );
-      alert('Запис в диспансерному обліку створено');
+      toast.success('Запис в диспансерному обліку створено', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       navigate('/dispensary');
     }
   };
@@ -93,13 +121,32 @@ export default function CreateDispensaryRecord() {
       !timeData ||
       !treatmentData
     ) {
-      alert(
-        'Заповніть необхідні поля: пацієнт, лікар, дата, потрібний час, лікування/процедури.'
+      toast.error(
+        'Заповніть необхідні поля: пацієнт, лікар, дата, потрібний час, лікування/процедури.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
       );
       return false;
     }
     if (!timeData.match(/^\d{1,2}:\d{2}$/)) {
-      alert('Час візиту введено невірно. Введіть у форматі години:хвилини');
+      toast.error('Час візиту введено невірно. Введіть у форматі години:хвилини', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     return true;
@@ -240,11 +287,7 @@ const patientSelectStylesDisabled = {
     boxShadow: 'none',
     padding: 0,
   },
-  '& .MuiOutlinedInput-notchedOutline': {
-    // border: 'none',
-  },
   '& .MuiAutocomplete-endAdornment': {
-    // display: 'none',
     right: 0,
   },
   '& .MuiInputLabel-root': {

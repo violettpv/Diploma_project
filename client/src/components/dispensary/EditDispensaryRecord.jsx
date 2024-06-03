@@ -12,6 +12,7 @@ import {
   reset,
 } from '../../features/dispensary/dispensarySlice';
 import { getUsers, reset as resetUsers } from '../../features/user/userSlice';
+import { toast } from 'react-toastify';
 
 export default function EditDispensaryRecord() {
   const params = useParams();
@@ -41,9 +42,28 @@ export default function EditDispensaryRecord() {
   useEffect(() => {
     if (isError) {
       console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
     if (isErrorUsers) {
-      console.error('Error:', messageUsers);
+      toast.error(messageUsers, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getUsers());
@@ -82,18 +102,48 @@ export default function EditDispensaryRecord() {
           notes: notesData,
         })
       );
-      alert('Запис в диспансерному обліку створено');
+      toast.success('Запис в диспансерному обліку оновлено', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       navigate('/dispensary');
     }
   };
 
   const validateForm = () => {
     if (!selectedUser || !selectedDate || !timeData || !treatmentData) {
-      alert('Заповніть необхідні поля: лікар, дата, потрібний час, лікування/процедури.');
+      toast.error(
+        'Заповніть необхідні поля: лікар, дата, потрібний час, лікування/процедури.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
       return false;
     }
     if (!timeData.match(/^\d{1,2}:\d{2}$/)) {
-      alert('Час візиту введено невірно. Введіть у форматі години:хвилини');
+      toast.error('Час візиту введено невірно. Введіть у форматі години:хвилини', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     return true;

@@ -83,7 +83,6 @@ const updateUser = async (uuid, userData, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  console.log('Service: ', uuid, userData, token);
   const response = await axios.put(API_URL + 'update/' + uuid, userData, config);
   if (response.data) {
     localStorage.setItem('user', JSON.stringify(response.data));

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -24,6 +24,10 @@ export default function UserPage() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const userFormRef = useRef(null);
+  const buttonsEditDeleteRef = useRef(null);
+  const buttonsSaveCancelRef = useRef(null);
 
   useEffect(() => {
     if (isError) {
@@ -59,7 +63,6 @@ export default function UserPage() {
         patronymic: patronymic || user.patronymic,
         password: password || user.password,
       };
-      console.log('dispatch: ', data);
       dispatch(updateUser(data));
       toast.success('Дані акаунту оновлено', {
         position: 'top-right',
@@ -86,49 +89,27 @@ export default function UserPage() {
     }
   };
 
-  const userForm = document.getElementById('user-page');
-  const buttonsEditDelete = document.getElementsByClassName('clinic-buttons');
-  const buttonsSaveCancel = document.getElementsByClassName('clinic-buttons-2');
-
   const enableEditForm = () => {
-    if (user.role === 'administrator' || user.role === 'doctor') {
-      toast.warn(
-        'У вас немає доступу до редагування Ваших даних. Зверніться до головного адміністратора.',
-        {
-          position: 'top-right',
-          autoClose: 1100,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        }
-      );
-      return;
-    }
-
-    userForm.querySelectorAll('.card-inputs').forEach((input) => {
+    userFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.removeAttribute('disabled');
     });
-
-    buttonsEditDelete[0].classList.add('disabled');
-    buttonsSaveCancel[0].classList.remove('disabled');
+    buttonsEditDeleteRef.current.classList.add('disabled');
+    buttonsSaveCancelRef.current.classList.remove('disabled');
   };
 
   const cancelEditForm = () => {
-    userForm.querySelectorAll('.card-inputs').forEach((input) => {
+    userFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.setAttribute('disabled', '');
     });
-    buttonsEditDelete[0].classList.remove('disabled');
-    buttonsSaveCancel[0].classList.add('disabled');
+    buttonsEditDeleteRef.current.classList.remove('disabled');
+    buttonsSaveCancelRef.current.classList.add('disabled');
   };
 
   const validateForm = async () => {
-    let surname = userForm['surname'].value;
-    let name = userForm['name'].value;
-    let patronymic = userForm['patronymic'].value;
-    let password = userForm['password'].value;
+    let surname = userFormRef.current['surname'].value;
+    let name = userFormRef.current['name'].value;
+    let patronymic = userFormRef.current['patronymic'].value;
+    let password = userFormRef.current['password'].value;
     if (name === '' || surname === '' || patronymic === '' || password === '') {
       toast.error("Заповніть обов'язкові поля: назва, телефон, адреса, пароль додатку", {
         position: 'top-right',
@@ -145,15 +126,11 @@ export default function UserPage() {
     return true;
   };
 
-  // const userForm = document.getElementById('user-page');
-  // const buttonsEditDelete = document.getElementsByClassName('clinic-buttons');
-  // const buttonsSaveCancel = document.getElementsByClassName('clinic-buttons-2');
-
   return (
     <>
       <div className="UserPage">
         {user && (
-          <form id="user-page" name="user-page">
+          <form id="user-page" name="user-page" ref={userFormRef}>
             <div className="user-row">
               <label>
                 <span>Прізвище:</span>
@@ -227,33 +204,35 @@ export default function UserPage() {
             </div>
           </form>
         )}
-        <div className="clinic-buttons-both">
-          <div className="clinic-buttons">
-            <Button
-              form="user-page"
-              type="button"
-              onClick={enableEditForm}
-              text="Редагувати"
-              color="var(--piction-blue)"
-            />
+        {user && user.role && user.role === 'main' && (
+          <div className="clinic-buttons-both">
+            <div className="clinic-buttons" ref={buttonsEditDeleteRef}>
+              <Button
+                form="user-page"
+                type="button"
+                onClick={enableEditForm}
+                text="Редагувати"
+                color="var(--piction-blue)"
+              />
+            </div>
+            <div className="clinic-buttons-2 disabled" ref={buttonsSaveCancelRef}>
+              <Button
+                form="user-page"
+                type="button"
+                onClick={(e) => onSubmitUpdate(e)}
+                text="Зберегти"
+                color="var(--piction-blue)"
+              />
+              <Button
+                form="user-page"
+                type="button"
+                onClick={cancelEditForm}
+                text="Скасувати"
+                color="gray"
+              />
+            </div>
           </div>
-          <div className="clinic-buttons-2 disabled">
-            <Button
-              form="user-page"
-              type="button"
-              onClick={(e) => onSubmitUpdate(e)}
-              text="Зберегти"
-              color="var(--piction-blue)"
-            />
-            <Button
-              form="user-page"
-              type="button"
-              onClick={cancelEditForm}
-              text="Скасувати"
-              color="gray"
-            />
-          </div>
-        </div>
+        )}
       </div>
     </>
   );

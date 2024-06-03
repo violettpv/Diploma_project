@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getNote, updateNote, deleteNote, reset } from '../../features/notes/noteSlice';
@@ -8,6 +8,7 @@ import '../../index.css';
 import Button from '../Button';
 import Header from '../Header';
 import Navigator from '../Navigator';
+import { toast } from 'react-toastify';
 
 export default function NoteCard() {
   const navigate = useNavigate();
@@ -27,9 +28,22 @@ export default function NoteCard() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
+  const noteFormRef = useRef(null);
+  const buttonsEditDeleteRef = useRef(null);
+  const buttonsSaveCancelRef = useRef(null);
+
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getNote(noteUuid));
@@ -47,6 +61,16 @@ export default function NoteCard() {
     if (window.confirm('Ви впевнені, що хочете видалити цей нотаток?')) {
       await dispatch(deleteNote(noteUuid));
       alert('Нотаток видалено');
+      toast.success('Нотаток видалено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       dispatch(savePage(page));
       navigate('/notes');
     }
@@ -54,59 +78,99 @@ export default function NoteCard() {
 
   const onSubmitUpdate = async (e) => {
     e.preventDefault();
-    // const isValid =  validateForm();
-    if (true) {
+    const isValid = validateForm();
+    if (isValid) {
       const data = {
         uuid: noteUuid,
         title: title || oneNote.title,
         content: content || oneNote.content,
       };
       await dispatch(updateNote(data));
-      alert('Дані нотатку оновлено');
+      toast.success('Дані нотатку оновлено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       cancelEditForm();
       await dispatch(getNote(noteUuid));
     } else {
-      alert(
-        'Помилка при оновленні даних нотатки. Перевірте правильність введених даних.'
+      toast.error(
+        'Помилка при оновленні даних нотатки. Перевірте правильність введених даних.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
       );
     }
   };
 
-  const noteForm = document.getElementById('note-info');
-  const buttonsEditDelete = document.getElementsByClassName('note-info-buttons');
-  const buttonsSaveCancel = document.getElementsByClassName('note-info-buttons-2');
-
   const enableEditForm = () => {
-    noteForm.querySelectorAll('.card-inputs').forEach((input) => {
+    noteFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.removeAttribute('disabled');
     });
-    noteForm.querySelectorAll('.card-inputs').forEach((textarea) => {
+    noteFormRef.current.querySelectorAll('.card-inputs').forEach((textarea) => {
       textarea.removeAttribute('disabled');
     });
-    buttonsEditDelete[0].classList.add('disabled');
-    buttonsSaveCancel[0].classList.remove('disabled');
+    buttonsEditDeleteRef.current.classList.add('disabled');
+    buttonsSaveCancelRef.current.classList.remove('disabled');
   };
 
   const cancelEditForm = () => {
-    noteForm.querySelectorAll('.card-inputs').forEach((input) => {
+    noteFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.setAttribute('disabled', '');
     });
-    noteForm.querySelectorAll('.card-inputs').forEach((textarea) => {
+    noteFormRef.current.querySelectorAll('.card-inputs').forEach((textarea) => {
       textarea.removeAttribute('disabled');
     });
-    buttonsEditDelete[0].classList.remove('disabled');
-    buttonsSaveCancel[0].classList.add('disabled');
+    buttonsEditDeleteRef.current.classList.remove('disabled');
+    buttonsSaveCancelRef.current.classList.add('disabled');
   };
 
-  // const validateForm = async () => {
-  //   if (title === '' || content === '') {
-  //     return false;
-  //   }
-  //   if (title.length > 3 || content.length > 3) {
-  //     return false;
-  //   }
-  //   return true;
-  // };
+  const validateForm = () => {
+    let title = noteFormRef.current['title'].value;
+    let content = noteFormRef.current['content'].value;
+    if (title === '' || content === '') {
+      toast.error(
+        'Помилка при оновленні даних нотатки. Перевірте правильність введених даних.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
+      return false;
+    }
+    if (title.length <= 3 || content.length <= 3) {
+      toast.error('Помилка при оновленні даних нотатки. Закороткий вміст.', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      return false;
+    }
+    return true;
+  };
 
   return (
     <>
@@ -116,9 +180,11 @@ export default function NoteCard() {
           <Header />
           <div className="notes-body">
             <div className="note-info-main">
-              <div className="note-fullname">Нотаток</div>
-              <hr className="custom-hr" />
-              <form id="note-info" className="note-data">
+              <div className="note-info-header">
+                <div className="note-fullname">Нотаток</div>
+                <hr className="custom-hr" />
+              </div>
+              <form id="note-info" name="note-info" ref={noteFormRef}>
                 <div className="note-data-row">
                   <label>
                     <span>Назва:</span>
@@ -158,7 +224,7 @@ export default function NoteCard() {
                 </div>
               </form>
               <div className="note-info-buttons-both">
-                <div className="note-info-buttons">
+                <div className="note-info-buttons" ref={buttonsEditDeleteRef}>
                   <Button
                     form="note-info"
                     type="button"
@@ -173,8 +239,15 @@ export default function NoteCard() {
                     text="Видалити"
                     color="var(--delete-button-color)"
                   />
+                  <Button
+                    form="note-info"
+                    type="button"
+                    onClick={() => navigate('/notes')}
+                    text="Назад"
+                    color="gray"
+                  />
                 </div>
-                <div className="note-info-buttons-2 disabled">
+                <div className="note-info-buttons-2 disabled" ref={buttonsSaveCancelRef}>
                   <Button
                     form="note-info"
                     type="button"

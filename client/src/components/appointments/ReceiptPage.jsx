@@ -6,6 +6,7 @@ import Navigator from '../../components/Navigator';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../Button';
+import { toast } from 'react-toastify';
 import {
   getReceipt,
   deleteReceipt,
@@ -36,7 +37,16 @@ export default function ReceiptPage() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getReceipt(receiptUuid));
@@ -64,7 +74,16 @@ export default function ReceiptPage() {
   const handleDelete = () => {
     if (window.confirm('Ви впевнені, що хочете видалити цей рахунок?')) {
       dispatch(deleteReceipt(receiptUuid));
-      alert('Рахунок видалено');
+      toast.success('Рахунок видалено', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       navigate('/appointments');
     }
   };
@@ -78,7 +97,16 @@ export default function ReceiptPage() {
       )
     ) {
       dispatch(payReceipt({ uuid: receiptUuid, paymentType: method }));
-      alert('Рахунок оплачено');
+      toast.success('Рахунок оплачено', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       navigate('/appointments');
     }
   };
@@ -127,20 +155,22 @@ export default function ReceiptPage() {
                     color="var(--delete-button-color)"
                     onClick={handleDelete}
                   />
-                  <Button
-                    type="button"
-                    text="Оплатити карткою"
-                    color="#d19d3d"
-                    onClick={() => handlePayment('card')}
-                    disabled={oneReceipt.isPaid}
-                  />
-                  <Button
-                    type="button"
-                    text="Оплатити готівкою"
-                    color="#3cba68"
-                    onClick={() => handlePayment('cash')}
-                    disabled={oneReceipt.isPaid}
-                  />
+                  {oneReceipt.isPaid === false && (
+                    <>
+                      <Button
+                        type="button"
+                        text="Оплатити карткою"
+                        color="#d19d3d"
+                        onClick={() => handlePayment('card')}
+                      />
+                      <Button
+                        type="button"
+                        text="Оплатити готівкою"
+                        color="#3cba68"
+                        onClick={() => handlePayment('cash')}
+                      />
+                    </>
+                  )}
                   <Button
                     type="button"
                     text="Назад"

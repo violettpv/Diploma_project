@@ -6,15 +6,12 @@ import Navigator from '../../components/Navigator';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../Button';
+import { toast } from 'react-toastify';
 import {
   getAppointment,
   updateAppointment,
   reset,
 } from '../../features/appointments/appointmentSlice';
-import {
-  getPatient,
-  reset as resetPatients,
-} from '../../features/patients/patientsSlice';
 import { getUsers, reset as resetUsers } from '../../features/user/userSlice';
 
 export default function EditAppointment() {
@@ -27,11 +24,6 @@ export default function EditAppointment() {
     isError: isErrorUsers,
     message: messageUsers,
   } = useSelector((state) => state.user);
-  const {
-    patient,
-    isError: isErrorPatient,
-    message: messagePatient,
-  } = useSelector((state) => state.patients);
   const { oneAppointment, isError, message } = useSelector((state) => state.appointments);
 
   const { user } = useSelector((state) => state.user);
@@ -58,27 +50,15 @@ export default function EditAppointment() {
     if (isErrorUsers) {
       console.error('Error:', messageUsers);
     }
-    if (isErrorPatient) {
-      console.error('Error:', messagePatient);
-    }
 
     dispatch(getUsers());
     dispatch(getAppointment(appointmentUuid));
-    // dispatch(getPatient(oneAppointment.patientUuid));
 
     return () => {
       dispatch(resetUsers());
       dispatch(reset());
     };
-  }, [
-    dispatch,
-    isError,
-    message,
-    isErrorUsers,
-    messageUsers,
-    isErrorPatient,
-    messagePatient,
-  ]);
+  }, [dispatch, isError, message, isErrorUsers, messageUsers]);
 
   useEffect(() => {
     setAppointmentData({
@@ -118,13 +98,32 @@ export default function EditAppointment() {
       endTime === '' ||
       roomNum === ''
     ) {
-      alert(
-        'Заповніть обов’язкові поля: лікар, дата візиту, час початку, час завершення, кабінет.'
+      toast.error(
+        'Заповніть обов’язкові поля: лікар, дата візиту, час початку, час завершення, кабінет.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
       );
       return false;
     }
     if (note.length > 255) {
-      alert('Примітка занадто довга. Максимальна довжина 255 символів.');
+      toast.error('Примітка занадто довга. Максимальна довжина 255 символів.', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     return true;
@@ -144,10 +143,31 @@ export default function EditAppointment() {
         note: appointmentData.note,
       };
       dispatch(updateAppointment(data));
-      alert('Запис оновлено');
+      toast.success('Запис оновлено', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       navigate('/appointments');
     } else {
-      alert('Помилка при оновленні запису. Перевірте правильність введених даних.');
+      toast.error(
+        'Помилка при оновленні запису. Перевірте правильність введених даних.',
+        {
+          position: 'top-right',
+          autoClose: 1700,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
     }
   };
 

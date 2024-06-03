@@ -6,6 +6,7 @@ import Navigator from '../../components/Navigator';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../Button';
+import { toast } from 'react-toastify';
 import {
   addReceipt,
   getAppointment,
@@ -21,8 +22,10 @@ export default function AddReceipt() {
   const appointmentUuid = params.uuid;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { oneAppointment, isError, message } = useSelector((state) => state.appointments);
   const { services } = useSelector((state) => state.services);
+
   const [serviceEntries, setServiceEntries] = useState([{ service: '', quantity: '' }]);
   const [sale, setSale] = useState('');
   const [totalPrice, setTotalPrice] = useState(0);
@@ -36,7 +39,16 @@ export default function AddReceipt() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getServices());
@@ -99,7 +111,16 @@ export default function AddReceipt() {
           uuid: appointmentUuid,
         })
       );
-      alert('Запис створено');
+      toast.success('Рахунок створено', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       navigate('/appointments');
     }
   };

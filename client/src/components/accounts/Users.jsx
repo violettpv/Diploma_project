@@ -71,7 +71,7 @@ export default function Users() {
     if (window.confirm('Ви впевнені, що хочете видалити цього користувача?')) {
       dispatch(deleteUser(uuid));
     }
-    dispatch(reset());
+    // dispatch(reset());
     dispatch(getUsers());
   };
 

@@ -241,44 +241,27 @@ const updateUser = asyncHandler(async (req, res) => {
     return res.status(400).json('User not found');
   }
 
-  // Get user's role
-  // const usersRole = await User.findOne({
-  //   where: { uuid: user.uuid },
-  //   include: { model: Role, through: { attributes: [] } },
-  // });
-
-  // Check if current user's role is 'main'
   if (!req.user.role === 'main') {
     res.status(403);
     throw new Error('You are not allowed to update a user');
   }
 
-  const {
-    // email,
-    password,
-    surname,
-    name,
-    patronymic,
-    // phone
-  } = req.body;
+  const { password, surname, name, patronymic } = req.body;
 
   // Hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
   user.set({
-    // email,
     password: hashedPassword,
     surname,
     name,
     patronymic,
-    // phone,
   });
   await user.save();
 
   if (user) {
     res.status(200).json({
-      // user data
       uuid: user.uuid,
       email: user.email,
       surname: user.surname,
@@ -286,9 +269,9 @@ const updateUser = asyncHandler(async (req, res) => {
       patronymic: user.patronymic,
       phone: user.phone,
       // roles: req.user.roles, (from authHandler.js)
-      // User's role
       role: user.roles[0].role,
       token: generateToken(req.user.uuid),
+      // token: req.user.token,
     });
   } else {
     res.status(400);

@@ -5,6 +5,7 @@ import Navigator from '../components/Navigator';
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt, FaEdit } from 'react-icons/fa';
 import { MdOutlinePayments } from 'react-icons/md';
+import { toast } from 'react-toastify';
 import {
   Table,
   TableBody,
@@ -33,9 +34,7 @@ export default function Appointments() {
     }
   }, []);
 
-  const { appointments, oneAppointment, isError, message } = useSelector(
-    (state) => state.appointments
-  );
+  const { appointments, isError, message } = useSelector((state) => state.appointments);
 
   const getToday = () => {
     const today = new Date();
@@ -49,7 +48,16 @@ export default function Appointments() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     const { day, month, year } = selectedDate;
@@ -68,7 +76,16 @@ export default function Appointments() {
     e.preventDefault();
     if (window.confirm('Ви впевнені, що хочете видалити цю запис?')) {
       dispatch(deleteAppointment(uuid));
-      alert('Запис видалено');
+      toast.success('Запис видалено', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       const { day, month, year } = selectedDate;
       dispatch(getAppointments({ date: day, month, year }));
     }
