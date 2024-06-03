@@ -53,12 +53,7 @@ const getMe = async (token) => {
 };
 
 const getUsers = async (token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const response = await axios.get(API_URL + 'getusers', config);
+  const response = await axios.get(API_URL + 'getusers');
   return response.data;
 };
 
@@ -82,6 +77,31 @@ const deleteUser = async (uuid, token) => {
   return response.data;
 };
 
+const updateUser = async (uuid, userData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  console.log('Service: ', uuid, userData, token);
+  const response = await axios.put(API_URL + 'update/' + uuid, userData, config);
+  if (response.data) {
+    localStorage.setItem('user', JSON.stringify(response.data));
+  }
+  return response.data;
+};
+
+const getUser = async (uuid, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  // console.log('Service: ', uuid, token);
+  const response = await axios.get(API_URL + 'get/' + uuid, config);
+  return response.data;
+};
+
 const userService = {
   login,
   register,
@@ -93,6 +113,8 @@ const userService = {
   deleteUser,
   updateClinic,
   getClinic,
+  updateUser,
+  getUser,
 };
 
 export default userService;

@@ -8,6 +8,7 @@ const {
   deleteUser,
   updateUser,
   getUsers,
+  getUser,
 } = require('../controllers/userController');
 const { protect } = require('../middleware/authHandler');
 
@@ -18,5 +19,6 @@ router.get('/getme', protect, getMe);
 router.delete('/delete/:uuid', protect, deleteUser);
 router.put('/update/:uuid', protect, updateUser);
 router.get('/getusers', getUsers);
+router.get('/get/:uuid', protect, getUser);
 
 module.exports = router;

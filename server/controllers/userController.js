@@ -248,7 +248,7 @@ const updateUser = asyncHandler(async (req, res) => {
   // Check if current user's role is 'main'
   if (!req.user.role === 'main') {
     res.status(403);
-    throw new Error('You are not allowed to create a new user');
+    throw new Error('You are not allowed to update a user');
   }
 
   const {
@@ -304,6 +304,28 @@ const getUsers = asyncHandler(async (req, res) => {
   res.json(users);
 });
 
+// @desc   Get user by id
+// @route  GET /api/users/get/:uuid
+// @access Private
+const getUser = asyncHandler(async (req, res) => {
+  const user = await User.findByPk(req.params.uuid, {
+    include: { model: Role, attributes: ['role'], through: { attributes: [] } },
+  });
+
+  // Check if current user's role is 'main'
+  if (!req.user.role === 'main') {
+    res.status(403);
+    throw new Error('You are not allowed to update a user');
+  }
+
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
 // @desc    Get user profile
 // @route   GET /api/users/getme
 // @access  Private
@@ -327,4 +349,5 @@ module.exports = {
   getUsers,
   deleteUser,
   updateUser,
+  getUser,
 };

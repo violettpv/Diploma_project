@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Button from '../Button';
 import '../../css/Accounts.css';
+import '../../css/Auth.css';
 import '../../index.css';
 import { getClinic, updateClinic, reset } from '../../features/user/userSlice';
 
@@ -65,7 +66,7 @@ export default function Clinic() {
         appPassword: appPassword || clinic.appPassword,
         address: address || clinic.address,
       };
-      dispatch(updateClinic(data, user.token));
+      dispatch(updateClinic(data));
       toast.success('Дані клініки оновлено', {
         position: 'top-right',
         autoClose: 1200,
@@ -77,7 +78,7 @@ export default function Clinic() {
         theme: 'light',
       });
       cancelEditForm();
-      dispatch(getClinic(user.token));
+      dispatch(getClinic());
     } else {
       toast.error(
         'Помилка при оновленні даних клініки. Перевірте правильність введених даних.',
@@ -216,7 +217,7 @@ export default function Clinic() {
             <label>
               <span>Телефон 2:</span>
               <input
-                name="phone"
+                name="phone2"
                 type="text"
                 disabled
                 className="card-inputs"
@@ -249,7 +250,15 @@ export default function Clinic() {
               />
             </label>
             <label>
-              <span>Пароль додатку:</span>
+              <span className="tooltip-app-password">
+                Пароль додатку:
+                <span className="tooltiptext">
+                  Щоб отримати пароль додатку для системи розсилок потрібно перейти за
+                  посиланням: https://myaccount.google.com/apppasswords. Вкажіть назву
+                  додатку 'nodemailer' та скопіюйте створений пароль у це поле. Пароль має
+                  бути у форматі 16 символів.
+                </span>
+              </span>
               <input
                 name="appPassword"
                 type="text"

@@ -44,10 +44,7 @@ export default function CreateAppointment() {
   const [selectedEndTime, setSelectedEndTime] = useState('');
   const [roomNum, setRoomNum] = useState('');
   const [noteData, setNoteData] = useState('');
-  // old select-option
-  // const [selectedPatient, setSelectedPatient] = useState('');
-  // Using for AutoComplete MUI component
-  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(null); // Using for AutoComplete MUI component
 
   useEffect(() => {
     if (isErrorPatients) {

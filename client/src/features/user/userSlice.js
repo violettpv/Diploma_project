@@ -6,12 +6,13 @@ const user = JSON.parse(localStorage.getItem('user'));
 const initialState = {
   user: user ? user : null,
   users: [],
+  oneUser: {},
   clinic: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: '',
-  role: '',
+  role: '', // delete later
 };
 
 export const login = createAsyncThunk('user/login', async (user, thunkAPI) => {
@@ -139,6 +140,37 @@ export const createUser = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (userData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      console.log('Slice: ', userData.uuid, userData);
+      return await userService.updateUser(userData.uuid, userData, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getUser = createAsyncThunk('user/getUser', async (uuid, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().user.user.token;
+    // console.log('Slice: ', uuid, token);
+    return await userService.getUser(uuid, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -199,7 +231,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.user = [];
+        // state.user = [];
       })
       // GET USERS
       .addCase(getUsers.pending, (state) => {
@@ -283,6 +315,37 @@ export const userSlice = createSlice({
         state.users.push(action.payload);
       })
       .addCase(createUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // UPDATE USER
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        // state.users = state.users.map((user) =>
+        //   user.uuid === action.payload.uuid ? action.payload : user
+        // );
+        // state.user = action.payload;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // GET ONE USER
+      .addCase(getUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.oneUser = action.payload;
+      })
+      .addCase(getUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

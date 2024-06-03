@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Accounts from './pages/Accounts';
 import CreateUser from './components/accounts/CreateUser';
+import UpdateUser from './components/accounts/UpdateUser';
 // Appointments
 import Appointments from './pages/Appointments';
 import CreateAppointment from './components/appointments/CreateAppointment';
@@ -66,6 +67,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/accounts" element={<Accounts />} />
             <Route path="/accounts/createuser" element={<CreateUser />} />
+            <Route path="/accounts/updateuser/:uuid" element={<UpdateUser />} />
             <Route path="/services" element={<Services />} />
             <Route path="/services/update/:uuid" element={<EditService />} />
             <Route path="/services/create/" element={<AddService />} />

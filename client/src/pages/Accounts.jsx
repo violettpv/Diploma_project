@@ -14,6 +14,7 @@ import { Tab } from '@mui/base/Tab';
 import UserPage from '../components/accounts/UserPage';
 import Clinic from '../components/accounts/Clinic';
 import Users from '../components/accounts/Users';
+import CreateUser from '../components/accounts/CreateUser';
 
 export default function Accounts() {
   const navigate = useNavigate();
@@ -49,10 +50,13 @@ export default function Accounts() {
                         Мій акаунт
                       </Tab>
                       <Tab className="tab" value={1}>
-                        Працівники
+                        Клініка
                       </Tab>
                       <Tab className="tab" value={2}>
-                        Клініка
+                        Працівники
+                      </Tab>
+                      <Tab className="tab" value={3}>
+                        Додати працівника
                       </Tab>
                     </TabsList>
                   </div>
@@ -69,10 +73,13 @@ export default function Accounts() {
                     <UserPage />
                   </TabPanel>
                   <TabPanel value={1}>
-                    <Users />
+                    <Clinic />
                   </TabPanel>
                   <TabPanel value={2}>
-                    <Clinic />
+                    <Users />
+                  </TabPanel>
+                  <TabPanel value={3}>
+                    <CreateUser />
                   </TabPanel>
                 </div>
               </Tabs>

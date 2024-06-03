@@ -48,7 +48,6 @@ export default function PPageSettings({ uuid }) {
       createButton.disabled = true;
       createButton.classList.add('disabled-ppage-button');
       createButton.style.cursor = 'not-allowed';
-      console.log(createButton);
     }
     // if (patient.login === null && patient.password === null) {
     //   // disableDeleteButton();

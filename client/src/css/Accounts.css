@@ -105,67 +105,104 @@
   width: 100%;
 }
 
-/* Users */
-.Users {
+/* Users, CreateUser */
+.Users,
+.CreateUser {
   display: flex;
   flex-direction: column;
 }
 
-/* CreateUser */
-.create-user-main {
-  padding: 10px;
-  width: 60%;
-  height: 70%;
+/* Clinic, UserPage */
+.Clinic,
+.UserPage {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  background-color: white;
-  border-radius: 10px;
-}
-.create-user-header {
+  height: 100%;
   width: 100%;
 }
+
+/* CreateUser, Clinic, UserPage */
+.create-user-main {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.create-user-header,
+.cu-form-main,
+.create-user-footer {
+  width: 100%;
+  height: 100%;
+}
+
 .create-user-header p {
-  margin-top: 4px;
+  margin-bottom: 5px;
   font-size: 20px;
   font-weight: bold;
   color: var(--charcoal);
 }
+
 .cu-form-main {
-  width: 100%;
-  height: 70%;
+  margin: 25px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-#create-user {
+#create-user,
+#clinic,
+#user-page {
   width: 80%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: space-between;
+  justify-content: space-between;
 }
-.cu-row {
+
+#clinic,
+#user-page {
+  padding: 20px 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.cu-row,
+.clinic-row,
+.user-row {
   width: 100%;
   margin: 0 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
 .cu-row div {
   display: flex;
   flex-direction: column;
   margin-bottom: 5px;
 }
-#create-user label {
+
+#create-user label,
+#clinic label,
+#user-page label {
   color: #333;
   font-weight: bold;
 }
+
+#clinic label,
+#user-page label {
+  margin-bottom: 10px;
+}
+
 #create-user input,
 #create-user select {
+  width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -173,22 +210,69 @@
   font-size: 16px;
   color: #333;
 }
+#clinic input,
+#user-page input {
+  margin-top: 2px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
 
-/* Clinic */
-.Clinic {
+.create-user-footer,
+.clinic-buttons-both {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+/* UpdateUser */
+.update-user-main {
+  padding: 10px;
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 100%;
 }
-#clinic {
-  height: 90%;
+
+.update-user-header {
   width: 100%;
+  margin-bottom: 10px;
+}
+
+.update-user-header p {
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--charcoal);
+}
+
+#update-user {
+  width: 100%;
+  height: fit-content;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
-.clinic-buttons-both {
-  height: 10%;
+#update-user .form-group-row {
+  width: 40%;
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#update-user label {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#update-user input {
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
