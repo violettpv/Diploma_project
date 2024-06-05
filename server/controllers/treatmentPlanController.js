@@ -55,7 +55,14 @@ const createTreatmentPlan = asyncHandler(async (req, res) => {
 // @route   GET /api/tplan/get/:uuid
 // @access  Private
 const getTreatmentPlan = asyncHandler(async (req, res) => {
-  const planRecord = await TreatmentPlanRecord.findByPk(req.params.uuid);
+  const planRecord = await TreatmentPlanRecord.findByPk(req.params.uuid, {
+    include: [
+      {
+        model: Patient,
+        through: { attributes: [] },
+      },
+    ],
+  });
 
   // Check if user's role is 'main' or 'doctor'
   const findUsersRole = await User.findByPk(req.user.uuid, {
@@ -73,6 +80,7 @@ const getTreatmentPlan = asyncHandler(async (req, res) => {
       date: planRecord.date,
       examination: planRecord.examination,
       treatment: planRecord.treatment,
+      patientUuid: planRecord.patients[0].uuid,
     });
   } else {
     res.status(404);
@@ -81,10 +89,9 @@ const getTreatmentPlan = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get all treatment plans
-// @route   GET /api/tplan/all/:uuid?limit=&offset=
+// @route   GET /api/tplan/all/:uuid
 // @access  Private
 const getAllPlansOfPatient = asyncHandler(async (req, res) => {
-  const { limit, offset } = req.query;
   const patient = await Patient.findByPk(req.params.uuid);
   const tPlans = await Patient.findByPk(patient.uuid, {
     attributes: ['uuid', 'surname', 'name'],
@@ -95,9 +102,6 @@ const getAllPlansOfPatient = asyncHandler(async (req, res) => {
       },
     ],
     order: [[TreatmentPlanRecord, 'date', 'DESC']],
-    limit: parseInt(limit),
-    offset: parseInt(offset),
-    subQuery: false,
   });
 
   // Check if user's role is 'main' or 'doctor'
@@ -183,7 +187,7 @@ const updateTreatmentPlan = asyncHandler(async (req, res) => {
 });
 
 // @desc    Find the treatment plan record by date
-// @route   GET /api/tplan/find?uuid=&date=&month=&year=
+// @route   GET /api/tplan/find?date=&month=&year=
 // @access  Private
 const findPlansByDate = asyncHandler(async (req, res) => {
   const { date, month, year } = req.query;

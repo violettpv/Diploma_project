@@ -8,6 +8,11 @@ const initialState = {
   diseases: [],
   form043: {},
   appointments: [],
+  treatmentPlans: [],
+  tPlan: {},
+  docsDiaryRecords: [],
+  ddRecord: {},
+  dentalFormula: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -193,7 +198,197 @@ export const updateForm043 = createAsyncThunk(
   }
 );
 
-// other functions here
+export const createTreatmentPlan = createAsyncThunk(
+  'patients/createTreatmentPlan',
+  async (planData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.createTreatmentPlan(planData, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getTreatmentPlan = createAsyncThunk(
+  'patients/getTreatmentPlan',
+  async (uuid, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.getTreatmentPlan(uuid, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getAllPlansOfPatient = createAsyncThunk(
+  'patients/getAllPlansOfPatient',
+  async (uuid, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.getAllPlansOfPatient(uuid, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteTreatmentPlan = createAsyncThunk(
+  'patients/deleteTreatmentPlan',
+  async (uuid, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.deleteTreatmentPlan(uuid, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateTreatmentPlan = createAsyncThunk(
+  'patients/updateTreatmentPlan',
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.updateTreatmentPlan(data.uuid, data, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const createDocsDiaryRecord = createAsyncThunk(
+  'patients/createDocsDiaryRecord',
+  async (recordData, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.createDocsDiaryRecord(recordData, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getDocsDiaryRecord = createAsyncThunk(
+  'patients/getDocsDiaryRecord',
+  async (uuid, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.getDocsDiaryRecord(uuid, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getAllDocsDiaryRecordsOfPatient = createAsyncThunk(
+  'patients/getAllDocsDiaryRecordsOfPatient',
+  async (uuid, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.getAllDocsDiaryRecordsOfPatient(uuid, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteDocsDiaryRecord = createAsyncThunk(
+  'patients/deleteDocsDiaryRecord',
+  async (uuid, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.deleteDocsDiaryRecord(uuid, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateDocsDiaryRecord = createAsyncThunk(
+  'patients/updateDocsDiaryRecord',
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.updateDocsDiaryRecord(data.uuid, data, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getDentalFormula = createAsyncThunk(
+  'patients/getDentalFormula',
+  async (uuid, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.getDentalFormula(uuid, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateDentalFormula = createAsyncThunk(
+  'patients/updateDentalFormula',
+  async (data, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().user.user.token;
+      return await patientsService.updateDentalFormula(data.uuid, data, token);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const createPatientsPage = createAsyncThunk(
   'patients/createPatientsPage',
@@ -409,6 +604,182 @@ export const patientsSlice = createSlice({
         );
       })
       .addCase(createPatientsPage.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === CREATE TREATMENT PLAN ===
+      .addCase(createTreatmentPlan.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createTreatmentPlan.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.treatmentPlans.push(action.payload);
+      })
+      .addCase(createTreatmentPlan.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === CREATE DOCS DIARY RECORD ===
+      .addCase(createDocsDiaryRecord.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createDocsDiaryRecord.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.docsDiaryRecords.push(action.payload);
+      })
+      .addCase(createDocsDiaryRecord.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === UPDATE TREATMENT PLAN ===
+      .addCase(updateTreatmentPlan.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateTreatmentPlan.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.treatmentPlans = state.treatmentPlans.map((tPlan) =>
+          tPlan.uuid === action.payload.uuid ? action.payload : tPlan
+        );
+      })
+      .addCase(updateTreatmentPlan.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === UPDATE DOCS DIARY RECORD ===
+      .addCase(updateDocsDiaryRecord.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateDocsDiaryRecord.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.docsDiaryRecords = state.docsDiaryRecords.map((ddRecord) =>
+          ddRecord.uuid === action.payload.uuid ? action.payload : ddRecord
+        );
+      })
+      .addCase(updateDocsDiaryRecord.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === UPDATE DENTAL FORMULA ===
+      .addCase(updateDentalFormula.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateDentalFormula.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.dentalFormula = action.payload;
+      })
+      .addCase(updateDentalFormula.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === GET ALL TREATMENT PLANS ===
+      .addCase(getAllPlansOfPatient.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllPlansOfPatient.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.treatmentPlans = action.payload;
+      })
+      .addCase(getAllPlansOfPatient.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === GET ALL DOCS DIARY RECORDS ===
+      .addCase(getAllDocsDiaryRecordsOfPatient.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllDocsDiaryRecordsOfPatient.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.docsDiaryRecords = action.payload;
+      })
+      .addCase(getAllDocsDiaryRecordsOfPatient.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === GET ONE TREATMENT PLAN ===
+      .addCase(getTreatmentPlan.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTreatmentPlan.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.tPlan = action.payload;
+      })
+      .addCase(getTreatmentPlan.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === GET ONE DOCS DIARY RECORD ===
+      .addCase(getDocsDiaryRecord.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getDocsDiaryRecord.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.ddRecord = action.payload;
+      })
+      .addCase(getDocsDiaryRecord.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === GET DENTAL FORMULA ===
+      .addCase(getDentalFormula.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getDentalFormula.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.dentalFormula = action.payload;
+      })
+      .addCase(getDentalFormula.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === DELETE TREATMENT PLAN ===
+      .addCase(deleteTreatmentPlan.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteTreatmentPlan.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.treatmentPlans = state.treatmentPlans.filter(
+          (tPlan) => tPlan.uuid !== action.payload
+        );
+      })
+      .addCase(deleteTreatmentPlan.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // === DELETE DOCS DIARY RECORD ===
+      .addCase(deleteDocsDiaryRecord.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteDocsDiaryRecord.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.docsDiaryRecords = state.docsDiaryRecords.filter(
+          (ddRecord) => ddRecord.uuid !== action.payload
+        );
+      })
+      .addCase(deleteDocsDiaryRecord.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

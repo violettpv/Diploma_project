@@ -23,6 +23,8 @@ import CreateDispensaryRecord from './components/dispensary/CreateDispensaryReco
 import Patients from './pages/Patients';
 import PatientsCard from './components/patients/PatientsCard';
 import CreatePatient from './components/patients/CreatePatient';
+import TreatmentPlan from './components/patients/TreatmentPlan';
+import CreateTreatmentPlan from './components/patients/CreateTreatmentPlan';
 // Mailing System
 import MailingSystem from './pages/MailingSystem';
 import CreateTemplate from './components/mailingsystem/CreateTemplate';
@@ -74,6 +76,11 @@ function App() {
             <Route path="/patients" element={<Patients />} />
             <Route path="/patients/get/:uuid" element={<PatientsCard />} />
             <Route path="/patients/create/" element={<CreatePatient />} />
+            <Route path="/patients/tplan/:uuid" element={<TreatmentPlan />} />
+            <Route
+              path="/patients/tplan/create/:uuid"
+              element={<CreateTreatmentPlan />}
+            />
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/appointments/create" element={<CreateAppointment />} />
             <Route path="/appointments/update/:uuid" element={<EditAppointment />} />

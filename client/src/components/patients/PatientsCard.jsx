@@ -11,7 +11,7 @@ import { Tab } from '@mui/base/Tab';
 import PatientsInfo from './PatientsInfo';
 import Anamnesis from './Anamnesis';
 import Form043 from './Form043';
-import TreatmentPlan from './TreatmentPlan';
+import TreatmentPlans from './TreatmentPlans';
 import DoctorsDiary from './DoctorsDiary';
 import DentalFormula from './DentalFormula';
 import PatientsAppointments from './PatientsAppointments';
@@ -60,7 +60,7 @@ export default function PatientsCard() {
                   <Form043 uuid={uuid} />
                 </TabPanel>
                 <TabPanel value={3}>
-                  <TreatmentPlan uuid={uuid} />
+                  <TreatmentPlans uuid={uuid} />
                 </TabPanel>
                 <TabPanel value={4}>
                   <DoctorsDiary uuid={uuid} />

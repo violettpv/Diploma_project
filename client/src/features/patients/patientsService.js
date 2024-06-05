@@ -81,7 +81,135 @@ const updateForm043 = async (uuid, formData, token) => {
   return response.data;
 };
 
-// fit other functions here
+const createTreatmentPlan = async (planData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.post(API_URL_TPLAN + 'create', planData, config);
+  return response.data;
+};
+
+const getTreatmentPlan = async (uuid, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL_TPLAN + 'get/' + uuid, config);
+  return response.data;
+};
+
+const getAllPlansOfPatient = async (uuid, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL_TPLAN + 'all/' + uuid, config);
+  return response.data;
+};
+
+const deleteTreatmentPlan = async (uuid, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.delete(API_URL_TPLAN + 'delete/' + uuid, config);
+  return response.data;
+};
+
+const updateTreatmentPlan = async (uuid, planData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.put(API_URL_TPLAN + 'update/' + uuid, planData, config);
+  return response.data;
+};
+
+const createDocsDiaryRecord = async (recordData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.post(API_URL_DOCSDIARY + 'create', recordData, config);
+  return response.data;
+};
+
+const getDocsDiaryRecord = async (uuid, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL_DOCSDIARY + 'get/' + uuid, config);
+  return response.data;
+};
+
+const getAllDocsDiaryRecordsOfPatient = async (uuid, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL_DOCSDIARY + 'all/' + uuid, config);
+  return response.data;
+};
+
+const deleteDocsDiaryRecord = async (uuid, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.delete(API_URL_DOCSDIARY + 'delete/' + uuid, config);
+  return response.data;
+};
+
+const updateDocsDiaryRecord = async (uuid, recordData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.put(
+    API_URL_DOCSDIARY + 'update/' + uuid,
+    recordData,
+    config
+  );
+  return response.data;
+};
+
+const getDentalFormula = async (uuid, token) => {
+  // uuid of patient
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL_DENTALFORMULA + 'get/' + uuid, config);
+  return response.data;
+};
+
+const updateDentalFormula = async (uuid, dentalFormulaData, token) => {
+  // uuid of dental formula
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.put(
+    API_URL_DENTALFORMULA + 'update/' + uuid,
+    dentalFormulaData,
+    config
+  );
+  return response.data;
+};
 
 const createPatientsPage = async (pageData, token) => {
   const config = {
@@ -118,6 +246,18 @@ const patientsService = {
   updateForm043,
   createPatientsPage,
   deletePatientsPage,
+  getDentalFormula,
+  updateDentalFormula,
+  createTreatmentPlan,
+  getTreatmentPlan,
+  getAllPlansOfPatient,
+  deleteTreatmentPlan,
+  updateTreatmentPlan,
+  createDocsDiaryRecord,
+  getDocsDiaryRecord,
+  getAllDocsDiaryRecordsOfPatient,
+  deleteDocsDiaryRecord,
+  updateDocsDiaryRecord,
 };
 
 export default patientsService;

@@ -79,7 +79,9 @@ const createAllDentalFormulas = asyncHandler(async (req, res) => {
 // @route   GET /api/dentalformula/get/:uuid
 // @access  Private
 const getDentalFormula = asyncHandler(async (req, res) => {
-  const dentalFormula = await DentalFormula.findByPk(req.params.uuid);
+  const dentalFormula = await DentalFormula.findOne({
+    where: { patientUuid: req.params.uuid },
+  });
 
   // Check if user's role is 'main' or 'doctor'
   const findUsersRole = await User.findByPk(req.user.uuid, {
@@ -120,7 +122,7 @@ const getAllDentalFormulas = asyncHandler(async (req, res) => {
 
 // @desc    Delete a dental formula
 // @route   DELETE /api/dentalformula/delete/:uuid
-// @access  Private
+// @access  Private (dev only)
 const deleteDentalFormula = asyncHandler(async (req, res) => {
   const dentalFormula = await DentalFormula.findByPk(req.params.uuid);
 

@@ -130,19 +130,15 @@ export default function EditTemplate() {
     templateFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.removeAttribute('disabled');
     });
-    templateFormRef.current.querySelectorAll('.card-inputs').forEach((textarea) => {
-      textarea.removeAttribute('disabled');
-    });
     buttonsEditDeleteRef.current.classList.add('disabled');
     buttonsSaveCancelRef.current.classList.remove('disabled');
   };
 
   const cancelEditForm = () => {
+    setName(oneTemplate.name);
+    setBody(oneTemplate.body);
     templateFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.setAttribute('disabled', '');
-    });
-    templateFormRef.current.querySelectorAll('.card-inputs').forEach((textarea) => {
-      textarea.removeAttribute('disabled');
     });
     buttonsEditDeleteRef.current.classList.remove('disabled');
     buttonsSaveCancelRef.current.classList.add('disabled');
