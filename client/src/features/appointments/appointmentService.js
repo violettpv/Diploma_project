@@ -1,18 +1,6 @@
 import axios from 'axios';
 const API_URL = '/api/appointments/';
 
-// router.post('/create', createAppointment);
-// router.get('/get/:uuid', getAppointment);
-// router.get('/all', getAllAppointments);
-// router.put('/update/:uuid', updateAppointment);
-// router.delete('/delete/:uuid', deleteAppointment);
-// router.post('/receipt/create/:uuid', addReceipt);
-// router.put('/pay/:uuid', payReceipt);
-// router.get('/receipt/get/:uuid', getReceipt);
-// router.put('/receipt/update/:uuid', updateReceipt);
-// router.delete('/receipt/delete/:uuid', deleteReceipt);
-// router.get('/finished', getFinishedAppointments);
-
 const createAppointment = async (appointmentData) => {
   const response = await axios.post(API_URL + 'create', appointmentData);
   return response.data;

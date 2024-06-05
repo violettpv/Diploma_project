@@ -7,6 +7,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '../Button';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import {
   getReceipt,
   deleteReceipt,
@@ -19,6 +21,7 @@ export default function ReceiptPage() {
   const receiptUuid = params.uuid;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const MySwal = withReactContent(Swal);
   const { oneReceipt, isError, isSuccess, message } = useSelector(
     (state) => state.appointments
   );
@@ -72,43 +75,58 @@ export default function ReceiptPage() {
   }, [isSuccess]);
 
   const handleDelete = () => {
-    if (window.confirm('Ви впевнені, що хочете видалити цей рахунок?')) {
-      dispatch(deleteReceipt(receiptUuid));
-      toast.success('Рахунок видалено', {
-        position: 'top-right',
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      navigate('/appointments');
-    }
+    MySwal.fire({
+      title: 'Ви впевнені?',
+      text: 'Хочете видалити цей рахунок?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--piction-blue)',
+      confirmButtonText: 'Так',
+      cancelButtonText: 'Ні',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteReceipt(receiptUuid));
+        toast.success('Рахунок видалено', {
+          position: 'top-right',
+          autoClose: 1200,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        navigate('/appointments');
+      }
+    });
   };
 
   const handlePayment = (method) => {
-    if (
-      window.confirm(
-        `Ви впевнені, що хочете оплатити цей рахунок ${
-          method === 'card' ? 'карткою' : 'готівкою'
-        }?`
-      )
-    ) {
-      dispatch(payReceipt({ uuid: receiptUuid, paymentType: method }));
-      toast.success('Рахунок оплачено', {
-        position: 'top-right',
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      navigate('/appointments');
-    }
+    MySwal.fire({
+      title: 'Ви впевнені?',
+      text: `Ви хочете оплатити цей рахунок ${
+        method === 'card' ? 'карткою' : 'готівкою'
+      }?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Так',
+      cancelButtonText: 'Ні',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(payReceipt({ uuid: receiptUuid, paymentType: method }));
+        toast.success('Рахунок оплачено', {
+          position: 'top-right',
+          autoClose: 1200,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        navigate('/appointments');
+      }
+    });
   };
 
   return (

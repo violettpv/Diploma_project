@@ -23,7 +23,6 @@ const findPatient = async (query) => {
 };
 
 const createPatient = async (patientData) => {
-  console.log(patientData);
   const response = await axios.post(API_URL_PATIENTS + 'create', patientData);
   return response.data;
 };

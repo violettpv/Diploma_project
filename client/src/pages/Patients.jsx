@@ -5,7 +5,8 @@ import Header from '../components/Header';
 import Navigator from '../components/Navigator';
 import { useNavigate } from 'react-router-dom';
 import { getPatients, findPatient, reset } from '../features/patients/patientsSlice';
-import { resetPage, savePage } from '../features/other/otherSlice';
+import { savePage } from '../features/other/otherSlice';
+import { toast } from 'react-toastify';
 import {
   Table,
   TableBody,
@@ -34,7 +35,16 @@ export default function Patients() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getPatients());

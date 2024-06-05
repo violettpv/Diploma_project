@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import {
   getTemplate,
   deleteTemplate,
@@ -17,6 +19,7 @@ import { toast } from 'react-toastify';
 export default function EditTemplate() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const MySwal = withReactContent(Swal);
   const params = useParams();
   const templateUuid = params.uuid;
 
@@ -62,20 +65,30 @@ export default function EditTemplate() {
 
   const onSubmitDelete = async (e) => {
     e.preventDefault();
-    if (window.confirm('Ви впевнені, що хочете видалити цей шаблон?')) {
-      await dispatch(deleteTemplate(templateUuid));
-      toast.success('Шаблон видалено', {
-        position: 'top-right',
-        autoClose: 1200,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      navigate('/mailingsystem');
-    }
+    MySwal.fire({
+      title: 'Ви впевнені?',
+      text: 'Хочете видалити цей шаблон?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--piction-blue)',
+      confirmButtonText: 'Так',
+      cancelButtonText: 'Ні',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteTemplate(templateUuid));
+        toast.success('Шаблон видалено', {
+          position: 'top-right',
+          autoClose: 1200,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        navigate('/mailingsystem');
+      }
+    });
   };
 
   const onSubmitUpdate = async (e) => {

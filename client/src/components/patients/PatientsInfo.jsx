@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
 import '../../index.css';
 import Button from '../Button';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import {
   getPatient,
   deletePatient,
@@ -16,6 +18,7 @@ import { toast } from 'react-toastify';
 export default function PatientsInfo({ uuid }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const MySwal = withReactContent(Swal);
 
   const { user } = useSelector((state) => state.user);
   useEffect(() => {
@@ -65,21 +68,31 @@ export default function PatientsInfo({ uuid }) {
 
   const onSubmitDelete = async (e) => {
     e.preventDefault();
-    if (window.confirm('Ви впевнені, що хочете видалити цього пацієнта?')) {
-      dispatch(deletePatient(uuid));
-      toast.success('Пацієнта видалено', {
-        position: 'top-right',
-        autoClose: 1200,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      dispatch(savePage(page));
-      navigate('/patients');
-    }
+    MySwal.fire({
+      title: 'Ви впевнені?',
+      text: 'Хочете видалити цього пацієнта?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--piction-blue)',
+      confirmButtonText: 'Так',
+      cancelButtonText: 'Ні',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deletePatient(uuid));
+        toast.success('Пацієнта видалено', {
+          position: 'top-right',
+          autoClose: 1200,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        dispatch(savePage(page));
+        navigate('/patients');
+      }
+    });
   };
 
   const onSubmitUpdate = async (e) => {

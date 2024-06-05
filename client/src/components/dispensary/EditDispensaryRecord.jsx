@@ -41,7 +41,6 @@ export default function EditDispensaryRecord() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
       toast.error(message, {
         position: 'top-right',
         autoClose: 1500,

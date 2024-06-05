@@ -4,6 +4,7 @@ import '../index.css';
 import Header from '../components/Header';
 import Navigator from '../components/Navigator';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import {
   Table,
   TableBody,
@@ -45,12 +46,20 @@ export default function Reports() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     const { day, month, year } = selectedDate;
     dispatch(getFinishedAppointments({ date: day, month, year }));
-    console.log('selectedDate', appointments);
 
     return () => {
       dispatch(reset());
@@ -66,7 +75,6 @@ export default function Reports() {
     const selectedDate = document.getElementById('search-reports').value;
     const [year, month, day] = selectedDate.split('-');
     setSelectedDate({ day, month, year });
-    console.log(dispatch(getFinishedAppointments({ date: day, month, year })));
   };
 
   return (

@@ -83,7 +83,16 @@ export default function Register() {
     e.preventDefault();
 
     if (password !== password2) {
-      console.log('Passwords do not match');
+      toast.error('Паролі не співпадають', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     } else {
       const userData = {
         email,

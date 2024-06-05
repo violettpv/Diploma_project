@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Header from '../components/Header';
 import NavigatorPatient from '../components/NavigatorPatient';
 import '../css/PatientsPage.css';
@@ -7,31 +6,45 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaSignOutAlt } from 'react-icons/fa';
+import Button from '../components/Button';
+import { toast } from 'react-toastify';
 import {
-  getMePatient,
   logoutPatient,
   updatePatient,
   reset,
 } from '../features/patientsPage/patientSlice';
-import Button from '../components/Button';
 
 export default function Main() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { patient, isError, message } = useSelector((state) => state.patient);
+
+  useEffect(() => {
+    if (!patient) {
+      navigate('/login');
+    }
+  }, []);
+
   const [login, setLogin] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
+  const formRef = useRef(null);
+  const buttonsEditRef = useRef(null);
+  const buttonsSaveCancelRef = useRef(null);
+
   useEffect(() => {
     if (isError) {
-      console.log(message);
-    }
-
-    if (patient && patient.token) {
-      dispatch(getMePatient());
-    } else {
-      navigate('/loginpatient');
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     return () => {
@@ -49,61 +62,88 @@ export default function Main() {
     navigate('/loginpatient');
   };
 
-  const form = document.getElementById('pa-form');
-  const buttonsEdit = document.getElementsByClassName('pa-buttons');
-  const buttonsSaveCancel = document.getElementsByClassName('pa-buttons-2');
-
   const enableEditForm = () => {
-    form.querySelectorAll('.form-inputs').forEach((input) => {
+    formRef.current.querySelectorAll('.form-inputs').forEach((input) => {
       input.removeAttribute('disabled');
     });
 
-    buttonsEdit[0].classList.add('disabled');
-    buttonsSaveCancel[0].classList.remove('disabled');
+    buttonsEditRef.current.classList.add('disabled');
+    buttonsSaveCancelRef.current.classList.remove('disabled');
   };
 
   const cancelEditForm = () => {
-    form.querySelectorAll('.form-inputs').forEach((input) => {
+    formRef.current.querySelectorAll('.form-inputs').forEach((input) => {
       input.setAttribute('disabled', '');
     });
-    buttonsEdit[0].classList.remove('disabled');
-    buttonsSaveCancel[0].classList.add('disabled');
+    buttonsEditRef.current.classList.remove('disabled');
+    buttonsSaveCancelRef.current.classList.add('disabled');
+    setLogin(patient.login);
+    setOldPassword('');
+    setNewPassword('');
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     const isValid = validateForm();
     if (isValid) {
-      dispatch(
-        updatePatient(
-          {
-            login: login || patient.login,
-            oldPassword: oldPassword,
-            newPassword: newPassword,
-          },
-          patient.token
-        )
+      await dispatch(
+        updatePatient({
+          login: login || patient.login,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        })
       );
-      // console.log(login, oldPassword, newPassword);
-      alert('Дані збережено');
+      toast.success('Дані збережено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       cancelEditForm(e);
-      // dispatch(getMePatient());
     } else {
-      alert('Помилка при оновленні даних. Перевірте правильність введених даних.');
+      toast.error('Помилка при оновленні даних. Перевірте правильність введених даних.', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   };
 
   const validateForm = () => {
-    // if (login === '') {
-    //   alert('Введіть логін');
-    //   return false;
-    // }
     if (oldPassword === '') {
-      alert('Введіть старий пароль');
+      toast.error('Введіть старий пароль', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+
       return false;
     }
     if (newPassword === '') {
-      alert('Введіть новий пароль');
+      toast.error('Введіть новий пароль', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     return true;
@@ -126,7 +166,7 @@ export default function Main() {
                   </b>
                 </div>
                 <hr className="main-hr" />
-                <form name="pa-form" id="pa-form">
+                <form name="pa-form" id="pa-form" ref={formRef}>
                   <label>
                     <span>Логін:&nbsp;&nbsp;</span>
                     <input
@@ -161,7 +201,7 @@ export default function Main() {
                 </form>
                 <hr className="main-hr" />
                 <div className="buttons-div">
-                  <div className="pa-buttons">
+                  <div className="pa-buttons" ref={buttonsEditRef}>
                     <Button
                       form="patients-info"
                       type="button"
@@ -170,7 +210,7 @@ export default function Main() {
                       color="var(--piction-blue)"
                     />
                   </div>
-                  <div className="pa-buttons-2 disabled">
+                  <div className="pa-buttons-2 disabled" ref={buttonsSaveCancelRef}>
                     <Button
                       form="patients-info"
                       type="button"

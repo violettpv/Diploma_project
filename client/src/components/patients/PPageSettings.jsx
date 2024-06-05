@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
 import '../../index.css';
+import { toast } from 'react-toastify';
 import {
   getPatient,
   createPatientsPage,
@@ -25,9 +26,21 @@ export default function PPageSettings({ uuid }) {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
+  const createButtonRef = useRef(null);
+  const inputRefs = useRef({});
+
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getPatient(patientUuid));
@@ -41,17 +54,16 @@ export default function PPageSettings({ uuid }) {
     if (patient.login && patient.password) {
       setLogin(patient.login);
       setPassword('Пароль приховано');
-      const createButton = document.getElementById('create-ppage-button');
-      document.querySelectorAll('.ppage-info-item-input').forEach((input) => {
+
+      const createButton = createButtonRef.current;
+      Object.values(inputRefs.current).forEach((input) => {
         input.setAttribute('disabled', '');
       });
+
       createButton.disabled = true;
       createButton.classList.add('disabled-ppage-button');
       createButton.style.cursor = 'not-allowed';
     }
-    // if (patient.login === null && patient.password === null) {
-    //   // disableDeleteButton();
-    // }
   }, [patient]);
 
   if (!patient) {
@@ -60,19 +72,55 @@ export default function PPageSettings({ uuid }) {
 
   const validateForm = async () => {
     if (!login || !password) {
-      alert('Заповніть всі поля');
+      toast.error('Заповніть всі поля', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (login.length < 3 || password.length < 3) {
-      alert('Логін та пароль повинні містити не менше 3 символів');
+      toast.error('Логін та пароль повинні містити не менше 3 символів', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (login === password) {
-      alert('Логін та пароль не можуть бути однаковими');
+      toast.error('Логін та пароль не можуть бути однаковими', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (login === '' || password === '') {
-      alert('Заповніть всі поля');
+      toast.error('Заповніть всі поля', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     return true;
@@ -89,10 +137,28 @@ export default function PPageSettings({ uuid }) {
           patientUuid: patientUuid,
         })
       );
-      alert('Кабінет пацієнта створено');
+      toast.success('Кабінет пацієнта створено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       dispatch(getPatient(patientUuid));
     } else {
-      alert('Помилка при створенні кабінету пацієнта');
+      toast.error('Помилка при створенні кабінету пацієнта', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   };
 
@@ -109,6 +175,7 @@ export default function PPageSettings({ uuid }) {
             <div className="ppage-info-item">
               <label htmlFor="login">Логін:</label>
               <input
+                ref={(el) => (inputRefs.current.login = el)}
                 name="login"
                 type="text"
                 className="ppage-info-item-input"
@@ -119,6 +186,7 @@ export default function PPageSettings({ uuid }) {
             <div className="ppage-info-item">
               <label htmlFor="password">Пароль:</label>
               <input
+                ref={(el) => (inputRefs.current.password = el)}
                 name="password"
                 type="text"
                 className="ppage-info-item-input"
@@ -136,7 +204,12 @@ export default function PPageSettings({ uuid }) {
           </div>
         </div>
         <div className="ppage-footer">
-          <button id="create-ppage-button" type="button" onClick={(e) => handleCreate(e)}>
+          <button
+            id="create-ppage-button"
+            type="button"
+            ref={createButtonRef}
+            onClick={(e) => handleCreate(e)}
+          >
             Створити кабінет
           </button>
         </div>

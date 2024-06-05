@@ -15,16 +15,20 @@ import {
 } from '@mui/material';
 import {
   getServices,
-  getService,
   searchServices,
   reset,
   deleteService,
 } from '../features/services/serviceSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 export default function Services() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const MySwal = withReactContent(Swal);
+
   const { services, isError, message } = useSelector((state) => state.services);
   const [search, setSearch] = useState('');
 
@@ -37,7 +41,16 @@ export default function Services() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getServices());
@@ -55,21 +68,50 @@ export default function Services() {
     e.preventDefault();
     dispatch(searchServices(search));
   };
+
   const handeDeleteService = (uuid) => {
     if (!user || user.role !== 'main') {
-      alert('У вас немає доступу до видалення послуги');
+      toast.warn('У вас немає доступу до видалення послуги', {
+        position: 'top-right',
+        autoClose: 1100,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return;
     }
-    if (window.confirm('Ви впевнені, що хочете видалити цю послугу?')) {
-      dispatch(deleteService(uuid));
-      alert('Послугу видалено');
-      dispatch(getServices());
-      navigate('/services');
-    }
+
+    MySwal.fire({
+      title: 'Ви впевнені?',
+      text: 'Хочете видалити цю послугу?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--piction-blue)',
+      confirmButtonText: 'Так',
+      cancelButtonText: 'Ні',
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          toast.success('Послугу видалено', {
+            position: 'top-right',
+            autoClose: 1200,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+          return dispatch(deleteService(uuid));
+        }
+      })
+      .then(() => dispatch(getServices()));
   };
 
   const handleUpdateService = (uuid) => {
-    dispatch(getService(uuid));
     navigate(`/services/update/${uuid}`);
   };
 

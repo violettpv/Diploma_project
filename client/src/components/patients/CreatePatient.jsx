@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
@@ -29,14 +29,16 @@ export default function CreatePatient() {
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');
 
+  const patientFormRef = useRef(null);
+
   const validateForm = () => {
-    let surname = document.forms['create-patient']['surname'].value;
-    let name = document.forms['create-patient']['name'].value;
-    let patronymic = document.forms['create-patient']['patronymic'].value;
-    let phone = document.forms['create-patient']['phone'].value;
-    let birthdate = document.forms['create-patient']['birthdate'].value;
-    let email = document.forms['create-patient']['email'].value;
-    let address = document.forms['create-patient']['address'].value;
+    let surname = patientFormRef.current['surname'].value;
+    let name = patientFormRef.current['name'].value;
+    let patronymic = patientFormRef.current['patronymic'].value;
+    let phone = patientFormRef.current['phone'].value;
+    let birthdate = patientFormRef.current['birthdate'].value;
+    let email = patientFormRef.current['email'].value;
+    let address = patientFormRef.current['address'].value;
 
     if (surname === '' || name === '' || phone === '') {
       toast.error("Заповніть обов'язкові поля: прізвище, ім'я, телефон.", {
@@ -214,7 +216,12 @@ export default function CreatePatient() {
             <div className="create-patient-main">
               <div className="create-patient-intro">Створити картку пацієнта</div>
               <hr className="custom-hr" />
-              <form name="create-patient" id="create-patient" className="patients-data">
+              <form
+                name="create-patient"
+                id="create-patient"
+                className="patients-data"
+                ref={patientFormRef}
+              >
                 <div className="patients-data-row">
                   <label>
                     <span>Прізвище:</span>

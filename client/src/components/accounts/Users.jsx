@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import {
   Table,
   TableBody,
@@ -19,6 +21,7 @@ import { getUsers, deleteUser, reset } from '../../features/user/userSlice';
 export default function Users() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const MySwal = withReactContent(Swal);
   const { user, users, isError, isSuccess, message } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -68,10 +71,30 @@ export default function Users() {
 
   const handleDeleteUser = async (e, uuid) => {
     e.preventDefault();
-    if (window.confirm('Ви впевнені, що хочете видалити цього користувача?')) {
-      dispatch(deleteUser(uuid));
-    }
-    dispatch(getUsers());
+    MySwal.fire({
+      title: 'Ви впевнені?',
+      text: 'Ви хочете видалити цього користувача?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--piction-blue)',
+      confirmButtonText: 'Так',
+      cancelButtonText: 'Ні',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteUser(uuid));
+        dispatch(getUsers());
+        toast.success('Користувача успішно видалено', {
+          position: 'top-right',
+          autoClose: 1200,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      }
+    });
   };
 
   return (

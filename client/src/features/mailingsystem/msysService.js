@@ -23,7 +23,6 @@ const deleteTemplate = async (uuid) => {
 };
 
 const updateTemplate = async (uuid, templateData) => {
-  // check obj
   const response = await axios.put(API_URL_TEMPLATES + 'update/' + uuid, templateData);
   return response.data;
 };

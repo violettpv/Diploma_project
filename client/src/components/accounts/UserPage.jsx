@@ -63,7 +63,7 @@ export default function UserPage() {
         patronymic: patronymic || user.patronymic,
         password: password || user.password,
       };
-      dispatch(updateUser(data));
+      await dispatch(updateUser(data));
       toast.success('Дані акаунту оновлено', {
         position: 'top-right',
         autoClose: 1200,

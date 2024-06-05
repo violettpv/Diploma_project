@@ -36,7 +36,6 @@ export default function Templates() {
         progress: undefined,
         theme: 'light',
       });
-      console.log(message);
     }
 
     dispatch(getAllTemplates());

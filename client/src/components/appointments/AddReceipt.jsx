@@ -65,7 +65,16 @@ export default function AddReceipt() {
     const newServiceEntries = [...serviceEntries];
 
     if (name === 'quantity' && (value <= 0 || value === '')) {
-      alert('Кількість повинна бути більше 0');
+      toast.error('Кількість повинна бути більше 0', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return;
     }
 
@@ -128,24 +137,69 @@ export default function AddReceipt() {
   const validateForm = () => {
     for (let entry of serviceEntries) {
       if (!entry.service || !entry.quantity) {
-        alert('Заповніть всі поля для всіх послуг та кількостей!');
+        toast.error('Заповніть всі поля для всіх послуг та кількостей!', {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
         return false;
       }
       if (entry.quantity <= 0) {
-        alert('Кількість повинна бути більше 0');
+        toast.error('Кількість повинна бути більше 0', {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
         return false;
       }
       if (entry.service === null) {
-        alert('Оберіть послугу');
+        toast.error('Оберіть послугу', {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
         return false;
       }
     }
     if (serviceEntries.length === 0) {
-      alert('Заповніть всі поля для всіх послуг та кількостей!');
+      toast.error('Заповніть всі поля для всіх послуг та кількостей!', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (sale < 0 || sale > 100) {
-      alert('Знижка повинна бути від 0 до 100');
+      toast.error('Знижка повинна бути від 0 до 100', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     return true;

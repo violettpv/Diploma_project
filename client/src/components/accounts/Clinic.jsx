@@ -124,7 +124,16 @@ export default function Clinic() {
     let appPassword = clinicFormRef.current['appPassword'].value;
     if (!email === '') {
       if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-        alert('Невірний формат email');
+        toast.error('Невірний формат email', {
+          position: 'top-right',
+          autoClose: 1700,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
         return false;
       }
     }

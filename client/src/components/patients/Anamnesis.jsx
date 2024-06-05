@@ -40,6 +40,8 @@ export default function Anamnesis({ uuid }) {
 
   const buttonEditRef = useRef(null);
   const buttonsSaveCancelRef = useRef(null);
+  const checkboxRefs = useRef({});
+  const textareaRefs = useRef({});
 
   useEffect(() => {
     if (isError) {
@@ -141,10 +143,10 @@ export default function Anamnesis({ uuid }) {
   };
 
   const enableEdit = () => {
-    document.querySelectorAll('.checkbox-disease').forEach((checkbox) => {
+    Object.values(checkboxRefs.current).forEach((checkbox) => {
       checkbox.removeAttribute('disabled');
     });
-    document.querySelectorAll('.textarea-note').forEach((note) => {
+    Object.values(textareaRefs.current).forEach((note) => {
       note.removeAttribute('disabled');
     });
     buttonEditRef.current.classList.add('disabled');
@@ -152,10 +154,10 @@ export default function Anamnesis({ uuid }) {
   };
 
   const cancelEdit = () => {
-    document.querySelectorAll('.checkbox-disease').forEach((checkbox) => {
+    Object.values(checkboxRefs.current).forEach((checkbox) => {
       checkbox.setAttribute('disabled', '');
     });
-    document.querySelectorAll('.textarea-note').forEach((note) => {
+    Object.values(textareaRefs.current).forEach((note) => {
       note.setAttribute('disabled', '');
     });
     buttonEditRef.current.classList.remove('disabled');
@@ -191,6 +193,7 @@ export default function Anamnesis({ uuid }) {
                       <TableCell>{disease.name}</TableCell>
                       <TableCell align="center">
                         <input
+                          ref={(el) => (checkboxRefs.current[disease.uuid] = el)}
                           disabled
                           type="checkbox"
                           className="anamnesis-inputs checkbox-disease"
@@ -200,6 +203,7 @@ export default function Anamnesis({ uuid }) {
                       </TableCell>
                       <TableCell>
                         <textarea
+                          ref={(el) => (textareaRefs.current[disease.uuid] = el)}
                           disabled
                           type="text"
                           name="d-note"

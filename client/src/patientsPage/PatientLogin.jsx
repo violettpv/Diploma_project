@@ -49,7 +49,6 @@ export default function PatientLogin() {
       login,
       password,
     };
-
     dispatch(loginPatient(patientData));
   };
 

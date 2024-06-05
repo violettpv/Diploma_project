@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt, FaEdit } from 'react-icons/fa';
 import { MdOutlinePayments } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import {
   Table,
   TableBody,
@@ -26,6 +28,7 @@ import {
 export default function Appointments() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const MySwal = withReactContent(Swal);
 
   const { user } = useSelector((state) => state.user);
   useEffect(() => {
@@ -74,21 +77,31 @@ export default function Appointments() {
 
   const handleDeleteAppointment = (e, uuid) => {
     e.preventDefault();
-    if (window.confirm('Ви впевнені, що хочете видалити цю запис?')) {
-      dispatch(deleteAppointment(uuid));
-      toast.success('Запис видалено', {
-        position: 'top-right',
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      const { day, month, year } = selectedDate;
-      dispatch(getAppointments({ date: day, month, year }));
-    }
+    MySwal.fire({
+      title: 'Ви впевнені?',
+      text: 'Хочете видалити цей запис?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--piction-blue)',
+      confirmButtonText: 'Так',
+      cancelButtonText: 'Ні',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteAppointment(uuid));
+        toast.success('Запис видалено', {
+          position: 'top-right',
+          autoClose: 1200,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        const { day, month, year } = selectedDate;
+        dispatch(getAppointments({ date: day, month, year }));
+      }
+    });
   };
 
   const handleUpdateAppointment = (e, uuid) => {

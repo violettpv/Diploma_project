@@ -285,7 +285,16 @@ const updatePageInfo = asyncHandler(async (req, res) => {
   await patient.save();
 
   if (patient) {
-    res.json(patient);
+    res.json({
+      uuid: patient.uuid,
+      login: patient.login,
+      token: generateToken(req.patient.uuid),
+      surname: patient.surname,
+      name: patient.name,
+      patronymic: patient.patronymic,
+      phone: patient.phone,
+      email: patient.email,
+    });
   } else {
     res.status(400);
     throw new Error('Couldn`t update patient`s data');

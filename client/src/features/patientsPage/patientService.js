@@ -40,6 +40,9 @@ const updatePatient = async (patientData, token) => {
     },
   };
   const response = await axios.put(API_URL + 'update', patientData, config);
+  if (response.data) {
+    localStorage.setItem('patient', JSON.stringify(response.data));
+  }
   return response.data;
 };
 

@@ -5,6 +5,7 @@ import Navigator from '../Navigator';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { createService } from '../../features/services/serviceSlice';
+import { toast } from 'react-toastify';
 
 export default function AddService() {
   const navigate = useNavigate();
@@ -19,7 +20,16 @@ export default function AddService() {
     }
     if (!user || user.role !== 'main') {
       navigate('/services');
-      alert('У вас немає доступу до цієї сторінки');
+      toast.warn('У вас немає доступу до цієї сторінки', {
+        position: 'top-right',
+        autoClose: 1100,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   }, []);
 
@@ -34,15 +44,42 @@ export default function AddService() {
     let name = serviceData.name;
     let price = serviceData.price;
     if (name === '' || price === '') {
-      alert('Заповніть обов’язкові поля: назва послуги, ціна послуги.');
+      toast.error('Заповніть обов’язкові поля: назва послуги, ціна послуги.', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (name.length > 200) {
-      alert('Назва послуги занадто довга. Максимальна довжина 200 символів.');
+      toast.error('Назва послуги занадто довга. Максимальна довжина 200 символів.', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (!price.match(/^\d+(\.\d{1,2})?$/)) {
-      alert('Невірний формат ціни послуги. Введіть у форматі 123.45.');
+      toast.error('Невірний формат ціни послуги. Введіть у форматі 123.45.', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     return true;
@@ -54,11 +91,32 @@ export default function AddService() {
     if (isValid) {
       const serviceData = { name, price };
       dispatch(createService(serviceData));
-      alert('Послугу створено');
+      toast.success('Послугу створено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       setServiceData({ name: '', price: '' });
       navigate('/services');
     } else {
-      alert('Помилка при створенні послуги. Перевірте правиьність введених даних.');
+      toast.error(
+        'Помилка при створенні послуги. Перевірте правильність введених даних.',
+        {
+          position: 'top-right',
+          autoClose: 1700,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
     }
   };
 

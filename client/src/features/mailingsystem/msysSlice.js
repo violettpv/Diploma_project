@@ -106,7 +106,6 @@ export const sendReminders = createAsyncThunk(
   'msystem/sendReminders',
   async (appointments, thunkAPI) => {
     try {
-      console.log('slice:', appointments);
       return await msysService.sendReminders(appointments);
     } catch (error) {
       const message =

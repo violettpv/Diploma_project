@@ -5,6 +5,7 @@ import Navigator from '../Navigator';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateService, getService, reset } from '../../features/services/serviceSlice';
+import { toast } from 'react-toastify';
 
 export default function EditService() {
   const params = useParams();
@@ -22,19 +23,32 @@ export default function EditService() {
     }
     if (!user || user.role !== 'main') {
       navigate('/services');
-      alert('У вас немає доступу до цієї сторінки');
+      toast.warn('У вас немає доступу до цієї сторінки', {
+        position: 'top-right',
+        autoClose: 1100,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   }, []);
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
-
-    // if (!user || user.role !== 'main') {
-    //   navigate('/services');
-    //   alert('У вас немає доступу до цієї сторінки');
-    // }
 
     dispatch(getService(serviceUuid));
     return () => {
@@ -61,15 +75,42 @@ export default function EditService() {
     let name = serviceData.name;
     let price = serviceData.price;
     if (name === '' || price === '') {
-      alert('Заповніть обов’язкові поля: назва послуги, ціна послуги.');
+      toast.error('Заповніть обов’язкові поля: назва послуги, ціна послуги.', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (name.length > 200) {
-      alert('Назва послуги занадто довга. Максимальна довжина 200 символів.');
+      toast.error('Назва послуги занадто довга. Максимальна довжина 200 символів.', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (!price.match(/^\d+(\.\d{1,2})?$/)) {
-      alert('Невірний формат ціни послуги. Введіть у форматі 123.45.');
+      toast.error('Невірний формат ціни послуги. Введіть у форматі 123.45.', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     return true;
@@ -85,10 +126,31 @@ export default function EditService() {
         price: price || service.price,
       };
       dispatch(updateService(serviceData));
-      alert('Послугу оновлено');
+      toast.success('Послугу оновлено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       navigate('/services');
     } else {
-      alert('Помилка при оновленні послуги. Перевірте правильність введених даних.');
+      toast.error(
+        'Помилка при оновленні послуги. Перевірте правильність введених даних.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
     }
   };
 

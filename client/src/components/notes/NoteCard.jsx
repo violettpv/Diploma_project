@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getNote, updateNote, deleteNote, reset } from '../../features/notes/noteSlice';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import '../../css/Notes.css';
 import '../../index.css';
 import Button from '../Button';
@@ -12,6 +14,7 @@ import { toast } from 'react-toastify';
 export default function NoteCard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const MySwal = withReactContent(Swal);
   const params = useParams();
   const noteUuid = params.uuid;
 
@@ -56,21 +59,30 @@ export default function NoteCard() {
 
   const onSubmitDelete = async (e) => {
     e.preventDefault();
-    if (window.confirm('Ви впевнені, що хочете видалити цей нотаток?')) {
-      await dispatch(deleteNote(noteUuid));
-      toast.success('Нотаток видалено', {
-        position: 'top-right',
-        autoClose: 1200,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-
-      navigate('/notes');
-    }
+    MySwal.fire({
+      title: 'Ви впевнені?',
+      text: 'Хочете видалити цей нотаток?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--piction-blue)',
+      confirmButtonText: 'Так',
+      cancelButtonText: 'Ні',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteNote(noteUuid));
+        toast.success('Нотаток видалено', {
+          position: 'top-right',
+          autoClose: 1200,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        navigate('/notes');
+      }
+    });
   };
 
   const onSubmitUpdate = async (e) => {

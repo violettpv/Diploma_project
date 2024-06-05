@@ -12,6 +12,7 @@ import '../css/PatientsPage.css';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import {
   getMePatient,
   logoutPatient,
@@ -25,7 +26,16 @@ export default function Main() {
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     if (patient && patient.token) {

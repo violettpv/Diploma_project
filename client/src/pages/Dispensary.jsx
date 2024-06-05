@@ -27,13 +27,16 @@ import {
   findRecordsOfDoctor,
   findRecordsOfPatient,
   deleteDispensary,
-  getDispensary,
 } from '../features/dispensary/dispensarySlice';
-import { resetPage, savePage } from '../features/other/otherSlice';
+import { savePage } from '../features/other/otherSlice';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 export default function Appointments() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const MySwal = withReactContent(Swal);
 
   const { user } = useSelector((state) => state.user);
   useEffect(() => {
@@ -56,10 +59,28 @@ export default function Appointments() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
     if (isErrorUser) {
-      console.error('Error:', messageUser);
+      toast.error(messageUser, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getUsers());
@@ -87,7 +108,6 @@ export default function Appointments() {
 
   const handleSearchByDoctor = (e) => {
     e.preventDefault();
-    console.log(searchByDoctor);
     dispatch(findRecordsOfDoctor(searchByDoctor));
   };
 
@@ -102,16 +122,34 @@ export default function Appointments() {
   };
 
   const handleUpdateRecord = (uuid) => {
-    // dispatch(getDispensary(uuid));
     navigate(`/dispensary/update/${uuid}`);
   };
 
   const handeDeleteRecord = (uuid) => {
-    if (window.confirm('Ви впевнені, що хочете видалити цей запис?')) {
-      dispatch(deleteDispensary(uuid));
-      alert('Запис видалено');
-      dispatch(getAllDispensary());
-    }
+    MySwal.fire({
+      title: 'Ви впевнені?',
+      text: 'Хочете видалити цей запис?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--piction-blue)',
+      confirmButtonText: 'Так',
+      cancelButtonText: 'Ні',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteDispensary(uuid));
+        toast.success('Запис видалено', {
+          position: 'top-right',
+          autoClose: 1200,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        dispatch(getAllDispensary());
+      }
+    });
   };
 
   return (
