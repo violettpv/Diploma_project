@@ -92,10 +92,6 @@ export default function Appointments() {
     };
   }, [dispatch, isError, message]);
 
-  if (!dispensary) {
-    return <div>Loading...</div>;
-  }
-
   const rowsPerPage = 8;
   const handleChangePage = (event, newPage) => {
     dispatch(savePage(newPage));

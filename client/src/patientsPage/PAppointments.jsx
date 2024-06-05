@@ -58,10 +58,6 @@ export default function PAppointments() {
     };
   }, [navigate, isError, message, dispatch]);
 
-  if (!patient) {
-    <div>Loading...</div>;
-  }
-
   const rowsPerPage = 7;
   const handleChangePage = (event, newPage) => {
     dispatch(savePage(newPage));

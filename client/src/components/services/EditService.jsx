@@ -60,10 +60,6 @@ export default function EditService() {
     setServiceData({ name: service.name, price: service.price });
   }, [service]);
 
-  if (!service) {
-    return <div>Loading...</div>;
-  }
-
   const onChange = (e) => {
     setServiceData((prevState) => ({
       ...prevState,
@@ -125,7 +121,7 @@ export default function EditService() {
         name: name || service.name,
         price: price || service.price,
       };
-      dispatch(updateService(serviceData));
+      await dispatch(updateService(serviceData));
       toast.success('Послугу оновлено', {
         position: 'top-right',
         autoClose: 1200,

@@ -71,10 +71,6 @@ export default function Appointments() {
     };
   }, [selectedDate, dispatch, isError, message]);
 
-  if (!appointments) {
-    return <div>Loading...</div>;
-  }
-
   const handleDeleteAppointment = (e, uuid) => {
     e.preventDefault();
     MySwal.fire({

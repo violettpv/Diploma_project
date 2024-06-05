@@ -94,10 +94,6 @@ export default function Anamnesis({ uuid }) {
     }
   }, [anamnesis]);
 
-  if (!diseases) {
-    return <div>Loading...</div>;
-  }
-
   const handleCheckboxChange = (diseaseUuid) => {
     setSelectedDiseases((prev) => ({
       ...prev,

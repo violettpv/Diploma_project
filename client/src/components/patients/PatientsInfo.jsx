@@ -62,10 +62,6 @@ export default function PatientsInfo({ uuid }) {
     };
   }, [isError, message, dispatch, uuid]);
 
-  if (!patients) {
-    return <div>Loading...</div>;
-  }
-
   const onSubmitDelete = async (e) => {
     e.preventDefault();
     MySwal.fire({
@@ -110,7 +106,7 @@ export default function PatientsInfo({ uuid }) {
         address: address || patient.address,
         notes: notes || patient.notes,
       };
-      dispatch(updatePatient(data));
+      await dispatch(updatePatient(data));
       toast.success('Дані пацієнта оновлено', {
         position: 'top-right',
         autoClose: 1200,
@@ -122,7 +118,7 @@ export default function PatientsInfo({ uuid }) {
         theme: 'light',
       });
       cancelEditForm();
-      dispatch(getPatient(uuid));
+      await dispatch(getPatient(uuid));
     } else {
       toast.error(
         'Помилка при оновленні даних пацієнта. Перевірте правильність введених даних.',

@@ -60,10 +60,6 @@ export default function BirthdayReminders() {
     };
   }, [dispatch, isError, message]);
 
-  if (!birthdays || !templates) {
-    return <div>Loading...</div>;
-  }
-
   const handleBirthdaysSelection = (birthday) => {
     setSelectedBirthdays((prevSelected) => {
       if (prevSelected.includes(birthday)) {

@@ -90,10 +90,6 @@ export default function EditAppointment() {
     });
   }, [oneAppointment]);
 
-  if (!oneAppointment) {
-    return <div>Loading...</div>;
-  }
-
   const onChange = (e) => {
     const { name, value } = e.target;
     setAppointmentData((prevState) => ({
@@ -160,7 +156,7 @@ export default function EditAppointment() {
         roomNumber: appointmentData.roomNum,
         note: appointmentData.note,
       };
-      dispatch(updateAppointment(data));
+      await dispatch(updateAppointment(data));
       toast.success('Запис оновлено', {
         position: 'top-right',
         autoClose: 1500,

@@ -52,10 +52,6 @@ export default function Clinic() {
     };
   }, [navigate, isError, message, dispatch]);
 
-  if (!user || !clinic) {
-    <div>Loading...</div>;
-  }
-
   const onSubmitUpdate = async (e) => {
     e.preventDefault();
     const isValid = await validateForm();
@@ -70,7 +66,7 @@ export default function Clinic() {
         appPassword: appPassword || clinic.appPassword,
         address: address || clinic.address,
       };
-      dispatch(updateClinic(data));
+      await dispatch(updateClinic(data));
       toast.success('Дані клініки оновлено', {
         position: 'top-right',
         autoClose: 1200,

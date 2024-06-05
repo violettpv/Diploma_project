@@ -112,7 +112,7 @@ export default function AddReceipt() {
       const services = serviceEntries.map((entry) => entry.service);
       const quantities = serviceEntries.map((entry) => entry.quantity);
 
-      dispatch(
+      await dispatch(
         addReceipt({
           services,
           quantities,

@@ -66,10 +66,6 @@ export default function PPageSettings({ uuid }) {
     }
   }, [patient]);
 
-  if (!patient) {
-    return <div>Loading...</div>;
-  }
-
   const validateForm = async () => {
     if (!login || !password) {
       toast.error('Заповніть всі поля', {

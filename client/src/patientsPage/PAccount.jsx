@@ -52,10 +52,6 @@ export default function Main() {
     };
   }, [navigate, isError, message, dispatch]);
 
-  if (!patient) {
-    <div>Loading...</div>;
-  }
-
   const logOut = async () => {
     await dispatch(logoutPatient());
     dispatch(reset());

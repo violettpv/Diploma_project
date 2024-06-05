@@ -67,10 +67,6 @@ export default function CustomMessage() {
     };
   }, [dispatch, isError, message, navigate]);
 
-  if (!templates || !patients) {
-    return <div>Loading...</div>;
-  }
-
   const handlePatientsSelection = (patient) => {
     setSelectedPatients((prevSelected) => {
       if (prevSelected.includes(patient)) {

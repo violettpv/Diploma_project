@@ -66,10 +66,6 @@ export default function Reports() {
     };
   }, [selectedDate, dispatch, isError, message]);
 
-  if (!appointments) {
-    return <div>Loading...</div>;
-  }
-
   const handleSearchDate = (e) => {
     e.preventDefault();
     const selectedDate = document.getElementById('search-reports').value;

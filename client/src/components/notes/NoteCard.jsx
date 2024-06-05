@@ -53,10 +53,6 @@ export default function NoteCard() {
     };
   }, [isError, message, dispatch, noteUuid]);
 
-  if (!oneNote) {
-    return <div>Loading...</div>;
-  }
-
   const onSubmitDelete = async (e) => {
     e.preventDefault();
     MySwal.fire({

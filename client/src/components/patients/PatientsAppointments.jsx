@@ -57,10 +57,6 @@ export default function PatientsAppointments({ uuid }) {
     };
   }, [isError, message, dispatch, uuid]);
 
-  if (!patient) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <>
       <div className="PatientsAppointments">

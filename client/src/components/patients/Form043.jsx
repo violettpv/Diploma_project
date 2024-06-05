@@ -75,10 +75,6 @@ export default function Form043({ uuid }) {
     };
   }, [isError, message, dispatch, uuid]);
 
-  if (!form043) {
-    return <div>Loading...</div>;
-  }
-
   const onSubmitUpdate = async (e) => {
     e.preventDefault();
     const data = {
@@ -94,7 +90,7 @@ export default function Form043({ uuid }) {
       oralHealthTrainingData: oralHealthTrainingData || form043.oralHealthTrainingData,
       oralHygieneControlData: oralHygieneControlData || form043.oralHygieneControlData,
     };
-    dispatch(updateForm043(data));
+    await dispatch(updateForm043(data));
 
     toast.success(
       `Дані форми 043/о пацієнта ${patient.surname} ${patient.name} оновлено`,
@@ -110,7 +106,7 @@ export default function Form043({ uuid }) {
       }
     );
     cancelEditForm();
-    dispatch(getForm043(uuid));
+    await dispatch(getForm043(uuid));
   };
 
   const enableEditForm = () => {

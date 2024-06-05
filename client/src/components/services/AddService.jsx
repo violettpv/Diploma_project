@@ -90,7 +90,7 @@ export default function AddService() {
     let isValid = await validateForm();
     if (isValid) {
       const serviceData = { name, price };
-      dispatch(createService(serviceData));
+      await dispatch(createService(serviceData));
       toast.success('Послугу створено', {
         position: 'top-right',
         autoClose: 1200,

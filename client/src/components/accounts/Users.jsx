@@ -65,10 +65,6 @@ export default function Users() {
     };
   }, [navigate, isError, message, dispatch]);
 
-  if (!user || !users) {
-    <div>Loading...</div>;
-  }
-
   const handleDeleteUser = async (e, uuid) => {
     e.preventDefault();
     MySwal.fire({

@@ -59,10 +59,6 @@ export default function EditTemplate() {
     };
   }, [isError, message, dispatch, templateUuid]);
 
-  if (!oneTemplate) {
-    return <div>Loading...</div>;
-  }
-
   const onSubmitDelete = async (e) => {
     e.preventDefault();
     MySwal.fire({

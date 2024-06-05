@@ -25,7 +25,7 @@ export default function CreateNote() {
 
   const noteFormRef = useRef(null);
 
-  const handleCancel = async (e) => {
+  const handleCancel = (e) => {
     e.preventDefault();
     navigate('/notes');
   };

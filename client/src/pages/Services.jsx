@@ -60,10 +60,6 @@ export default function Services() {
     };
   }, [navigate, isError, message, dispatch]);
 
-  if (!services) {
-    return <div>Loading...</div>;
-  }
-
   const handleSearch = (e) => {
     e.preventDefault();
     dispatch(searchServices(search));

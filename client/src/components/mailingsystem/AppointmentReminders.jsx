@@ -65,10 +65,6 @@ export default function MSysInfo() {
     };
   }, [selectedDate, dispatch, isError, message]);
 
-  if (!reminders) {
-    return <div>Loading...</div>;
-  }
-
   const handleSearchDate = (e) => {
     e.preventDefault();
     const selectedDate = document.getElementById('search-date').value;

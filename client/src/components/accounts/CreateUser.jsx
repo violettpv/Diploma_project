@@ -61,10 +61,6 @@ export default function Clinic() {
     };
   }, [navigate, isError, message, dispatch]);
 
-  if (!user) {
-    <div>Loading...</div>;
-  }
-
   const validateForm = () => {
     let surname = createUserFormRef.current['surname'].value;
     let name = createUserFormRef.current['name'].value;

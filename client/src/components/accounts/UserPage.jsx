@@ -48,10 +48,6 @@ export default function UserPage() {
     };
   }, [navigate, isError, message, dispatch]);
 
-  if (!user) {
-    <div>Loading...</div>;
-  }
-
   const onSubmitUpdate = async (e) => {
     e.preventDefault();
     const isValid = await validateForm();

@@ -112,7 +112,7 @@ export default function CreateAppointment() {
     e.preventDefault();
     const isValid = validateForm();
     if (isValid) {
-      dispatch(
+      await dispatch(
         createAppointment({
           patientUuid: selectedPatient.uuid,
           userUuid: selectedUser,

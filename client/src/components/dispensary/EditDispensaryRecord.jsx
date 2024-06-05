@@ -82,16 +82,12 @@ export default function EditDispensaryRecord() {
     setNotesData(oneDispensary.notes);
   }, [oneDispensary]);
 
-  if (!oneDispensary) {
-    return <div>Loading...</div>;
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validateForm();
     if (isValid) {
       dispatch(
-        updateDispensary({
+        await updateDispensary({
           uuid: dispensaryUuid,
           // patientUuid: selectedPatient.uuid,
           userUuid: selectedUser,

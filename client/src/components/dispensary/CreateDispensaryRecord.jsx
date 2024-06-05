@@ -88,7 +88,7 @@ export default function CreateDispensaryRecord() {
     e.preventDefault();
     const isValid = validateForm();
     if (isValid) {
-      dispatch(
+      await dispatch(
         createDispensary({
           patientUuid: selectedPatient.uuid,
           userUuid: selectedUser,
