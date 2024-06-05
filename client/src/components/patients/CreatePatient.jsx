@@ -7,6 +7,7 @@ import Navigator from '../Navigator';
 import Header from '../Header';
 import Button from '../Button';
 import { createPatient } from '../../features/patients/patientsSlice';
+import { toast } from 'react-toastify';
 
 export default function CreatePatient() {
   const navigate = useNavigate();
@@ -36,40 +37,116 @@ export default function CreatePatient() {
     let birthdate = document.forms['create-patient']['birthdate'].value;
     let email = document.forms['create-patient']['email'].value;
     let address = document.forms['create-patient']['address'].value;
+
     if (surname === '' || name === '' || phone === '') {
-      alert("Заповніть обов'язкові поля: прізвище, ім'я, телефон.");
+      toast.error("Заповніть обов'язкові поля: прізвище, ім'я, телефон.", {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (!phone.match(/^\+380\d{9}$/)) {
-      alert('Невірний формат телефону. Введіть у форматі +380123456789');
+      toast.error('Невірний формат телефону. Введіть у форматі +380123456789', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (!(birthdate === '' || birthdate === null)) {
       if (!birthdate.match(/^\d{4}\-\d{2}\-\d{2}$/)) {
-        alert('Невірний формат дати народження. Введіть у форматі рррр.мм.дд');
+        toast.error('Невірний формат дати народження. Введіть у форматі рррр.мм.дд', {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
         return false;
       }
     }
     if (!email === '') {
       if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-        alert('Невірний формат email');
+        toast.error('Невірний формат email', {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
         return false;
       }
     }
     if (surname.lenght > 80) {
-      alert('Прізвище занадто довге');
+      toast.error('Прізвище занадто довге', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (name.lenght > 80) {
-      alert("Ім'я занадто довге");
+      toast.error("Ім'я занадто довге", {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (patronymic.lenght > 80) {
-      alert('По батькові занадто довге');
+      toast.error('По батькові занадто довге', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (address.lenght > 200) {
-      alert('Адреса занадто довга. Приклади: "м. Львів, вул. Шевченка, 1", "м. Київ".');
+      toast.error(
+        'Адреса занадто довга. Приклади: "м. Львів, вул. Шевченка, 1", "м. Київ".',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
       return false;
     }
     return true;
@@ -91,7 +168,16 @@ export default function CreatePatient() {
           notes,
         })
       );
-      alert('Пацієнта створено');
+      toast.success('Пацієнта створено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       setSurname('');
       setName('');
       setPatronymic('');
@@ -102,7 +188,19 @@ export default function CreatePatient() {
       setNotes('');
       navigate('/patients');
     } else {
-      alert('Помилка при створенні пацієнта. Перевірте правильність введених даних.');
+      toast.error(
+        'Помилка при створенні пацієнта. Перевірте правильність введених даних.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
     }
   };
 

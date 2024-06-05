@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/MailingSystem.css';
+import '../../css/Appointments.css';
+import '../../css/Services.css';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   Table,
   TableBody,
@@ -42,7 +45,16 @@ export default function MSysInfo() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     const { day, month, year } = selectedDate;
@@ -85,14 +97,23 @@ export default function MSysInfo() {
     let convertDateInString =
       selectedDate.year + '-' + selectedDate.month + '-' + selectedDate.day;
 
-    console.log('selectedAppointmentsData', selectedAppointmentsData);
     dispatch(
       sendReminders({
         currentDate: convertDateInString,
         appointments: selectedAppointmentsData,
       })
     );
-    alert('Нагадування відправлено');
+    toast.success('Нагадування відправлено', {
+      position: 'top-right',
+      autoClose: 1500,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    });
+    setSelectedAppointments([]);
   };
 
   return (

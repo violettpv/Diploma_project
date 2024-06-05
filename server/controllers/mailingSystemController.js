@@ -275,6 +275,9 @@ const getBirthdays = asyncHandler(async (req, res) => {
   let month = today.getMonth() + 1;
   let year = today.getFullYear();
 
+  day = day < 10 ? `0${day}` : day;
+  month = month < 10 ? `0${month}` : month;
+
   const patients = await Patient.findAll({
     where: {
       birthdate: {

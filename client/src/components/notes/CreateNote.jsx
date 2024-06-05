@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createNote, reset } from '../../features/notes/noteSlice';
@@ -23,18 +23,21 @@ export default function CreateNote() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
+  const noteFormRef = useRef(null);
+
   const handleCancel = async (e) => {
     e.preventDefault();
     navigate('/notes');
   };
 
   const validateForm = async () => {
-    let title = document.forms['note-info']['title'].value;
-    let content = document.forms['note-info']['content'].value;
+    let title = noteFormRef.current['title'].value;
+    let content = noteFormRef.current['content'].value;
+
     if (title === '' || content === '') {
       return false;
     }
-    if (title.length > 3 || content.length > 3) {
+    if (title.length <= 3 || content.length <= 3) {
       return false;
     }
     return true;
@@ -87,7 +90,7 @@ export default function CreateNote() {
             <div className="create-note-main">
               <div className="note-fullname">Створити нотаток</div>
               <hr className="custom-hr" />
-              <form id="create-note" name="create-note">
+              <form id="create-note" name="create-note" ref={noteFormRef}>
                 <div className="note-data-row">
                   <label>
                     <span>Назва:</span>
@@ -99,6 +102,8 @@ export default function CreateNote() {
                       onChange={(e) => setTitle(e.target.value)}
                     />
                   </label>
+                </div>
+                <div className="note-data-row">
                   <label>
                     <span>Вміст:</span>
                     <textarea

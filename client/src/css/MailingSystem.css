@@ -24,8 +24,9 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .msys-card-main {
+  height: 88%;
   width: 100%;
-  padding: 5px 20px;
+  /* border: 1px solid red; */
 }
 .msys-tabs-list {
   display: flex;
@@ -37,12 +38,19 @@
 
 /*#region MSysInfo */
 .MSysInfo {
+  padding: 10px 0;
   height: 100%;
   width: 100%;
 }
 .msys-info-main {
   height: 100%;
   width: 100%;
+  padding: 0 20px;
+}
+
+.msys-info-main ol li {
+  margin: 15px;
+  line-height: 1.6em;
 }
 /*#endregion MSysInfo */
 
@@ -61,3 +69,349 @@
   overflow-y: auto;
 }
 /*#endregion MailingSystem */
+
+/*#region Templates */
+.Templates {
+  height: 100%;
+  width: 100%;
+  padding: 0 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.templates-list {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
+  margin-top: 5px;
+}
+/*#endregion Templates */
+
+/*#region EditTemplate */
+.EditTemplate {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.template-content,
+.template-body {
+  width: 100%;
+}
+
+.template-body {
+  height: 94vh;
+  padding: 35px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.template-info-main {
+  width: 75%;
+  height: 100%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.template-header {
+  margin-top: 2px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+#template {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.template-element {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+}
+.template-element:nth-child(1) {
+  height: 15%;
+}
+
+.template-element:nth-child(2) {
+  height: 85%;
+}
+
+.template-element label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin: 5px 0;
+}
+
+#template input {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  padding: 5px;
+}
+
+.template-element textarea {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5em;
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  resize: none;
+}
+
+.template-buttons,
+.template-buttons-2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+/*#endregion EditTemplate */
+
+/*#region CreateTemplate */
+.CreateTemplate {
+  height: 100%;
+  width: 100%;
+  padding: 5px 15px;
+  height: 510px;
+  max-height: 510px;
+}
+#create-template {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#create-template div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+}
+
+#create-template div label {
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+#create-template div:nth-child(1) input {
+  margin-top: 5px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  padding: 5px;
+}
+
+#create-template div:nth-child(2) textarea {
+  margin-top: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5em;
+  padding: 5px;
+  width: 100%;
+  height: 300px;
+  max-height: 300px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  resize: none;
+}
+/*#endregion CreateTemplate */
+
+/*#region BirthdayReminders */
+.template-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.subject,
+.choose-template,
+.send-greetings {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: column;
+}
+.subject {
+  width: 40%;
+}
+.choose-template {
+  width: 40%;
+}
+.send-greetings {
+  width: 20%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.subject input,
+.choose-template select {
+  width: 95%;
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  padding: 5px;
+}
+
+.send-greetings button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  width: fit-content;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+  background-color: var(--piction-blue);
+  cursor: pointer;
+}
+
+.bdays-table-block,
+.bdays-table-container {
+  max-height: 63vh;
+  overflow-y: auto;
+}
+/*#endregion BirthdayReminders */
+
+/*#region CustomMessage */
+.custom-message-content {
+  height: 100%;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-header {
+  padding-top: 8px;
+}
+
+.patients-table-block,
+.message-header {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.message-header-row {
+  width: 50%;
+  height: 150px;
+  max-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.message-header-row div {
+  width: 95%;
+  height: 100%;
+}
+
+.message-header-row span {
+  margin-left: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+.message-header-row .subject input {
+  width: 100%;
+  height: 50%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  padding: 5px;
+}
+
+.message-header-row .use-template {
+  height: 20%;
+}
+
+.message-header-row .choose-template select {
+  width: 100%;
+  height: 30%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  padding: 5px;
+}
+
+.use-template label {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.use-template input[type='checkbox'] {
+  padding: 5px;
+}
+
+.message-body textarea {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.5em;
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  resize: none;
+}
+
+.send-message {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.send-message button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  width: fit-content;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+  background-color: var(--piction-blue);
+  cursor: pointer;
+}
+
+.patients-table-block,
+.patients-table-container {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+/*#endregion CustomMessage */

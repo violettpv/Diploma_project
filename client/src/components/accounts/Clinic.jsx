@@ -82,7 +82,6 @@ export default function Clinic() {
         theme: 'light',
       });
       cancelEditForm();
-      // dispatch(getClinic());
     } else {
       toast.error(
         'Помилка при оновленні даних клініки. Перевірте правильність введених даних.',
@@ -116,7 +115,7 @@ export default function Clinic() {
     buttonsSaveCancelRef.current.classList.add('disabled');
   };
 
-  const validateForm = async () => {
+  const validateForm = () => {
     let name = clinicFormRef.current['name'].value;
     let phone = clinicFormRef.current['phone'].value;
     let phone2 = clinicFormRef.current['phone2'].value;

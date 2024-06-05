@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   getAllDiseases,
   reset,
@@ -23,7 +24,7 @@ export default function Anamnesis({ uuid }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const patientUuid = uuid;
-  const { diseases, anamnesis, isSuccess, isLoading, isError, message } = useSelector(
+  const { diseases, anamnesis, isSuccess, isError, message } = useSelector(
     (state) => state.patients
   );
 
@@ -37,9 +38,21 @@ export default function Anamnesis({ uuid }) {
   const [selectedDiseases, setSelectedDiseases] = useState({});
   const [notes, setNotes] = useState({});
 
+  const buttonEditRef = useRef(null);
+  const buttonsSaveCancelRef = useRef(null);
+
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getAllDiseases());
@@ -56,15 +69,32 @@ export default function Anamnesis({ uuid }) {
         const parsedAnamnesis = JSON.parse(anamnesis.jsonAnamnesis);
         const initialSelectedDiseases = {};
         const initialNotes = {};
+
         parsedAnamnesis.forEach((disease) => {
           initialSelectedDiseases[disease.diseaseUuid] = true;
           initialNotes[disease.diseaseUuid] = disease.note;
         });
+
         setSelectedDiseases(initialSelectedDiseases);
         setNotes(initialNotes);
-      } catch {}
+      } catch (error) {
+        toast.error(error, {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      }
     }
   }, [anamnesis]);
+
+  if (!diseases) {
+    return <div>Loading...</div>;
+  }
 
   const handleCheckboxChange = (diseaseUuid) => {
     setSelectedDiseases((prev) => ({
@@ -84,7 +114,7 @@ export default function Anamnesis({ uuid }) {
     const data = Object.keys(selectedDiseases)
       .filter((diseaseUuid) => selectedDiseases[diseaseUuid])
       .map((diseaseUuid) => {
-        const disease = diseases.find((d) => d.uuid === diseaseUuid);
+        diseases.find((d) => d.uuid === diseaseUuid);
         return {
           diseaseUuid,
           note: notes[diseaseUuid] || '',
@@ -96,13 +126,19 @@ export default function Anamnesis({ uuid }) {
       diseases: data,
     };
     dispatch(updateAnamnesis(updatedAnamnesis));
-    alert('Анамнез оновлено');
+    toast.success('Анамнез оновлено', {
+      position: 'top-right',
+      autoClose: 1200,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    });
     cancelEdit();
     dispatch(getAnamnesis(patientUuid));
   };
-
-  const buttonEdit = document.getElementsByClassName('anamnesis-buttons');
-  const buttonsSaveCancel = document.getElementsByClassName('anamnesis-buttons-2');
 
   const enableEdit = () => {
     document.querySelectorAll('.checkbox-disease').forEach((checkbox) => {
@@ -111,8 +147,8 @@ export default function Anamnesis({ uuid }) {
     document.querySelectorAll('.textarea-note').forEach((note) => {
       note.removeAttribute('disabled');
     });
-    buttonEdit[0].classList.add('disabled');
-    buttonsSaveCancel[0].classList.remove('disabled');
+    buttonEditRef.current.classList.add('disabled');
+    buttonsSaveCancelRef.current.classList.remove('disabled');
   };
 
   const cancelEdit = () => {
@@ -122,8 +158,8 @@ export default function Anamnesis({ uuid }) {
     document.querySelectorAll('.textarea-note').forEach((note) => {
       note.setAttribute('disabled', '');
     });
-    buttonEdit[0].classList.remove('disabled');
-    buttonsSaveCancel[0].classList.add('disabled');
+    buttonEditRef.current.classList.remove('disabled');
+    buttonsSaveCancelRef.current.classList.add('disabled');
   };
 
   return (
@@ -179,7 +215,7 @@ export default function Anamnesis({ uuid }) {
             </Table>
           </TableContainer>
         </div>
-        <div className="anamnesis-buttons">
+        <div className="anamnesis-buttons" ref={buttonEditRef}>
           <Button
             type="button"
             text="Редагувати"
@@ -187,7 +223,7 @@ export default function Anamnesis({ uuid }) {
             onClick={enableEdit}
           />
         </div>
-        <div className="anamnesis-buttons-2 disabled">
+        <div className="anamnesis-buttons-2 disabled" ref={buttonsSaveCancelRef}>
           <Button
             type="button"
             text="Зберегти"

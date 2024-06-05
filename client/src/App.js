@@ -25,6 +25,8 @@ import PatientsCard from './components/patients/PatientsCard';
 import CreatePatient from './components/patients/CreatePatient';
 // Mailing System
 import MailingSystem from './pages/MailingSystem';
+import CreateTemplate from './components/mailingsystem/CreateTemplate';
+import EditTemplate from './components/mailingsystem/EditTemplate';
 // Reports
 import Reports from './pages/Reports';
 // Services
@@ -85,6 +87,8 @@ function App() {
             <Route path="/notes/get/:uuid" element={<NoteCard />} />
             <Route path="/notes/create" element={<CreateNote />} />
             <Route path="/mailingsystem" element={<MailingSystem />} />
+            <Route path="/mailingsystem/edit/:uuid" element={<EditTemplate />} />
+            <Route path="/mailingsystem/createtemplate" element={<CreateTemplate />} />
             <Route path="/patientspage" element={<PatientsPageMain />} />
             <Route path="/patientspage/appointments" element={<PAppointments />} />
             <Route path="/patientspage/account" element={<PAccount />} />

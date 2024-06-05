@@ -307,6 +307,10 @@ const getAppointments = asyncHandler(async (req, res) => {
     attributes: ['uuid', 'date', 'startTime', 'endTime', 'isFinished'],
     include: [
       {
+        model: User,
+        attributes: ['uuid', 'name', 'surname'],
+      },
+      {
         model: Receipt,
         attributes: ['uuid', 'total', 'isPaid', 'sale', 'paymentType'],
         include: [

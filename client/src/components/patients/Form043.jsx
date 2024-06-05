@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
 import '../../index.css';
 import Button from '../Button';
+import { toast } from 'react-toastify';
 import {
   getForm043,
   updateForm043,
   reset,
   getPatient,
 } from '../../features/patients/patientsSlice';
-import { getMe } from '../../features/user/userSlice';
-import { useNavigate } from 'react-router-dom';
 
 export default function Form043({ uuid }) {
   const dispatch = useDispatch();
@@ -36,14 +36,36 @@ export default function Form043({ uuid }) {
   const [oralHealthTrainingData, setOralHealthTrainingData] = useState('');
   const [oralHygieneControlData, setOralHygieneControlData] = useState('');
 
+  const form043FormRef = useRef(null);
+  const buttonUpdateRef = useRef(null);
+  const buttonsSaveCancelRef = useRef(null);
+
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     if (!user || !(user.role === 'doctor' || user.role === 'main')) {
       navigate('/');
-      alert('У вас немає доступу до цієї сторінки');
+      toast.warn('У вас немає доступу до цієї сторінки', {
+        position: 'top-right',
+        autoClose: 1100,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getPatient(uuid));
@@ -73,29 +95,38 @@ export default function Form043({ uuid }) {
       oralHygieneControlData: oralHygieneControlData || form043.oralHygieneControlData,
     };
     dispatch(updateForm043(data));
-    alert(`Дані форми 043/о пацієнта ${patient.surname} ${patient.name} оновлено`);
+
+    toast.success(
+      `Дані форми 043/о пацієнта ${patient.surname} ${patient.name} оновлено`,
+      {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      }
+    );
     cancelEditForm();
     dispatch(getForm043(uuid));
   };
 
-  const form043Form = document.getElementById('form043');
-  const buttonUpdate = document.getElementsByClassName('form043-buttons-1');
-  const buttonsSaveCancel = document.getElementsByClassName('form043-buttons-2');
-
   const enableEditForm = () => {
-    form043Form.querySelectorAll('.form043-textarea').forEach((textarea) => {
+    form043FormRef.current.querySelectorAll('.form043-textarea').forEach((textarea) => {
       textarea.removeAttribute('disabled');
     });
-    buttonUpdate[0].classList.add('disabled');
-    buttonsSaveCancel[0].classList.remove('disabled');
+    buttonUpdateRef.current.classList.add('disabled');
+    buttonsSaveCancelRef.current.classList.remove('disabled');
   };
 
   const cancelEditForm = () => {
-    form043Form.querySelectorAll('.form043-textarea').forEach((textarea) => {
+    form043FormRef.current.querySelectorAll('.form043-textarea').forEach((textarea) => {
       textarea.setAttribute('disabled', '');
     });
-    buttonUpdate[0].classList.remove('disabled');
-    buttonsSaveCancel[0].classList.add('disabled');
+    buttonUpdateRef.current.classList.remove('disabled');
+    buttonsSaveCancelRef.current.classList.add('disabled');
   };
 
   return (
@@ -107,7 +138,7 @@ export default function Form043({ uuid }) {
               Форма 043/о ({patient.surname} {patient.name} {patient.patronymic})
             </div>
             <div className="form043-buttons">
-              <div className="form043-buttons-1">
+              <div className="form043-buttons-1" ref={buttonUpdateRef}>
                 <Button
                   form="form043"
                   type="button"
@@ -116,7 +147,7 @@ export default function Form043({ uuid }) {
                   color="var(--piction-blue)"
                 />
               </div>
-              <div className="form043-buttons-2 disabled">
+              <div className="form043-buttons-2 disabled" ref={buttonsSaveCancelRef}>
                 <Button
                   form="form043"
                   type="button"
@@ -136,7 +167,7 @@ export default function Form043({ uuid }) {
           </div>
           <hr className="custom-hr" />
           <div className="form043-main">
-            <form id="form043">
+            <form id="form043" ref={form043FormRef}>
               <label>
                 <span>Діагноз:</span>
                 <textarea

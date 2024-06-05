@@ -29,9 +29,9 @@ export const createTemplate = createAsyncThunk(
 
 export const getTemplate = createAsyncThunk(
   'msystem/getTemplate',
-  async (_, thunkAPI) => {
+  async (uuid, thunkAPI) => {
     try {
-      return await msysService.getTemplate();
+      return await msysService.getTemplate(uuid);
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
@@ -266,7 +266,6 @@ export const msysSlice = createSlice({
       .addCase(sendReminders.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // state.appointments = action.payload;
       })
       .addCase(sendReminders.rejected, (state, action) => {
         state.isLoading = false;
@@ -294,7 +293,6 @@ export const msysSlice = createSlice({
       .addCase(sendMessage.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // state.appointments = action.payload;
       })
       .addCase(sendMessage.rejected, (state, action) => {
         state.isLoading = false;

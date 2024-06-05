@@ -11,9 +11,10 @@ import { TabPanel } from '@mui/base/TabPanel';
 import { Tab } from '@mui/base/Tab';
 import MSysInfo from '../components/mailingsystem/MSysInfo';
 import AppointmentReminders from '../components/mailingsystem/AppointmentReminders';
-import CustomReminders from '../components/mailingsystem/CustomReminders';
+import CustomMessage from '../components/mailingsystem/CustomMessage';
 import Templates from '../components/mailingsystem/Templates';
-// pages
+import CreateTemplate from '../components/mailingsystem/CreateTemplate';
+import BirthdayReminders from '../components/mailingsystem/BirthdayReminders';
 
 export default function MailingSystem() {
   const navigate = useNavigate();
@@ -34,10 +35,12 @@ export default function MailingSystem() {
           <div className="msys-body">
             <Tabs className="msys-card-tabs" defaultValue={0} orientation="vertical">
               <TabsList className="msys-tabs-list">
-                <Tab className="tab">Загальна інформація</Tab>
+                <Tab className="tab">Інформація</Tab>
                 <Tab className="tab">Нагадування про візит</Tab>
-                <Tab className="tab">Відправити за повідомлення</Tab>
+                <Tab className="tab">Відправити повідомлення</Tab>
+                <Tab className="tab">Привітання з ДН</Tab>
                 <Tab className="tab">Шаблони</Tab>
+                <Tab className="tab">Створити шаблон</Tab>
               </TabsList>
               <hr className="custom-hr" />
               <div className="msys-card-main">
@@ -48,10 +51,16 @@ export default function MailingSystem() {
                   <AppointmentReminders />
                 </TabPanel>
                 <TabPanel value={2}>
-                  <CustomReminders />
+                  <CustomMessage />
                 </TabPanel>
                 <TabPanel value={3}>
+                  <BirthdayReminders />
+                </TabPanel>
+                <TabPanel value={4}>
                   <Templates />
+                </TabPanel>
+                <TabPanel value={5}>
+                  <CreateTemplate />
                 </TabPanel>
               </div>
             </Tabs>

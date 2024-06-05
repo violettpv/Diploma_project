@@ -11,7 +11,7 @@ import {
   getAppointments,
   reset,
 } from '../features/patientsPage/patientSlice';
-import { resetPage, savePage } from '../features/other/otherSlice';
+import { savePage } from '../features/other/otherSlice';
 import {
   Table,
   TableBody,
@@ -21,6 +21,7 @@ import {
   TableRow,
   TablePagination,
 } from '@mui/material';
+import { toast } from 'react-toastify';
 
 export default function PAppointments() {
   const navigate = useNavigate();
@@ -33,7 +34,16 @@ export default function PAppointments() {
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     if (patient && patient.token) {
@@ -82,6 +92,9 @@ export default function PAppointments() {
                   <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                       <TableRow>
+                        <TableCell sx={{ fontWeight: 'bold', width: '15%' }}>
+                          Лікар
+                        </TableCell>
                         <TableCell sx={{ fontWeight: 'bold' }}>Дата</TableCell>
                         <TableCell sx={{ fontWeight: 'bold' }}>Час</TableCell>
                         <TableCell sx={{ fontWeight: 'bold' }}>Сума</TableCell>
@@ -98,6 +111,11 @@ export default function PAppointments() {
                           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                           .map((appointment) => (
                             <TableRow key={appointment.uuid}>
+                              <TableCell>
+                                {appointment && appointment.user
+                                  ? `${appointment.user.surname} ${appointment.user.name}`
+                                  : 'Відсутні'}
+                              </TableCell>
                               <TableCell>{appointment.date}</TableCell>
                               <TableCell>
                                 {appointment.startTime.slice(0, 5)} -{' '}

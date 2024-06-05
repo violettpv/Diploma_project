@@ -6,28 +6,33 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 
-export default function Note({ note }) {
+export default function Template({ template }) {
   const navigate = useNavigate();
-  const { uuid, title, content, createdAt } = note;
+  const { uuid, name, body } = template;
 
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card
+      sx={{
+        minWidth: 275,
+        backgroundColor: 'lightgoldenrodyellow',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}
+    >
       <CardContent>
-        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-          {createdAt && createdAt.split('T')[0].split('-').reverse().join('.')}
-        </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {title}
+          {name}
         </Typography>
         <Typography noWrap variant="body2">
-          {content}
+          {body}
         </Typography>
       </CardContent>
       <CardActions>
         <Button
           size="small"
           sx={{ cursor: 'pointer', fontWeight: 'bold' }}
-          onClick={() => navigate(`/notes/get/${uuid}`)}
+          onClick={() => navigate(`/mailingsystem/edit/${uuid}`)}
         >
           Відкрити
         </Button>

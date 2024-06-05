@@ -35,6 +35,7 @@
 .intro-div p {
   display: flex;
   align-items: center;
+  margin: 5px 0;
 }
 .main-hr,
 .intro-div div {

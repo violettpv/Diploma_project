@@ -7,6 +7,7 @@ const Service = require('../models/serviceModel');
 const Form043 = require('../models/form043Model');
 const DentalFormula = require('../models/dentalFormulaModel');
 const Anamnesis = require('../models/anamnesisModel');
+const User = require('../models/userModel');
 
 // @desc    Register a new patient
 // @route   POST /api/patients/create
@@ -249,6 +250,10 @@ const getAllPatientsAppointments = asyncHandler(async (req, res) => {
     attributes: ['uuid', 'date', 'startTime', 'endTime', 'isFinished'],
     include: [
       {
+        model: User,
+        attributes: ['uuid', 'surname', 'name'],
+      },
+      {
         model: Receipt,
         attributes: ['uuid', 'total', 'isPaid', 'sale', 'paymentType'],
         include: [
@@ -271,33 +276,12 @@ const getAllPatientsAppointments = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Find all patient's receipts
-// @route   GET /api/patients/receipts/:uuid
-// @access  Public
-// const findReceipts = asyncHandler(async (req, res) => {
-//   const patient = await Patient.findByPk(req.params.uuid);
-//   if (!patient) {
-//     res.status(404);
-//     throw new Error('Patient not found');
-//   }
-
-//   const receipts = await patient.getReceipts();
-//   if (receipts) {
-//     res.json(receipts);
-//   } else {
-//     res.status(404);
-//     throw new Error('Receipts not found');
-//   }
-// });
-
 module.exports = {
   createPatient,
   getPatient,
   getPatients,
   deletePatient,
   updatePatient,
-  // findPatientByPhone,
-  // findPatientByName,
   findPatient,
   getAllPatientsAppointments,
 };

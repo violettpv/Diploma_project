@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { reset, createUser } from '../../features/user/userSlice';
@@ -10,7 +10,7 @@ import '../../index.css';
 export default function Clinic() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isError, isSuccess, message } = useSelector((state) => state.user);
+  const { user, isError, message } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (!user) {
@@ -25,6 +25,8 @@ export default function Clinic() {
   const [role, setRole] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const createUserFormRef = useRef(null);
 
   useEffect(() => {
     if (isError) {
@@ -64,13 +66,14 @@ export default function Clinic() {
   }
 
   const validateForm = () => {
-    let surname = document.forms['create-user']['surname'].value;
-    let name = document.forms['create-user']['name'].value;
-    let patronymic = document.forms['create-user']['patronymic'].value;
-    let phone = document.forms['create-user']['phone'].value;
-    let email = document.forms['create-user']['email'].value;
-    let password = document.forms['create-user']['password'].value;
-    let role = document.forms['create-user']['role'].value;
+    let surname = createUserFormRef.current['surname'].value;
+    let name = createUserFormRef.current['name'].value;
+    let patronymic = createUserFormRef.current['patronymic'].value;
+    let phone = createUserFormRef.current['phone'].value;
+    let email = createUserFormRef.current['email'].value;
+    let password = createUserFormRef.current['password'].value;
+    let role = createUserFormRef.current['role'].value;
+
     if (surname === '' || name === '' || phone === '') {
       toast.error("Заповніть обов'язкові поля: прізвище, ім'я, телефон, пошта, пароль.", {
         position: 'top-right',
@@ -248,7 +251,7 @@ export default function Clinic() {
           </div>
           <hr className="custom-hr" />
           <div className="cu-form-main">
-            <form name="create-user" id="create-user">
+            <form name="create-user" id="create-user" ref={createUserFormRef}>
               <div className="cu-row">
                 <div>
                   <label htmlFor="surname">Прізвище:</label>

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
 import '../../index.css';
+import { toast } from 'react-toastify';
 import {
   getPatient,
   getAllPatientsAppointments,
@@ -36,7 +37,16 @@ export default function PatientsAppointments({ uuid }) {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getPatient(patientUuid));
@@ -69,10 +79,11 @@ export default function PatientsAppointments({ uuid }) {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold', width: '15%' }}>Дата</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', width: '15%' }}>Час</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', width: '20%' }}>Сума</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', width: '10%' }}>
+                  <TableCell sx={{ fontWeight: 'bold', width: '15%' }}>Лікар</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', width: '10%' }}>Дата</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', width: '11%' }}>Час</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', width: '15%' }}>Сума</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', width: '9%' }}>
                     Тип оплати
                   </TableCell>
                   <TableCell sx={{ fontWeight: 'bold', width: '40%' }}>
@@ -85,6 +96,11 @@ export default function PatientsAppointments({ uuid }) {
                   appointments.length > 0 &&
                   appointments.map((appointment) => (
                     <TableRow key={appointment.uuid}>
+                      <TableCell>
+                        {appointment && appointment.user
+                          ? `${appointment.user.surname} ${appointment.user.name}`
+                          : 'Відсутні'}
+                      </TableCell>
                       <TableCell>{appointment.date}</TableCell>
                       <TableCell>
                         {appointment.startTime.slice(0, 5)} -{' '}

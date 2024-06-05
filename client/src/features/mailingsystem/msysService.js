@@ -2,20 +2,8 @@ import axios from 'axios';
 const API_URL = '/api/mailingsystem/';
 const API_URL_TEMPLATES = '/api/msgtemplate/';
 
-// router.post('/create', createTemplate);
-// router.get('/get/:uuid', getTemplate);
-// router.get('/all', getAllTemplates);
-// router.delete('/delete/:uuid', deleteTemplate);
-// router.put('/update/:uuid', updateTemplate);
-
-// router.get('/getappointments', getAppointmentsByDate);
-// router.post('/sendreminders', sendReminders);
-// router.post('/createmsg', createMessage);
-// router.post('/sendmsg', sendMessage);
-// router.get('/getbirthdays', getBirthdays);
-
 const createTemplate = async (templateData) => {
-  const response = await axios.post(API_URL + 'create', templateData);
+  const response = await axios.post(API_URL_TEMPLATES + 'create', templateData);
   return response.data;
 };
 
@@ -48,7 +36,6 @@ const getAppointmentsByDate = async (date, month, year) => {
 };
 
 const sendReminders = async (appointments) => {
-  console.log('service:', appointments);
   const response = await axios.post(API_URL + 'sendreminders', appointments);
   return response.data;
 };

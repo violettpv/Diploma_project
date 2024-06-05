@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getAllNotes, reset } from '../features/notes/noteSlice';
 import Pagination from '@mui/material/Pagination';
+import { toast } from 'react-toastify';
 
 export default function Notes() {
   const dispatch = useDispatch();
@@ -27,7 +28,16 @@ export default function Notes() {
 
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getAllNotes());

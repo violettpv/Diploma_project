@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginPatient, reset } from '../features/patientsPage/patientSlice';
+import { toast } from 'react-toastify';
 
 export default function PatientLogin() {
   const [formData, setFormData] = useState({ login: '', password: '' });
@@ -16,7 +17,16 @@ export default function PatientLogin() {
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     if (isSuccess || patient) {

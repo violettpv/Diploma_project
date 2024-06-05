@@ -84,7 +84,7 @@ export default function EditAppointment() {
     }));
   };
 
-  const validateForm = async () => {
+  const validateForm = () => {
     let doctor = appointmentData.doctor;
     let date = appointmentData.date;
     let startTime = appointmentData.startTime;

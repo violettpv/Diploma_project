@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getNote, updateNote, deleteNote, reset } from '../../features/notes/noteSlice';
-import { savePage } from '../../features/other/otherSlice';
 import '../../css/Notes.css';
 import '../../index.css';
 import Button from '../Button';
@@ -24,7 +23,6 @@ export default function NoteCard() {
   }, []);
 
   const { oneNote, isError, message } = useSelector((state) => state.notes);
-  const { page } = useSelector((state) => state.other);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -60,7 +58,6 @@ export default function NoteCard() {
     e.preventDefault();
     if (window.confirm('Ви впевнені, що хочете видалити цей нотаток?')) {
       await dispatch(deleteNote(noteUuid));
-      alert('Нотаток видалено');
       toast.success('Нотаток видалено', {
         position: 'top-right',
         autoClose: 1200,
@@ -71,7 +68,7 @@ export default function NoteCard() {
         progress: undefined,
         theme: 'light',
       });
-      dispatch(savePage(page));
+
       navigate('/notes');
     }
   };
@@ -197,6 +194,8 @@ export default function NoteCard() {
                       onChange={(e) => setTitle(e.target.value)}
                     />
                   </label>
+                </div>
+                <div className="note-data-row">
                   <label>
                     <span>Вміст:</span>
                     <textarea
@@ -208,6 +207,8 @@ export default function NoteCard() {
                       onChange={(e) => setContent(e.target.value)}
                     />
                   </label>
+                </div>
+                <div className="note-data-row">
                   <label>
                     <span>Дата створення:</span>
                     <input

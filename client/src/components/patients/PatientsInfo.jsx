@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import '../../css/Patients.css';
@@ -11,6 +11,7 @@ import {
   reset,
 } from '../../features/patients/patientsSlice';
 import { savePage } from '../../features/other/otherSlice';
+import { toast } from 'react-toastify';
 
 export default function PatientsInfo({ uuid }) {
   const navigate = useNavigate();
@@ -34,9 +35,22 @@ export default function PatientsInfo({ uuid }) {
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');
 
+  const patientsFormRef = useRef(null);
+  const buttonsEditDeleteRef = useRef(null);
+  const buttonsSaveCancelRef = useRef(null);
+
   useEffect(() => {
     if (isError) {
-      console.error('Error:', message);
+      toast.error(message, {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
 
     dispatch(getPatient(uuid));
@@ -53,7 +67,16 @@ export default function PatientsInfo({ uuid }) {
     e.preventDefault();
     if (window.confirm('Ви впевнені, що хочете видалити цього пацієнта?')) {
       dispatch(deletePatient(uuid));
-      alert('Пацієнта видалено');
+      toast.success('Пацієнта видалено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       dispatch(savePage(page));
       navigate('/patients');
     }
@@ -75,77 +98,171 @@ export default function PatientsInfo({ uuid }) {
         notes: notes || patient.notes,
       };
       dispatch(updatePatient(data));
-      alert('Дані пацієнта оновлено');
+      toast.success('Дані пацієнта оновлено', {
+        position: 'top-right',
+        autoClose: 1200,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       cancelEditForm();
       dispatch(getPatient(uuid));
     } else {
-      alert(
-        'Помилка при оновленні даних пацієнта. Перевірте правильність введених даних.'
+      toast.error(
+        'Помилка при оновленні даних пацієнта. Перевірте правильність введених даних.',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
       );
     }
   };
 
-  const patientsForm = document.getElementById('patients-info');
-  const buttonsEditDelete = document.getElementsByClassName('patients-info-buttons');
-  const buttonsSaveCancel = document.getElementsByClassName('patients-info-buttons-2');
-
   const enableEditForm = () => {
-    patientsForm.querySelectorAll('.card-inputs').forEach((input) => {
+    patientsFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.removeAttribute('disabled');
     });
 
-    buttonsEditDelete[0].classList.add('disabled');
-    buttonsSaveCancel[0].classList.remove('disabled');
+    buttonsEditDeleteRef.current.classList.add('disabled');
+    buttonsSaveCancelRef.current.classList.remove('disabled');
   };
 
   const cancelEditForm = () => {
-    patientsForm.querySelectorAll('.card-inputs').forEach((input) => {
+    patientsFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.setAttribute('disabled', '');
     });
-    buttonsEditDelete[0].classList.remove('disabled');
-    buttonsSaveCancel[0].classList.add('disabled');
+    buttonsEditDeleteRef.current.classList.remove('disabled');
+    buttonsSaveCancelRef.current.classList.add('disabled');
   };
 
-  const validateForm = async () => {
-    let surname = patientsForm['surname'].value;
-    let name = patientsForm['name'].value;
-    let patronymic = patientsForm['patronymic'].value;
-    let phone = patientsForm['phone'].value;
-    let email = patientsForm['email'].value;
-    let birthdate = patientsForm['birthdate'].value;
-    let address = patientsForm['address'].value;
+  const validateForm = () => {
+    let surname = patientsFormRef.current['surname'].value;
+    let name = patientsFormRef.current['name'].value;
+    let patronymic = patientsFormRef.current['patronymic'].value;
+    let phone = patientsFormRef.current['phone'].value;
+    let email = patientsFormRef.current['email'].value;
+    let birthdate = patientsFormRef.current['birthdate'].value;
+    let address = patientsFormRef.current['address'].value;
+
     if (surname === '' || name === '' || phone === '' || birthdate === '') {
-      alert("Заповніть обов'язкові поля: прізвище, ім'я, телефон, дату народження");
+      toast.error(
+        "Заповніть обов'язкові поля: прізвище, ім'я, телефон, дату народження",
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
       return false;
     }
     if (!phone.match(/^\+380\d{9}$/)) {
-      alert('Невірний формат телефону. Введіть у форматі +380123456789');
+      toast.error('Невірний формат телефону. Введіть у форматі +380123456789', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (!birthdate.match(/^\d{4}\-\d{2}\-\d{2}$/)) {
-      alert('Невірний формат дати народження. Введіть у форматі рррр.мм.дд');
+      toast.error('Невірний формат дати народження. Введіть у форматі рррр.мм.дд', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
     if (!email === '') {
       if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-        alert('Невірний формат email');
+        toast.error('Невірний формат email', {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
         return false;
       }
     }
-    if (surname.lenght > 80) {
-      alert('Прізвище занадто довге');
+    if (surname.lenght >= 80) {
+      toast.error('Прізвище занадто довге', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
-    if (name.lenght > 80) {
-      alert("Ім'я занадто довге");
+    if (name.lenght >= 80) {
+      toast.error("Ім'я занадто довге", {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
-    if (patronymic.lenght > 80) {
-      alert('По батькові занадто довге');
+    if (patronymic.lenght >= 80) {
+      toast.error('По батькові занадто довге', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
       return false;
     }
-    if (address.lenght > 200) {
-      alert('Адреса занадто довга. Приклади: "м. Львів, вул. Шевченка, 1", "м. Київ".');
+    if (address.lenght >= 200) {
+      toast.error(
+        'Адреса занадто довга. Приклади: "м. Львів, вул. Шевченка, 1", "м. Київ"',
+        {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        }
+      );
       return false;
     }
     return true;
@@ -159,7 +276,7 @@ export default function PatientsInfo({ uuid }) {
             {patient.surname} {patient.name} {patient.patronymic}
           </div>
           <hr className="custom-hr" />
-          <form id="patients-info" className="patients-data">
+          <form id="patients-info" className="patients-data" ref={patientsFormRef}>
             <div className="patients-data-row">
               <label>
                 <span>Прізвище:</span>
@@ -253,7 +370,7 @@ export default function PatientsInfo({ uuid }) {
             </div>
           </form>
           <div className="patients-info-buttons-both">
-            <div className="patients-info-buttons">
+            <div className="patients-info-buttons" ref={buttonsEditDeleteRef}>
               <Button
                 form="patients-info"
                 type="button"
@@ -269,7 +386,7 @@ export default function PatientsInfo({ uuid }) {
                 color="var(--delete-button-color)"
               />
             </div>
-            <div className="patients-info-buttons-2 disabled">
+            <div className="patients-info-buttons-2 disabled" ref={buttonsSaveCancelRef}>
               <Button
                 form="patients-info"
                 type="button"

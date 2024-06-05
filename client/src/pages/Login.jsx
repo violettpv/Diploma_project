@@ -15,7 +15,6 @@ export default function Login() {
 
   useEffect(() => {
     if (isError) {
-      // console.log(message);
       toast.error(message, {
         position: 'top-right',
         autoClose: 5000,
