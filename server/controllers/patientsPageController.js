@@ -99,10 +99,9 @@ const loginPatient = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get all treatment plans for a patient
-// @route   GET /api/patientspage/all/tplans?limit=&offset=
+// @route   GET /api/patientspage/all/tplans
 // @access  Private
 const getAllPlans = asyncHandler(async (req, res) => {
-  // const { limit, offset } = req.query;
   const patient = await Patient.findByPk(req.patient.uuid);
   if (!patient) {
     res.status(400);
@@ -117,9 +116,6 @@ const getAllPlans = asyncHandler(async (req, res) => {
       },
     ],
     order: [[TreatmentPlanRecord, 'date', 'DESC']],
-    // limit: parseInt(limit),
-    // offset: parseInt(offset),
-    // subQuery: false,
   });
 
   if (allTrPlans) {

@@ -76,12 +76,6 @@
 
 /* ==== PAccount ==== */
 .p-account-main {
-  /* height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: pa; */
   height: 100%;
   width: 70%;
   padding: 15px;
@@ -97,7 +91,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
 }
 #pa-form input {
   margin: 10px 0;
@@ -107,4 +100,41 @@
 }
 .disabled {
   display: none;
+}
+
+/* Treatment Plans */
+.treatmentplans-main {
+  height: 100%;
+  width: 80%;
+  padding: 15px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+.tplans-title {
+  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--charcoal);
+}
+.treatmentplans-main .tplans-header {
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.treatmentplans-main .treatmentplans-list {
+  height: 90%;
+}
+.tplans-list {
+  /* height: 80%; */
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  margin-top: 5px;
 }

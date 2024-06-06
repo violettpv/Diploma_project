@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../../css/Patients.css';
-import '../../index.css';
+import '../../../css/Patients.css';
+import '../../../index.css';
 import { toast } from 'react-toastify';
 import {
-  createTreatmentPlan,
+  createDocsDiaryRecord,
   getPatient,
   reset,
-} from '../../features/patients/patientsSlice';
-import Button from '../Button';
-import Header from '../Header';
-import Navigator from '../Navigator';
+} from '../../../features/patients/patientsSlice';
+import Button from '../../Button';
+import Header from '../../Header';
+import Navigator from '../../Navigator';
 
-export default function CreateTreatmentPlan() {
+export default function CreateDDRecord() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
@@ -63,10 +63,14 @@ export default function CreateTreatmentPlan() {
   }, [isError, message, dispatch, patientUuid]);
 
   const [date, setDate] = useState('');
-  const [examination, setExamination] = useState('');
+  const [complaints, setComplaints] = useState('');
+  const [anamnesis, setAnamnesis] = useState('');
+  const [status, setStatus] = useState('');
+  const [diagnosis, setDiagnosis] = useState('');
   const [treatment, setTreatment] = useState('');
+  const [recommendations, setRecommendations] = useState('');
 
-  const treatmentPlanFormRef = useRef(null);
+  const docsRecordFormRef = useRef(null);
   const buttonsSaveCancelRef = useRef(null);
 
   const handleCancel = (e) => {
@@ -75,11 +79,26 @@ export default function CreateTreatmentPlan() {
   };
 
   const validateForm = () => {
-    let date = treatmentPlanFormRef.current.date.value;
-    let treatment = treatmentPlanFormRef.current.treatment.value;
+    let date = docsRecordFormRef.current.date.value;
+    let anamnesis = docsRecordFormRef.current.anamnesis.value;
+    let status = docsRecordFormRef.current.status.value;
 
-    if (treatment === '' || treatment === null) {
-      toast.error("Заповніть обов'язкові поля: дата та лікування", {
+    if (anamnesis === '' || anamnesis === null) {
+      toast.error("Заповніть обов'язкові поля: дата, анамнезис, статус", {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+      return false;
+    }
+
+    if (status === '' || status === null) {
+      toast.error("Заповніть обов'язкові поля: дата, анамнезис, статус", {
         position: 'top-right',
         autoClose: 1500,
         hideProgressBar: false,
@@ -129,11 +148,15 @@ export default function CreateTreatmentPlan() {
       const data = {
         patientUuid: patientUuid,
         date: date,
-        examination: examination,
+        complaints: complaints,
+        anamnesis: anamnesis,
+        status: status,
+        diagnosis: diagnosis,
         treatment: treatment,
+        recommendations: recommendations,
       };
-      await dispatch(createTreatmentPlan(data));
-      toast.success('План лікування створено', {
+      await dispatch(createDocsDiaryRecord(data));
+      toast.success('Запис в щоденнику лікаря створено', {
         position: 'top-right',
         autoClose: 1200,
         hideProgressBar: false,
@@ -146,7 +169,7 @@ export default function CreateTreatmentPlan() {
       navigate(`/patients/get/${patientUuid}`);
     } else {
       toast.error(
-        'Помилка при створенні плану лікування. Перевірте правильність введених даних.',
+        'Помилка при створенні запису в щоденнику лікаря. Перевірте правильність введених даних.',
         {
           position: 'top-right',
           autoClose: 1500,
@@ -163,21 +186,25 @@ export default function CreateTreatmentPlan() {
 
   return (
     <>
-      <div className="CreateTreatmentPlan">
+      <div className="CreateDDRecord">
         <Navigator />
-        <div className="tplan-content">
+        <div className="docsrecord-content">
           <Header />
-          <div className="tplan-body">
-            <div className="tplan-main">
+          <div className="docsrecord-body">
+            <div className="docsrecord-main">
               <div className="tplan-fullname">
                 <div className="tplan-title">
-                  Створення плану лікування (Пацієнт: {patient?.surname} {patient?.name}{' '}
-                  {patient?.patronymic}){patient?.patronymic}
+                  Створення запису в щоденнику лікаря (Пацієнт: {patient?.surname}{' '}
+                  {patient?.name} {patient?.patronymic})
                 </div>
                 <hr className="custom-hr" />
               </div>
-              <form id="create-tplan" name="create-tplan" ref={treatmentPlanFormRef}>
-                <div className="tplan-data-row">
+              <form
+                id="create-docsrecord"
+                name="create-docsrecord"
+                ref={docsRecordFormRef}
+              >
+                <div className="docsrecord-date-row">
                   <label htmlFor="date">Дата:</label>
                   <input
                     name="date"
@@ -186,35 +213,67 @@ export default function CreateTreatmentPlan() {
                     onChange={(e) => setDate(e.target.value)}
                   />
                 </div>
-                <div className="tplan-data-row">
-                  <label htmlFor="examination">План обстеження:</label>
-                  <textarea
-                    name="examination"
-                    type="text"
-                    value={examination}
-                    onChange={(e) => setExamination(e.target.value)}
-                  />
-                </div>
-                <div className="tplan-data-row">
-                  <label htmlFor="treatment">План лікування:</label>
-                  <textarea
-                    name="treatment"
-                    type="text"
-                    value={treatment}
-                    onChange={(e) => setTreatment(e.target.value)}
-                  />
+                <div className="docsrecord-data-rows">
+                  <div className="docsrecord-data-row">
+                    <label htmlFor="complaints">Скарги:</label>
+                    <textarea
+                      name="complaints"
+                      type="text"
+                      value={complaints}
+                      onChange={(e) => setComplaints(e.target.value)}
+                    />
+                    <label htmlFor="anamnesis">Анамнез:</label>
+                    <textarea
+                      placeholder="Обов'язкове поле"
+                      name="anamnesis"
+                      type="text"
+                      value={anamnesis}
+                      onChange={(e) => setAnamnesis(e.target.value)}
+                    />
+                    <label htmlFor="status">Статус:</label>
+                    <textarea
+                      placeholder="Обов'язкове поле"
+                      name="status"
+                      type="text"
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
+                    />
+                  </div>
+                  <div className="docsrecord-data-row">
+                    <label htmlFor="diagnosis">Діагноз:</label>
+                    <textarea
+                      name="diagnosis"
+                      type="text"
+                      value={diagnosis}
+                      onChange={(e) => setDiagnosis(e.target.value)}
+                    />
+                    <label htmlFor="treatment">Лікування:</label>
+                    <textarea
+                      name="treatment"
+                      type="text"
+                      value={treatment}
+                      onChange={(e) => setTreatment(e.target.value)}
+                    />
+                    <label htmlFor="recommendations">Рекомендації:</label>
+                    <textarea
+                      name="recommendations"
+                      type="text"
+                      value={recommendations}
+                      onChange={(e) => setRecommendations(e.target.value)}
+                    />
+                  </div>
                 </div>
               </form>
-              <div className="tplan-buttons" ref={buttonsSaveCancelRef}>
+              <div className="docsrecord-buttons" ref={buttonsSaveCancelRef}>
                 <Button
-                  form="create-tplan"
+                  form="create-docsrecord"
                   type="button"
                   onClick={(e) => onSubmitCreate(e)}
                   text="Створити"
                   color="var(--piction-blue)"
                 />
                 <Button
-                  form="create-tplan"
+                  form="create-docsrecord"
                   type="button"
                   onClick={(e) => handleCancel(e)}
                   text="Скасувати"

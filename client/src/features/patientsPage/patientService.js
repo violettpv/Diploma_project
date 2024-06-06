@@ -33,6 +33,16 @@ const getAllTreatmentPlans = async (token) => {
   return response.data;
 };
 
+const getTreatmentPlan = async (token, planUuid) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL + 'tplan/' + planUuid, config);
+  return response.data;
+};
+
 const updatePatient = async (patientData, token) => {
   const config = {
     headers: {
@@ -63,6 +73,7 @@ const patientService = {
   updatePatient,
   getAllTreatmentPlans,
   getAppointments,
+  getTreatmentPlan,
 };
 
 export default patientService;

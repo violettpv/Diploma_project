@@ -115,6 +115,7 @@
 
 .note-data-row textarea,
 .note-data-row input {
+  font-family: Arial, Helvetica, sans-serif;
   margin-top: 5px;
   width: 100%;
   border: 1px solid #e0e0e0;

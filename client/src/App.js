@@ -25,6 +25,8 @@ import PatientsCard from './components/patients/PatientsCard';
 import CreatePatient from './components/patients/CreatePatient';
 import TreatmentPlan from './components/patients/TreatmentPlan';
 import CreateTreatmentPlan from './components/patients/CreateTreatmentPlan';
+import DDRecord from './components/patients/DocsDiary/DDRecord';
+import CreateDDRecord from './components/patients/DocsDiary/CreateDDRecord';
 // Mailing System
 import MailingSystem from './pages/MailingSystem';
 import CreateTemplate from './components/mailingsystem/CreateTemplate';
@@ -44,6 +46,8 @@ import PatientLogin from './patientsPage/PatientLogin';
 import PatientsPageMain from './patientsPage/Main';
 import PAppointments from './patientsPage/PAppointments';
 import PAccount from './patientsPage/PAccount';
+import PTreatmentPlans from './patientsPage/PTreatmentPlans';
+import PPlanCard from './patientsPage/PPlanCard';
 
 function App() {
   return (
@@ -81,6 +85,8 @@ function App() {
               path="/patients/tplan/create/:uuid"
               element={<CreateTreatmentPlan />}
             />
+            <Route path="/patients/docsdiary/:uuid" element={<DDRecord />} />
+            <Route path="/patients/docsdiary/create/:uuid" element={<CreateDDRecord />} />
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/appointments/create" element={<CreateAppointment />} />
             <Route path="/appointments/update/:uuid" element={<EditAppointment />} />
@@ -99,6 +105,12 @@ function App() {
             <Route path="/patientspage" element={<PatientsPageMain />} />
             <Route path="/patientspage/appointments" element={<PAppointments />} />
             <Route path="/patientspage/account" element={<PAccount />} />
+            <Route path="/patientspage/treatmentplans" element={<PTreatmentPlans />} />
+            <Route
+              path="/patientspage/treatmentplans/get/:uuid"
+              element={<PPlanCard />}
+            />
+
             {/* <Route path="*" element={<h1>Not Found</h1>} /> */}
           </Routes>
         </div>

@@ -6,6 +6,7 @@ const patient = JSON.parse(localStorage.getItem('patient'));
 const initialState = {
   patient: patient ? patient : null,
   treatmentPlans: [],
+  plan: {},
   appointments: [],
   isError: false,
   isSuccess: false,
@@ -84,6 +85,22 @@ export const getAllTreatmentPlans = createAsyncThunk(
   }
 );
 
+export const getTreatmentPlan = createAsyncThunk(
+  'patient/treatmentPlan',
+  async (planUuid, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().patient.patient.token;
+      return await patientService.getTreatmentPlan(token, planUuid);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const getAppointments = createAsyncThunk(
   'patient/appointments',
   async (_, thunkAPI) => {
@@ -109,6 +126,10 @@ export const patientSlice = createSlice({
       state.isSuccess = false;
       state.isError = false;
       state.message = '';
+    },
+    resetPlans: (state) => {
+      state.treatmentPlans = [];
+      state.plan = {};
     },
   },
   extraReducers: (builder) => {
@@ -170,6 +191,19 @@ export const patientSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
+      .addCase(getTreatmentPlan.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTreatmentPlan.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.plan = action.payload;
+      })
+      .addCase(getTreatmentPlan.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
       .addCase(getAppointments.pending, (state) => {
         state.isLoading = true;
       })
@@ -186,5 +220,5 @@ export const patientSlice = createSlice({
   },
 });
 
-export const { reset } = patientSlice.actions;
+export const { reset, resetPlans } = patientSlice.actions;
 export default patientSlice.reducer;

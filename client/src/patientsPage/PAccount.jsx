@@ -21,7 +21,7 @@ export default function Main() {
 
   useEffect(() => {
     if (!patient) {
-      navigate('/login');
+      navigate('/loginpatient');
     }
   }, []);
 
@@ -62,7 +62,6 @@ export default function Main() {
     formRef.current.querySelectorAll('.form-inputs').forEach((input) => {
       input.removeAttribute('disabled');
     });
-
     buttonsEditRef.current.classList.add('disabled');
     buttonsSaveCancelRef.current.classList.remove('disabled');
   };

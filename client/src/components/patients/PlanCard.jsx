@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -6,10 +6,32 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import '../../index.css';
+import { toast } from 'react-toastify';
 
 export default function PlanCard({ plan }) {
   const navigate = useNavigate();
   const { uuid, date, examination, treatment } = plan;
+
+  const handleClick = (e) => {
+    e.preventDefault();
+
+    if (localStorage.getItem('user')) {
+      navigate(`/patients/tplan/${uuid}`);
+    } else if (localStorage.getItem('patient')) {
+      navigate(`/patientspage/treatmentplans/get/${uuid}`);
+    } else {
+      toast.error('Помилка в рендерингу PlanCard', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
+  };
 
   return (
     <Card
@@ -36,7 +58,8 @@ export default function PlanCard({ plan }) {
         <Button
           size="small"
           sx={{ cursor: 'pointer', fontWeight: 'bold', color: 'white' }}
-          onClick={() => navigate(`/patients/tplan/${uuid}`)}
+          // onClick={() => navigate(`/patients/tplan/${uuid}`)}
+          onClick={(e) => handleClick(e)}
         >
           Відкрити
         </Button>

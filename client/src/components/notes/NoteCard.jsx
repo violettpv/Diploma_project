@@ -124,19 +124,15 @@ export default function NoteCard() {
     noteFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.removeAttribute('disabled');
     });
-    noteFormRef.current.querySelectorAll('.card-inputs').forEach((textarea) => {
-      textarea.removeAttribute('disabled');
-    });
     buttonsEditDeleteRef.current.classList.add('disabled');
     buttonsSaveCancelRef.current.classList.remove('disabled');
   };
 
   const cancelEditForm = () => {
+    setTitle(oneNote.title);
+    setContent(oneNote.content);
     noteFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.setAttribute('disabled', '');
-    });
-    noteFormRef.current.querySelectorAll('.card-inputs').forEach((textarea) => {
-      textarea.removeAttribute('disabled');
     });
     buttonsEditDeleteRef.current.classList.remove('disabled');
     buttonsSaveCancelRef.current.classList.add('disabled');

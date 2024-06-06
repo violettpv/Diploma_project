@@ -37,7 +37,7 @@ export default function TreatmentPlan() {
     if (!user) {
       navigate('/login');
     }
-  }, []);
+  }, [navigate, user]);
 
   useEffect(() => {
     if (isError) {
@@ -54,7 +54,7 @@ export default function TreatmentPlan() {
     }
 
     if (!user || !(user.role === 'doctor' || user.role === 'main')) {
-      navigate('/');
+      navigate('/patients');
       toast.warn('У вас немає доступу до цієї сторінки', {
         position: 'top-right',
         autoClose: 1100,
@@ -71,7 +71,7 @@ export default function TreatmentPlan() {
     return () => {
       dispatch(reset());
     };
-  }, [isError, message, dispatch, treatmentPlanUuid]);
+  }, [isError, message, dispatch, treatmentPlanUuid, navigate, user]);
 
   const validateForm = () => {
     let date = treatmentPlanFormRef.current.date.value;
@@ -91,7 +91,7 @@ export default function TreatmentPlan() {
       return false;
     }
     if (!(date === '' || date === null)) {
-      if (!date.match(/^\d{4}\-\d{2}\-\d{2}$/)) {
+      if (!date.match(/^\d{4}-\d{2}-\d{2}$/)) {
         toast.error('Невірний формат дати. Введіть у форматі рррр.мм.дд', {
           position: 'top-right',
           autoClose: 1500,

@@ -140,7 +140,6 @@ export default function PatientsInfo({ uuid }) {
     patientsFormRef.current.querySelectorAll('.card-inputs').forEach((input) => {
       input.removeAttribute('disabled');
     });
-
     buttonsEditDeleteRef.current.classList.add('disabled');
     buttonsSaveCancelRef.current.classList.remove('disabled');
   };
@@ -191,7 +190,7 @@ export default function PatientsInfo({ uuid }) {
       });
       return false;
     }
-    if (!birthdate.match(/^\d{4}\-\d{2}\-\d{2}$/)) {
+    if (!birthdate.match(/^\d{4}-\d{2}-\d{2}$/)) {
       toast.error('Невірний формат дати народження. Введіть у форматі рррр.мм.дд', {
         position: 'top-right',
         autoClose: 1500,

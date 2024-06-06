@@ -74,7 +74,14 @@ const createDDRecord = asyncHandler(async (req, res) => {
 // @route   GET /api/docsdiary/get/:uuid
 // @access  Private
 const getDDRecord = asyncHandler(async (req, res) => {
-  const diaryRecord = await DoctorsDiaryRecord.findByPk(req.params.uuid);
+  const diaryRecord = await DoctorsDiaryRecord.findByPk(req.params.uuid, {
+    include: [
+      {
+        model: Patient,
+        through: { attributes: [] },
+      },
+    ],
+  });
 
   // Check if user's role is 'main' or 'doctor'
   const findUsersRole = await User.findByPk(req.user.uuid, {
@@ -96,6 +103,7 @@ const getDDRecord = asyncHandler(async (req, res) => {
       diagnosis: diaryRecord.diagnosis,
       treatment: diaryRecord.treatment,
       recommendations: diaryRecord.recommendations,
+      patientUuid: diaryRecord.patients[0].uuid,
     });
   } else {
     res.status(404);
@@ -104,10 +112,9 @@ const getDDRecord = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get all doctor's diary records of a patient
-// @route   GET /api/docsdiary/all/:uuid?limit=&offset=
+// @route   GET /api/docsdiary/all/:uuid
 // @access  Private
 const getAllRecordsOfPatient = asyncHandler(async (req, res) => {
-  const { limit, offset } = req.query;
   const patient = await Patient.findByPk(req.params.uuid);
   const diaryRecords = await Patient.findByPk(patient.uuid, {
     attributes: ['uuid', 'surname', 'name'],
@@ -118,9 +125,6 @@ const getAllRecordsOfPatient = asyncHandler(async (req, res) => {
       },
     ],
     order: [[DoctorsDiaryRecord, 'date', 'DESC']],
-    limit: parseInt(limit),
-    offset: parseInt(offset),
-    subQuery: false,
   });
 
   // Check if user's role is 'main' or 'doctor'
