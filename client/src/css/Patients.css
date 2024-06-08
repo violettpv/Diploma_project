@@ -162,9 +162,6 @@
   width: 100%;
   margin-top: 20px;
 }
-/* .disabled {
-  display: none;
-} */
 /*#endregion */
 
 /*#region Anamnesis  */
@@ -194,34 +191,6 @@
   justify-content: flex-start;
   align-items: center;
 }
-/* .disabled {
-  display: none;
-} */
-/* .diseases-buttons button {
-  width: 100px;
-  height: 40px;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  margin: 10px 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-} */
-/* #diseases-button-save,
-#diseases-button-update {
-  background-color: #009be5;
-}
-#diseases-button-save:hover,
-#diseases-button-update:hover {
-  background-color: #0077b3;
-}
-#diseases-button-cancel {
-  background-color: #767676;
-}
-#diseases-button-cancel:hover {
-  background-color: #585858;
-} */
 /*#endregion */
 
 /*#region Form043  */
@@ -271,6 +240,142 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 /*#endregion */
+
+/*#region Dental Formula */
+.DentalFormula {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.DentalFormula-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 70vh;
+}
+.DentalFormula-block-1 {
+  padding-top: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  height: 82%;
+}
+
+#df-table {
+  border-collapse: collapse;
+}
+
+.image-row {
+  text-align: center;
+  height: 80%;
+}
+
+.options-row td {
+  width: 6.25%;
+  height: fit-content;
+  text-align: center;
+}
+
+#dental-formula-img {
+  padding: 5px;
+  /* width: 100%; */
+  height: auto;
+
+  /* from html styles */
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+}
+
+.DentalFormula-block-2 {
+  width: 100%;
+  height: 18%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.df-note {
+  width: 75%;
+}
+.df-buttons {
+  width: 25%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.df-note,
+.df-buttons {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.df-note textarea {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  resize: none;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* CHECKBOXES */
+.select-with-checkboxes {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  width: 100%;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1000;
+  width: 220px;
+  height: 710%;
+  max-height: 710%;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  display: flex;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.dropdown-item input[type='checkbox'] {
+  margin-right: 10px;
+}
+
+.df-icon {
+  font-size: 18px;
+}
+
+/*#endregion Dental Formula  */
 
 /*#region Treatment Plan  */
 .TreatmentPlans {
