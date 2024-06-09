@@ -42,7 +42,9 @@ export default function CreateDDRecord() {
       });
     }
 
-    if (!user || !(user.role === 'doctor' || user.role === 'main')) {
+    if (user && (user.role === 'doctor' || user.role === 'main')) {
+      dispatch(getPatient(patientUuid));
+    } else {
       navigate('/patients');
       toast.warn('У вас немає доступу до цієї сторінки', {
         position: 'top-right',
@@ -56,7 +58,6 @@ export default function CreateDDRecord() {
       });
     }
 
-    dispatch(getPatient(patientUuid));
     return () => {
       dispatch(reset());
     };

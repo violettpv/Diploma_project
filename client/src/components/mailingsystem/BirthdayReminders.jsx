@@ -204,7 +204,7 @@ export default function BirthdayReminders() {
                         <TableCell
                           sx={{ cursor: 'pointer' }}
                           // onClick={() => navigate(`/patients/get/${birthday.uuid}`)}
-                          onClick={() => navigate(`/patients/card/${birthday.uuid}`)}
+                          onClick={() => navigate(`/patients/card/${birthday.uuid}/info`)}
                         >
                           {birthday.surname} {birthday.name} {birthday.patronymic}
                         </TableCell>

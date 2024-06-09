@@ -42,8 +42,9 @@ export default function CreateTreatmentPlan() {
       });
     }
 
-    if (!user || !(user.role === 'doctor' || user.role === 'main')) {
-      navigate('/patients');
+    if (user && (user.role === 'doctor' || user.role === 'main')) {
+      dispatch(getPatient(patientUuid));
+    } else {
       toast.warn('У вас немає доступу до цієї сторінки', {
         position: 'top-right',
         autoClose: 1100,
@@ -54,9 +55,9 @@ export default function CreateTreatmentPlan() {
         progress: undefined,
         theme: 'light',
       });
+      navigate(`/patients/card/${patientUuid}/info`);
     }
 
-    dispatch(getPatient(patientUuid));
     return () => {
       dispatch(reset());
     };

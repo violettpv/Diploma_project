@@ -57,7 +57,9 @@ export default function TreatmentPlan() {
       });
     }
 
-    if (!user || !(user.role === 'doctor' || user.role === 'main')) {
+    if (user && (user.role === 'doctor' || user.role === 'main')) {
+      dispatch(getDocsDiaryRecord(docsRecordUuid));
+    } else {
       navigate('/patients');
       toast.warn('У вас немає доступу до цієї сторінки', {
         position: 'top-right',
@@ -71,7 +73,6 @@ export default function TreatmentPlan() {
       });
     }
 
-    dispatch(getDocsDiaryRecord(docsRecordUuid));
     return () => {
       dispatch(reset());
     };

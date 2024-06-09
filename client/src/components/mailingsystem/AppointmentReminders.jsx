@@ -172,7 +172,7 @@ export default function MSysInfo() {
                           sx={{ cursor: 'pointer' }}
                           onClick={() =>
                             // navigate(`/patients/get/${appointment.patient.uuid}`)
-                            navigate(`/patients/card/${appointment.patient.uuid}`)
+                            navigate(`/patients/card/${appointment.patient.uuid}/info`)
                           }
                         >
                           {appointment.patient.surname} {appointment.patient.name}{' '}

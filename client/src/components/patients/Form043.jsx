@@ -54,8 +54,10 @@ export default function Form043({ uuid }) {
       });
     }
 
-    if (!user || !(user.role === 'doctor' || user.role === 'main')) {
-      navigate('/');
+    if (user && (user.role === 'doctor' || user.role === 'main')) {
+      dispatch(getPatient(uuid));
+      dispatch(getForm043(uuid));
+    } else {
       toast.warn('У вас немає доступу до цієї сторінки', {
         position: 'top-right',
         autoClose: 1100,
@@ -66,10 +68,9 @@ export default function Form043({ uuid }) {
         progress: undefined,
         theme: 'light',
       });
+      navigate(`/patients/card/${uuid}/info`);
     }
 
-    dispatch(getPatient(uuid));
-    dispatch(getForm043(uuid));
     return () => {
       dispatch(reset());
     };

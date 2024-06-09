@@ -43,7 +43,6 @@ export default function Clinic() {
     }
 
     if (!user || user.role !== 'main') {
-      navigate('/');
       toast.warn('У вас немає доступу до цієї сторінки', {
         position: 'top-right',
         autoClose: 1700,
@@ -54,6 +53,7 @@ export default function Clinic() {
         progress: undefined,
         theme: 'light',
       });
+      navigate('/accounts/me');
     }
 
     return () => {

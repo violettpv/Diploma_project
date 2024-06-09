@@ -45,7 +45,6 @@ export default function Users() {
     }
 
     if (!user || user.role !== 'main') {
-      navigate('/');
       toast.warn('У вас немає доступу до цієї сторінки', {
         position: 'top-right',
         autoClose: 1100,
@@ -56,6 +55,7 @@ export default function Users() {
         progress: undefined,
         theme: 'light',
       });
+      navigate('/accounts/me');
     } else {
       dispatch(getUsers());
     }

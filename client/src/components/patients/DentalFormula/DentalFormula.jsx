@@ -110,16 +110,6 @@ function MultipleSelectChip({ parentState, defVal, toothId, disabled }) {
           value={toothOption}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" />}
-          // renderValue={(selected) => (
-          //   <Box sx={{ display: 'flex', flexWrap: 'noWrap', gap: 0.5 }}>
-          //     {selected.map((value) => (
-          //       // <Chip key={value} label={value} id="chip" />
-          //       <span key={value} id="chip">
-          //         {value}
-          //       </span>
-          //     ))}
-          //   </Box>
-          // )}
           renderValue={(selected) =>
             selected.map((value) => (
               <span key={value} id="chip">
@@ -210,8 +200,9 @@ export default function DentalFormula({ uuid }) {
       });
     }
 
-    if (!user || !(user.role === 'doctor' || user.role === 'main')) {
-      navigate('/');
+    if (user && (user.role === 'doctor' || user.role === 'main')) {
+      dispatch(getDentalFormula(uuid));
+    } else {
       toast.warn('У вас немає доступу до цієї сторінки', {
         position: 'top-right',
         autoClose: 1100,
@@ -222,9 +213,8 @@ export default function DentalFormula({ uuid }) {
         progress: undefined,
         theme: 'light',
       });
+      navigate(`/patients/card/${uuid}/info`);
     }
-
-    dispatch(getDentalFormula(uuid));
 
     return () => {
       dispatch(reset());

@@ -135,7 +135,7 @@ export default function Patients() {
                                 sx={{ cursor: 'pointer' }}
                                 onClick={
                                   // () => navigate(`/patients/get/${patient.uuid}`)
-                                  () => navigate(`/patients/card/${patient.uuid}`)
+                                  () => navigate(`/patients/card/${patient.uuid}/info`)
                                 }
                               >
                                 {patient.surname} {patient.name} {patient.patronymic}
