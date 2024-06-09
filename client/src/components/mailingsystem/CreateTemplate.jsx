@@ -77,7 +77,7 @@ export default function CreateTemplate() {
     return true;
   };
 
-  const onSubmitCreate = (e) => {
+  const onSubmitCreate = async (e) => {
     e.preventDefault();
     let isValid = validateForm();
     if (isValid) {
@@ -85,7 +85,7 @@ export default function CreateTemplate() {
         name: name,
         body: body,
       };
-      dispatch(createTemplate(data));
+      await dispatch(createTemplate(data));
       toast.success('Шаблон створено', {
         position: 'top-right',
         autoClose: 1200,
@@ -97,7 +97,6 @@ export default function CreateTemplate() {
         theme: 'light',
       });
       navigate('/mailingsystem/templates');
-      dispatch(reset());
     } else {
       toast.error('Помилка при створенні шаблону', {
         position: 'top-right',

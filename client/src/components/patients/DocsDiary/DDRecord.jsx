@@ -197,20 +197,34 @@ export default function TreatmentPlan() {
       cancelButtonText: 'Ні',
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteDocsDiaryRecord(docsRecordUuid));
-        toast.success('Запис щоденнику видалено', {
-          position: 'top-right',
-          autoClose: 1200,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-        // navigate(`/patients/get/${ddRecord.patientUuid}`);
-        // navigate(`/patients/card/${ddRecord.patientUuid}`);
-        navigate(`/patients/card/${ddRecord.patientUuid}/doctorsDiary`);
+        dispatch(deleteDocsDiaryRecord(docsRecordUuid))
+          .then((result) => {
+            toast.success('Запис щоденнику видалено', {
+              position: 'top-right',
+              autoClose: 1200,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            });
+            // navigate(`/patients/get/${ddRecord.patientUuid}`);
+            // navigate(`/patients/card/${ddRecord.patientUuid}`);
+            navigate(`/patients/card/${ddRecord.patientUuid}/doctorsDiary`);
+          })
+          .catch((err) => {
+            toast.error(err.message, {
+              position: 'top-right',
+              autoClose: 1200,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            });
+          });
       }
     });
   };

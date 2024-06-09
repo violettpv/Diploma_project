@@ -71,18 +71,32 @@ export default function EditTemplate() {
       cancelButtonText: 'Ні',
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteTemplate(templateUuid));
-        toast.success('Шаблон видалено', {
-          position: 'top-right',
-          autoClose: 1200,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-        navigate('/mailingsystem/templates');
+        dispatch(deleteTemplate(templateUuid))
+          .then((result) => {
+            toast.success('Шаблон видалено', {
+              position: 'top-right',
+              autoClose: 1200,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            });
+            navigate('/mailingsystem/templates');
+          })
+          .catch((err) => {
+            toast.error(err.message, {
+              position: 'top-right',
+              autoClose: 1500,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            });
+          });
       }
     });
   };
