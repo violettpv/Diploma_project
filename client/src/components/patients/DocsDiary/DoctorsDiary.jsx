@@ -96,7 +96,7 @@ export default function DoctorsDiary({ uuid }) {
               <DDRecordCard key={record.uuid} record={record} />
             ))
           ) : (
-            <p>Плани не знайдені</p>
+            <p>Записи не знайдені</p>
           )}
         </div>
       </div>

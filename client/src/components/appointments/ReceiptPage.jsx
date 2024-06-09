@@ -125,6 +125,7 @@ export default function ReceiptPage() {
           theme: 'light',
         });
         navigate('/appointments');
+        // dispatch(getReceipt(receiptUuid));
       }
     });
   };

@@ -327,52 +327,25 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* CHECKBOXES */
-.select-with-checkboxes {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-button {
-  width: 100%;
-  padding: 5px 10px;
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  z-index: 1000;
-  width: 220px;
-  height: 710%;
-  max-height: 710%;
-  overflow-y: auto;
-}
-
-.dropdown-item {
-  display: flex;
-  padding: 5px 0;
-  cursor: pointer;
-}
-
-.dropdown-item input[type='checkbox'] {
-  margin-right: 10px;
-}
-
+/* SELECT */
 .df-icon {
   font-size: 18px;
+}
+
+#demo-multiple-chip,
+#select-multiple-chip,
+#chip {
+  padding: 0;
+  border: none;
+  background: none;
+}
+#demo-multiple-chip {
+  padding-left: 4px;
+  width: 35px;
+  border-radius: 0px;
+}
+#chip {
+  margin-right: 5px;
 }
 
 /*#endregion Dental Formula  */

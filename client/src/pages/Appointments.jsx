@@ -20,10 +20,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getAppointments,
-  getAppointment,
   deleteAppointment,
   reset,
 } from '../features/appointments/appointmentSlice';
+import { saveDate } from '../features/other/dateSlice';
 
 export default function Appointments() {
   const navigate = useNavigate();
@@ -38,6 +38,7 @@ export default function Appointments() {
   }, []);
 
   const { appointments, isError, message } = useSelector((state) => state.appointments);
+  const savedDate = useSelector((state) => state.date.selectedDate);
 
   const getToday = () => {
     const today = new Date();
@@ -47,7 +48,8 @@ export default function Appointments() {
     return { day, month, year };
   };
 
-  const [selectedDate, setSelectedDate] = useState(getToday());
+  // const [selectedDate, setSelectedDate] = useState(getToday());
+  const [selectedDate, setSelectedDate] = useState(savedDate || getToday());
 
   useEffect(() => {
     if (isError) {
@@ -102,15 +104,24 @@ export default function Appointments() {
 
   const handleUpdateAppointment = (e, uuid) => {
     e.preventDefault();
-    dispatch(getAppointment(uuid));
     navigate(`/appointments/update/${uuid}`);
   };
+
+  // const handleSearchDate = (e) => {
+  //   e.preventDefault();
+  //   const selectedDate = document.getElementById('search-date').value;
+  //   const [year, month, day] = selectedDate.split('-');
+  //   setSelectedDate({ day, month, year });
+  //   dispatch(getAppointments({ date: day, month, year }));
+  // };
 
   const handleSearchDate = (e) => {
     e.preventDefault();
     const selectedDate = document.getElementById('search-date').value;
     const [year, month, day] = selectedDate.split('-');
-    setSelectedDate({ day, month, year });
+    const dateObject = { day, month, year };
+    setSelectedDate(dateObject);
+    dispatch(saveDate(dateObject));
     dispatch(getAppointments({ date: day, month, year }));
   };
 

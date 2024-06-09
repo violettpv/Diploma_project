@@ -5,13 +5,12 @@ import '../../../css/Patients.css';
 import '../../../index.css';
 import Button from '../../Button';
 import { toast } from 'react-toastify';
-import { IoMdAddCircleOutline, IoMdCloseCircle } from 'react-icons/io';
 import {
   getDentalFormula,
   updateDentalFormula,
   reset,
 } from '../../../features/patients/patientsSlice';
-import { Box, OutlinedInput, MenuItem, FormControl, Select, Chip } from '@mui/material';
+import { OutlinedInput, MenuItem, FormControl, Select } from '@mui/material';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -81,7 +80,7 @@ const convertedFormula = {
   31: 38,
 };
 
-function MultipleSelectChip({ parentState, defVal, toothId }) {
+function MultipleSelectChip({ parentState, defVal, toothId, disabled }) {
   const [toothOption, setToothOption] = useState([]);
 
   useEffect(() => {
@@ -102,7 +101,7 @@ function MultipleSelectChip({ parentState, defVal, toothId }) {
 
   return (
     <div>
-      <FormControl sx={{ width: 50 }}>
+      <FormControl sx={{ width: '100%' }}>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
@@ -111,14 +110,25 @@ function MultipleSelectChip({ parentState, defVal, toothId }) {
           value={toothOption}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
+          // renderValue={(selected) => (
+          //   <Box sx={{ display: 'flex', flexWrap: 'noWrap', gap: 0.5 }}>
+          //     {selected.map((value) => (
+          //       // <Chip key={value} label={value} id="chip" />
+          //       <span key={value} id="chip">
+          //         {value}
+          //       </span>
+          //     ))}
+          //   </Box>
+          // )}
+          renderValue={(selected) =>
+            selected.map((value) => (
+              <span key={value} id="chip">
+                {value}
+              </span>
+            ))
+          }
           MenuProps={MenuProps}
+          disabled={disabled}
         >
           {options.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -288,6 +298,7 @@ export default function DentalFormula({ uuid }) {
                     {[...Array(16)].map((_, index) => (
                       <td key={index} className="td-buttons">
                         <MultipleSelectChip
+                          disabled={!isEditing}
                           parentState={setJsonDentalFormula}
                           toothId={convertedFormula[index]}
                           defVal={jsonDentalFormula[convertedFormula[index]]}
@@ -308,6 +319,7 @@ export default function DentalFormula({ uuid }) {
                     {[...Array(16)].map((_, index) => (
                       <td key={index} className="td-buttons">
                         <MultipleSelectChip
+                          disabled={!isEditing}
                           parentState={setJsonDentalFormula}
                           toothId={convertedFormula[16 + index]}
                           defVal={jsonDentalFormula[convertedFormula[16 + index]]}

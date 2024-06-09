@@ -14,11 +14,13 @@ const TreatmentPlanRecord = db.define(
       allowNull: false,
     },
     examination: {
-      type: DataTypes.STRING,
+      // type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     treatment: {
-      type: DataTypes.STRING,
+      // type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
   },
