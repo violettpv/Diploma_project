@@ -71,7 +71,9 @@ export default function CreateTreatmentPlan() {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    navigate(`/patients/get/${patientUuid}`);
+    // navigate(`/patients/get/${patientUuid}`);
+    // navigate(`/patients/card/${patientUuid}`);
+    navigate(`/patients/card/${patientUuid}/treatmentPlans`);
   };
 
   const validateForm = () => {
@@ -143,7 +145,9 @@ export default function CreateTreatmentPlan() {
         progress: undefined,
         theme: 'light',
       });
-      navigate(`/patients/get/${patientUuid}`);
+      // navigate(`/patients/get/${patientUuid}`);
+      // navigate(`/patients/card/${patientUuid}`);
+      navigate(`/patients/card/${patientUuid}/treatmentPlans`);
     } else {
       toast.error(
         'Помилка при створенні плану лікування. Перевірте правильність введених даних.',

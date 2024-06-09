@@ -111,7 +111,6 @@ export default function AddReceipt() {
     if (isValid) {
       const services = serviceEntries.map((entry) => entry.service);
       const quantities = serviceEntries.map((entry) => entry.quantity);
-
       await dispatch(
         addReceipt({
           services,
@@ -119,18 +118,43 @@ export default function AddReceipt() {
           sale,
           uuid: appointmentUuid,
         })
-      );
-      toast.success('Рахунок створено', {
-        position: 'top-right',
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-      navigate('/appointments');
+      )
+        .then((result) => {
+          toast.success('Рахунок створено', {
+            position: 'top-right',
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+          navigate('/appointments');
+        })
+        .catch((err) => {
+          toast.error(err.message, {
+            position: 'top-right',
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+        });
+      // toast.success('Рахунок створено', {
+      //   position: 'top-right',
+      //   autoClose: 1500,
+      //   hideProgressBar: false,
+      //   closeOnClick: false,
+      //   pauseOnHover: false,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: 'light',
+      // });
+      // navigate('/appointments');
     }
   };
 

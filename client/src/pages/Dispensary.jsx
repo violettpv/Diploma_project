@@ -264,7 +264,8 @@ export default function Appointments() {
                                 <TableCell
                                   sx={{ cursor: 'pointer' }}
                                   onClick={() =>
-                                    navigate(`/patients/get/${record.patient.uuid}`)
+                                    // navigate(`/patients/get/${record.patient.uuid}`)
+                                    navigate(`/patients/card/${record.patient.uuid}`)
                                   }
                                 >
                                   {record.patient.surname} {record.patient.name}{' '}

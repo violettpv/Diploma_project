@@ -171,7 +171,9 @@ export default function TreatmentPlan() {
           progress: undefined,
           theme: 'light',
         });
-        navigate(`/patients/get/${tPlan.patientUuid}`);
+        // navigate(`/patients/get/${tPlan.patientUuid}`);
+        // navigate(`/patients/card/${tPlan.patientUuid}`);
+        navigate(`/patients/card/${tPlan.patientUuid}/treatmentPlans`);
       }
     });
   };
@@ -260,7 +262,11 @@ export default function TreatmentPlan() {
                 <Button
                   form="tplan-form"
                   type="button"
-                  onClick={() => navigate(`/patients/get/${tPlan.patientUuid}`)}
+                  onClick={
+                    //() => navigate(`/patients/get/${tPlan.patientUuid}`)
+                    // () => navigate(`/patients/card/${tPlan.patientUuid}`)
+                    () => navigate(`/patients/card/${tPlan.patientUuid}/treatmentPlans`)
+                  }
                   text="Назад"
                   color="gray"
                 />

@@ -96,6 +96,8 @@ export default function CreateTemplate() {
         progress: undefined,
         theme: 'light',
       });
+      navigate('/mailingsystem/templates');
+      dispatch(reset());
     } else {
       toast.error('Помилка при створенні шаблону', {
         position: 'top-right',

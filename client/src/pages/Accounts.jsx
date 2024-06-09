@@ -4,7 +4,7 @@ import Navigator from '../components/Navigator';
 import '../css/Accounts.css';
 import '../index.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { logout, reset } from '../features/user/userSlice';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { Tabs } from '@mui/base/Tabs';
@@ -34,6 +34,13 @@ export default function Accounts() {
     navigate('/login');
   };
 
+  const { tab } = useParams();
+
+  const handleTabChange = (event, newValue) => {
+    event.preventDefault();
+    navigate(`/accounts/${newValue}`);
+  };
+
   return (
     <>
       <div className="Accounts">
@@ -42,7 +49,48 @@ export default function Accounts() {
           <Header />
           <div className="accounts-body">
             <div className="accounts-main">
-              <Tabs defaultValue={0}>
+              <Tabs value={tab} onChange={handleTabChange}>
+                <div className="tabs-logout">
+                  <div className="tabs">
+                    <TabsList className="tabs-list">
+                      <Tab className="tab" value="me">
+                        Мій акаунт
+                      </Tab>
+                      <Tab className="tab" value="clinic">
+                        Клініка
+                      </Tab>
+                      <Tab className="tab" value="workers">
+                        Працівники
+                      </Tab>
+                      <Tab className="tab" value="add-worker">
+                        Додати працівника
+                      </Tab>
+                    </TabsList>
+                  </div>
+                  <div className="logout-container">
+                    <button className="tooltip" id="logout-button" onClick={logOut}>
+                      <FaSignOutAlt />
+                      <span className="tooltiptext">Вийти</span>
+                    </button>
+                  </div>
+                </div>
+                <hr className="custom-hr" />
+                <div className="tab-panel">
+                  <TabPanel value="me">
+                    <UserPage />
+                  </TabPanel>
+                  <TabPanel value="clinic">
+                    <Clinic />
+                  </TabPanel>
+                  <TabPanel value="workers">
+                    <Users />
+                  </TabPanel>
+                  <TabPanel value="add-worker">
+                    <CreateUser />
+                  </TabPanel>
+                </div>
+              </Tabs>
+              {/* <Tabs defaultValue={0}>
                 <div className="tabs-logout">
                   <div className="tabs">
                     <TabsList className="tabs-list">
@@ -82,7 +130,7 @@ export default function Accounts() {
                     <CreateUser />
                   </TabPanel>
                 </div>
-              </Tabs>
+              </Tabs> */}
             </div>
           </div>
         </div>

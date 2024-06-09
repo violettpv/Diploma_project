@@ -75,7 +75,9 @@ export default function CreateDDRecord() {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    navigate(`/patients/get/${patientUuid}`);
+    // navigate(`/patients/get/${patientUuid}`);
+    // navigate(`/patients/card/${patientUuid}`);
+    navigate(`/patients/card/${patientUuid}/doctorsDiary`);
   };
 
   const validateForm = () => {
@@ -166,7 +168,9 @@ export default function CreateDDRecord() {
         progress: undefined,
         theme: 'light',
       });
-      navigate(`/patients/get/${patientUuid}`);
+      // navigate(`/patients/get/${patientUuid}`);
+      // navigate(`/patients/card/${patientUuid}`);
+      navigate(`/patients/card/${patientUuid}/doctorsDiary`);
     } else {
       toast.error(
         'Помилка при створенні запису в щоденнику лікаря. Перевірте правильність введених даних.',

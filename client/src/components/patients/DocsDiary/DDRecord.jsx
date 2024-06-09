@@ -207,7 +207,9 @@ export default function TreatmentPlan() {
           progress: undefined,
           theme: 'light',
         });
-        navigate(`/patients/get/${ddRecord.patientUuid}`);
+        // navigate(`/patients/get/${ddRecord.patientUuid}`);
+        // navigate(`/patients/card/${ddRecord.patientUuid}`);
+        navigate(`/patients/card/${ddRecord.patientUuid}/doctorsDiary`);
       }
     });
   };
@@ -344,7 +346,11 @@ export default function TreatmentPlan() {
                 <Button
                   form="tplan-form"
                   type="button"
-                  onClick={() => navigate(`/patients/get/${ddRecord.patientUuid}`)}
+                  onClick={
+                    // () => navigate(`/patients/get/${ddRecord.patientUuid}`)
+                    // () => navigate(`/patients/card/${ddRecord.patientUuid}`)
+                    () => navigate(`/patients/card/${ddRecord.patientUuid}/doctorsDiary`)
+                  }
                   text="Назад"
                   color="gray"
                 />

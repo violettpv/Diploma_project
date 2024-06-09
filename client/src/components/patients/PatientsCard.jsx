@@ -28,7 +28,13 @@ export default function PatientsCard() {
     }
   }, []);
 
-  const { uuid } = useParams();
+  const { uuid, tab } = useParams();
+
+  const handleTabChange = (event, newValue) => {
+    event.preventDefault();
+    // navigate(`/patients/get/${uuid}/${newValue}`);
+    navigate(`/patients/card/${uuid}/${newValue}`);
+  };
 
   return (
     <>
@@ -37,41 +43,64 @@ export default function PatientsCard() {
         <div className="patients-content">
           <Header />
           <div className="patients-body">
-            <Tabs className="patients-card-tabs" defaultValue={0} orientation="vertical">
+            <Tabs
+              className="patients-card-tabs"
+              orientation="vertical"
+              defaultValue="info"
+              value={tab}
+              // value={tab ? tab : 'info'}
+              onChange={handleTabChange}
+            >
               <TabsList className="tabs-list">
-                <Tab className="tab">Дані</Tab>
-                <Tab className="tab">Анамнез</Tab>
-                <Tab className="tab">Форма 043/о</Tab>
-                <Tab className="tab">План лікування</Tab>
-                <Tab className="tab">Щоденник лікаря</Tab>
-                <Tab className="tab">Зубна формула</Tab>
-                <Tab className="tab">Візити</Tab>
-                <Tab className="tab">Кабінет</Tab>
+                <Tab className="tab" value="info">
+                  Дані
+                </Tab>
+                <Tab className="tab" value="anamnesis">
+                  Анамнез
+                </Tab>
+                <Tab className="tab" value="form043">
+                  Форма 043/о
+                </Tab>
+                <Tab className="tab" value="treatmentPlans">
+                  План лікування
+                </Tab>
+                <Tab className="tab" value="doctorsDiary">
+                  Щоденник лікаря
+                </Tab>
+                <Tab className="tab" value="dentalFormula">
+                  Зубна формула
+                </Tab>
+                <Tab className="tab" value="appointments">
+                  Візити
+                </Tab>
+                <Tab className="tab" value="settings">
+                  Кабінет
+                </Tab>
               </TabsList>
               <hr className="custom-hr" />
               <div className="patients-card-main">
-                <TabPanel value={0}>
+                <TabPanel value="info">
                   <PatientsInfo uuid={uuid} />
                 </TabPanel>
-                <TabPanel value={1}>
+                <TabPanel value="anamnesis">
                   <Anamnesis uuid={uuid} />
                 </TabPanel>
-                <TabPanel value={2}>
+                <TabPanel value="form043">
                   <Form043 uuid={uuid} />
                 </TabPanel>
-                <TabPanel value={3}>
+                <TabPanel value="treatmentPlans">
                   <TreatmentPlans uuid={uuid} />
                 </TabPanel>
-                <TabPanel value={4}>
+                <TabPanel value="doctorsDiary">
                   <DoctorsDiary uuid={uuid} />
                 </TabPanel>
-                <TabPanel value={5}>
+                <TabPanel value="dentalFormula">
                   <DentalFormula uuid={uuid} />
                 </TabPanel>
-                <TabPanel value={6}>
+                <TabPanel value="appointments">
                   <PatientsAppointments uuid={uuid} />
                 </TabPanel>
-                <TabPanel value={7}>
+                <TabPanel value="settings">
                   <PPSettings uuid={uuid} />
                 </TabPanel>
               </div>

@@ -65,7 +65,7 @@ export default function Users() {
     };
   }, [navigate, isError, message, dispatch]);
 
-  const handleDeleteUser = async (e, uuid) => {
+  const handleDeleteUser = (e, uuid) => {
     e.preventDefault();
     MySwal.fire({
       title: 'Ви впевнені?',
@@ -77,17 +77,19 @@ export default function Users() {
       cancelButtonText: 'Ні',
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteUser(uuid));
-        dispatch(getUsers());
-        toast.success('Користувача успішно видалено', {
-          position: 'top-right',
-          autoClose: 1200,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
+        dispatch(deleteUser(uuid)).then(() => {
+          // should be a better solutions
+          dispatch(getUsers());
+          toast.success('Користувача успішно видалено', {
+            position: 'top-right',
+            autoClose: 1200,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
         });
       }
     });

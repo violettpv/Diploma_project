@@ -133,7 +133,10 @@ export default function Patients() {
                             <TableRow key={patient.uuid}>
                               <TableCell
                                 sx={{ cursor: 'pointer' }}
-                                onClick={() => navigate(`/patients/get/${patient.uuid}`)}
+                                onClick={
+                                  // () => navigate(`/patients/get/${patient.uuid}`)
+                                  () => navigate(`/patients/card/${patient.uuid}`)
+                                }
                               >
                                 {patient.surname} {patient.name} {patient.patronymic}
                               </TableCell>

@@ -204,13 +204,7 @@ export default function Clinic() {
         progress: undefined,
         theme: 'light',
       });
-      setSurname('');
-      setName('');
-      setPatronymic('');
-      setPhone('');
-      setEmail('');
-      setPassword('');
-      setRole('');
+      navigate('/accounts/workers');
     } else {
       toast.error(
         'Помилка при створенні акаунта. Перевірте правильність введених даних.',

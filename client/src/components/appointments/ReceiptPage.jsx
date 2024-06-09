@@ -85,18 +85,32 @@ export default function ReceiptPage() {
       cancelButtonText: 'Ні',
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteReceipt(receiptUuid));
-        toast.success('Рахунок видалено', {
-          position: 'top-right',
-          autoClose: 1200,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-        navigate('/appointments');
+        dispatch(deleteReceipt(receiptUuid))
+          .then((result) => {
+            toast.success('Рахунок видалено', {
+              position: 'top-right',
+              autoClose: 1200,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            });
+            navigate('/appointments');
+          })
+          .catch((err) => {
+            toast.error(err.message, {
+              position: 'top-right',
+              autoClose: 1200,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            });
+          });
       }
     });
   };
@@ -113,19 +127,32 @@ export default function ReceiptPage() {
       cancelButtonText: 'Ні',
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(payReceipt({ uuid: receiptUuid, paymentType: method }));
-        toast.success('Рахунок оплачено', {
-          position: 'top-right',
-          autoClose: 1200,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-        navigate('/appointments');
-        // dispatch(getReceipt(receiptUuid));
+        dispatch(payReceipt({ uuid: receiptUuid, paymentType: method }))
+          .then((result) => {
+            toast.success('Рахунок оплачено', {
+              position: 'top-right',
+              autoClose: 1200,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            });
+            navigate('/appointments');
+          })
+          .catch((err) => {
+            toast.error(err.message, {
+              position: 'top-right',
+              autoClose: 1200,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            });
+          });
       }
     });
   };

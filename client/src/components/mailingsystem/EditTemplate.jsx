@@ -82,7 +82,7 @@ export default function EditTemplate() {
           progress: undefined,
           theme: 'light',
         });
-        navigate('/mailingsystem');
+        navigate('/mailingsystem/templates');
       }
     });
   };
@@ -234,7 +234,7 @@ export default function EditTemplate() {
                   <Button
                     form="template"
                     type="button"
-                    onClick={() => navigate('/mailingsystem')}
+                    onClick={() => navigate('/mailingsystem/templates')}
                     text="Назад"
                     color="gray"
                   />

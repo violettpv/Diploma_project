@@ -192,29 +192,6 @@ export default function BirthdayReminders() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {/* {birthdays &&
-                    birthdays.patients &&
-                    birthdays.patients.length > 0 &&
-                    birthdays.patients.map((birthday) => (
-                      <TableRow key={birthday.uuid}>
-                        <TableCell align="center">
-                          <Checkbox
-                            checked={selectedBirthdays.includes(birthday)}
-                            onChange={() => handleBirthdaysSelection(birthday)}
-                          />
-                        </TableCell>
-                        <TableCell
-                          sx={{ cursor: 'pointer' }}
-                          onClick={() => navigate(`/patients/get/${birthday.uuid}`)}
-                        >
-                          {birthday.surname} {birthday.name} {birthday.patronymic}
-                        </TableCell>
-                        <TableCell>
-                          {birthday.email ? birthday.email : 'Відсутня'}
-                        </TableCell>
-                        <TableCell align="center">{birthday.birthdate}</TableCell>
-                      </TableRow>
-                    ))} */}
                   {birthdays && birthdays.patients && birthdays.patients.length > 0 ? (
                     birthdays.patients.map((birthday) => (
                       <TableRow key={birthday.uuid}>
@@ -226,7 +203,8 @@ export default function BirthdayReminders() {
                         </TableCell>
                         <TableCell
                           sx={{ cursor: 'pointer' }}
-                          onClick={() => navigate(`/patients/get/${birthday.uuid}`)}
+                          // onClick={() => navigate(`/patients/get/${birthday.uuid}`)}
+                          onClick={() => navigate(`/patients/card/${birthday.uuid}`)}
                         >
                           {birthday.surname} {birthday.name} {birthday.patronymic}
                         </TableCell>
