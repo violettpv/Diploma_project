@@ -226,7 +226,6 @@
 #delete-service-input {
   width: fit-content;
   height: fit-content;
-  background-color: var(--prussian-blue);
   color: white;
   border-radius: 8px;
   padding: 7px;
@@ -237,7 +236,7 @@
   font-size: 14px;
 }
 #add-service-input {
-  background-color: var(--prussian-blue);
+  background-color: var(--piction-blue);
 }
 #delete-service-input {
   background-color: var(--delete-button-color);
