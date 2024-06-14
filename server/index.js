@@ -34,6 +34,16 @@ app.use('/api/appointments', require('./routes/appointmentRoute'));
 app.use('/api/dentalformula', require('./routes/dentalFormulaRoute'));
 app.use('/api/mailingsystem', require('./routes/mailingSystemRoute'));
 
+// Static folder
+const path = require('path');
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, '../', 'client', 'build', 'index.html'))
+  );
+}
+
 app.use(errorHandler);
 
 app.listen(port, () => {

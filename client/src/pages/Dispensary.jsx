@@ -132,18 +132,19 @@ export default function Appointments() {
       cancelButtonText: 'Ні',
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteDispensary(uuid));
-        toast.success('Запис видалено', {
-          position: 'top-right',
-          autoClose: 1200,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
+        dispatch(deleteDispensary(uuid)).then(() => {
+          toast.success('Запис видалено', {
+            position: 'top-right',
+            autoClose: 1200,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+          dispatch(getAllDispensary());
         });
-        dispatch(getAllDispensary());
       }
     });
   };

@@ -85,19 +85,20 @@ export default function Appointments() {
       cancelButtonText: 'Ні',
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteAppointment(uuid));
-        toast.success('Запис видалено', {
-          position: 'top-right',
-          autoClose: 1200,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
+        dispatch(deleteAppointment(uuid)).then(() => {
+          toast.success('Запис видалено', {
+            position: 'top-right',
+            autoClose: 1200,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+          const { day, month, year } = selectedDate;
+          dispatch(getAppointments({ date: day, month, year }));
         });
-        const { day, month, year } = selectedDate;
-        dispatch(getAppointments({ date: day, month, year }));
       }
     });
   };
@@ -106,14 +107,6 @@ export default function Appointments() {
     e.preventDefault();
     navigate(`/appointments/update/${uuid}`);
   };
-
-  // const handleSearchDate = (e) => {
-  //   e.preventDefault();
-  //   const selectedDate = document.getElementById('search-date').value;
-  //   const [year, month, day] = selectedDate.split('-');
-  //   setSelectedDate({ day, month, year });
-  //   dispatch(getAppointments({ date: day, month, year }));
-  // };
 
   const handleSearchDate = (e) => {
     e.preventDefault();

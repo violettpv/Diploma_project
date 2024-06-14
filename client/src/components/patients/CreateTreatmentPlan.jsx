@@ -177,7 +177,7 @@ export default function CreateTreatmentPlan() {
               <div className="tplan-fullname">
                 <div className="tplan-title">
                   Створення плану лікування (Пацієнт: {patient?.surname} {patient?.name}{' '}
-                  {patient?.patronymic}){patient?.patronymic}
+                  {patient?.patronymic})
                 </div>
                 <hr className="custom-hr" />
               </div>
